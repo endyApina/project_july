@@ -5,13 +5,16 @@ import { connect } from 'react-redux';
 import CustomButton from '../forms/custom-button/custom-button.component';
 import CustomInput from '../forms/custom-input/custom-input.component';
 import ButtonText from '../forms/button-text/button-text.component';
-
+import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { SigninContainer } from './Signin.styles';
+import { createStructuredSelector } from 'reselect';
+import { appSettings } from '../../config';
 
 const SignIn = ({}) => {
     const [userData, updateData] = useState({email: '', password: ''});
     const {email, password} = userData;
     const [isSubmitting, toggleSubmitting] = useState(false);
+    const { transparentBorder, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings
 
     const handleSubmit = () => {
         console.log("Submitting")
@@ -29,45 +32,47 @@ const SignIn = ({}) => {
                 onChangeText={text => handleChange({ email: text })}
                 value={email}
                 autoCompleteType={'email'}
-                placeholder={'Email'}
-                bgcolor={'transparent'}
+                placeholder={'Email/Username'}
+                bgcolor={defaultInputBgColor}
                 space={'20px'} 
-                leftIcon={'md-mail'} 
-                placeholderTextColor={'black'} 
-                width={'100%'} 
-                radius={'0px'} 
-                border={'1px solid black'} 
-                underline={'white'} 
-                txtcolor={'black'} 
+                placeholderTextColor={defaultInputPlaceholderColor} 
+                width={defaultInputWidth} 
+                radius={inputRadius} 
+                border={transparentBorder} 
+                // underline={'white'} 
+                txtcolor={defaultInputTextColor} 
             />
             <CustomInput 
                 onChangeText={text => handleChange({ password: text })}
                 value={password}
                 placeholder={'Password'}
-                bgcolor={'transparent'}
+                bgcolor={defaultInputBgColor}
                 space={'20px'} 
-                leftIcon={'md-mail'} 
-                placeholderTextColor={'black'} 
-                width={'100%'} 
-                radius={'0px'} 
-                border={'1px solid black'} 
-                underline={'white'} 
-                txtcolor={'black'} 
+                placeholderTextColor={defaultInputPlaceholderColor} 
+                width={defaultInputWidth} 
+                radius={inputRadius} 
+                border={transparentBorder} 
                 forPassword={true}
+                txtcolor={defaultInputTextColor} 
             />
             <CustomButton 
             onPress={handleSubmit} 
             space={'20px'} 
             uppercase={'true'} 
-            width={'99%'} 
-            color={'blue'} 
-            bgcolor={'white'} 
-            radius={'0px'}
+            width={defaultButtonWidth} 
+            color={buttonTextColor} 
+            bgcolor={defaultButtonBackgroundColor} 
+            box-shadow={boxShadow}
+            radius={'10px'}
             >
                 <ButtonText weight={'bold'}>{'Log In'}</ButtonText>
             </CustomButton>
         </SigninContainer>
     );
-}
+};
 
-export default SignIn;
+const mapStateToProps = createStructuredSelector ({
+    appSettings: selectAppSettings,
+})
+
+export default connect(mapStateToProps)(SignIn);

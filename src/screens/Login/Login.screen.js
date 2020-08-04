@@ -6,15 +6,25 @@ import SignIn from '../../components/Signin/Signin.form';
 import CustomTextContainer from '../../components/forms/custom-text/custom-text.container';
 import { NavigationContainer } from '@react-navigation/native';
 
-const LoginScreen = ({}) => {
+import { createStructuredSelector } from 'reselect';
+import { selectAppSettings } from '../../redux/settings/settings.selector';
+import { connect } from 'react-redux';
+
+const LoginScreen = ({ navigation, appSettings }) => {
+    const {mainColor, defaltColor, backgroundColor } = appSettings;
+
     return (
-        <LoginContainer bgcolor={'white'}>
+        <LoginContainer bgcolor={backgroundColor}>
             <StatusBar backgroundColor={'red'} barStyle={'light-content'} />
             <SignIn />
             <CustomTextContainer txtcolor={'blue'} onPress={() => {}} >Forget Password</CustomTextContainer>
-			<CustomTextContainer txtcolor={'blue'} onPress={() => {}}>New user? Create account</CustomTextContainer>
+			<CustomTextContainer txtcolor={'blue'} onPress={() => navigation.push('Registration')}>New user? Create account</CustomTextContainer>
         </LoginContainer>
     );
 };
 
-export default LoginScreen;
+const mapStateToProps = createStructuredSelector ({
+    appSettings: selectAppSettings,
+});
+
+export default connect(mapStateToProps)(LoginScreen);
