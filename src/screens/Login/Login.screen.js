@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBar, Text } from 'react-native';
 import Signin from '../../components/Signin/Signin.form';
-import { LoginContainer } from './Login.styles';
+import { LoginContainer, Avatar } from './Login.styles';
 import SignIn from '../../components/Signin/Signin.form';
 import CustomTextContainer from '../../components/forms/custom-text/custom-text.container';
 import { NavigationContainer } from '@react-navigation/native';
@@ -16,6 +16,7 @@ const LoginScreen = ({ navigation, appSettings }) => {
     return (
         <LoginContainer bgcolor={backgroundColor}>
             <StatusBar backgroundColor={'red'} barStyle={'light-content'} />
+            <Avatar source={require('../../../assets/logo.png')} />
             <SignIn />
             <CustomTextContainer txtcolor={'blue'} onPress={() => {}} >Forget Password</CustomTextContainer>
 			<CustomTextContainer txtcolor={'blue'} onPress={() => navigation.push('Registration')}>New user? Create account</CustomTextContainer>

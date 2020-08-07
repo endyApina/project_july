@@ -11,9 +11,10 @@ import { connect } from 'react-redux';
 import { signUpStart } from '../../redux/user/user.action';
 import {registration} from '../../util/user.util';
 import {Picker} from "react-native";
+import { useNavigation } from '@react-navigation/native';
 // import CustomSelectInput from '../forms/custom-select-input/custom-select';
 
-const SignUp = ({}) => {
+const SignUp = ({appSettings}) => {
     const [ userData, updateData ] = useState({ 
         fullName: '', 
         email: '',  
@@ -21,9 +22,17 @@ const SignUp = ({}) => {
         userType: '', 
         password: '',
     })
+    const navigation = useNavigation();
     const { fullName, email, password, phone, userType } = userData;
     const { transparentBorder, inputSpace, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
     const [isSubmitting, toggleSubmitting] = useState(false);
+
+    const updateType = (type) => {
+        updateData({
+            ...userData, 
+            userType: type
+        })
+    }
 
     const handleSubmit = async () => {
         if (isSubmitting) return;
@@ -31,10 +40,19 @@ const SignUp = ({}) => {
         if (submittedData != true) {
             return 
         }
-        toggleSubmitting(true)
+        // toggleSubmitting(true)
         // await signUpStart({email, password, fullName, phone, userType})
-        await registration(userData)
-        toggleSubmitting(false);
+        // await registration(userData)
+        // toggleSubmitting(false);
+        navigateToIntoSliders()
+    }
+
+    const navigateToIntoSliders = () => {
+        alert("Navigating")
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'AppSlider' }]
+        })
     }
 
     const handleChange = data => {
@@ -48,7 +66,7 @@ const SignUp = ({}) => {
             alert("Kindly Fill All details")
             return false 
         }
-        return 
+        return true
     }
 
     return (
@@ -106,16 +124,19 @@ const SignUp = ({}) => {
                 txtcolor={defaultInputTextColor} 
             />
             <Picker
+                // selectedValue={(userData && userData.userType) || "vendor"}
                 selectedValue={userType}
                 space={inputSpace}
                 style={{width: defaultInputWidth}}
-                onValueChange={(itemValue, itemIndex) => handleChange({userType: itemValue})}
+                onValueChange={(itemValue, itemIndex) => {
+                    handleChange({ userType: itemValue })
+                }}
             >
-                <Picker.Item label="Customer" />
-                <Picker.Item label="Vendor" />
+                <Picker.Item label="Customer" value="customer" />
+                <Picker.Item label="Vendor" value="vendor" />
             </Picker>
             <CustomButton 
-            onPress={handleSubmit} 
+            onPress={() => handleSubmit()} 
             space={'20px'} 
             uppercase={'true'} 
             width={defaultButtonWidth} 

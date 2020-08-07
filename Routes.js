@@ -8,7 +8,9 @@ import { Ionicons } from '@expo/vector-icons';
 
 import LoginScreen from './src/screens/Login/Login.screen';
 import RegistrationScreen from './src/screens/Registration/Registration.screen';
+import Landing from './src/screens/Landing/index';
 import { selectConnectionStatus } from './src/redux/user/user.selector';
+import AppSlider from './src/screens/AppIntroSlider/index';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { selectAppSettings} from './src/redux/settings/settings.selector';
@@ -18,7 +20,7 @@ import Loader from './src/components/utility/loader/loader.component';
 const Stack = createStackNavigator();
 
 const Routes = ({appSettings, isConnecting}) => {
-	const { subColor, defaultColor, transparentColor } = appSettings;
+	const { subColor, defaultColor, transparentColor, sliderOneBackgroundColor } = appSettings;
     const theme = {
         ...DefaultTheme, 
         colors: {
@@ -53,6 +55,16 @@ const Routes = ({appSettings, isConnecting}) => {
                 >
                     <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
                     <Stack.Screen name="Registration" component={RegistrationScreen} options={{ title: 'Sign Up' }} />
+                    <Stack.Screen name="Landing" component={Landing} options={{title: 'Landing'}} />
+                    <Stack.Screen 
+                        name="AppSlider" 
+                        component={AppSlider} 
+                        options={{
+                            headerStyle: {
+                                backgroundColor: sliderOneBackgroundColor,
+                            },
+                        }}
+                    />
                 </Stack.Navigator>
             </NavigationContainer>
         </PaperProvider>

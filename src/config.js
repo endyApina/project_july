@@ -23,6 +23,7 @@ export const appSettings = {
 	defaultInputPlaceholderColor: '#919090',
 	defaultInputTextColor: 'black',
 	boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)',
+	sliderOneBackgroundColor: '#0a52f0',
 };
 
 export const appModes = {
