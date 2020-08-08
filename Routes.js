@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import LoginScreen from './src/screens/Login/Login.screen';
 import RegistrationScreen from './src/screens/Registration/Registration.screen';
 import Landing from './src/screens/Landing/index';
+import OtpVerification from './src/screens/otp/otpverification';
 import { selectConnectionStatus } from './src/redux/user/user.selector';
 import AppSlider from './src/screens/AppIntroSlider/index';
 import { createStructuredSelector } from 'reselect';
@@ -65,6 +66,7 @@ const Routes = ({appSettings, isConnecting}) => {
                             },
                         }}
                     />
+                    <Stack.Screen name="otp" component={OtpVerification} />
                 </Stack.Navigator>
             </NavigationContainer>
         </PaperProvider>

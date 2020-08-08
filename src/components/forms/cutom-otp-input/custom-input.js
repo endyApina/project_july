@@ -1,5 +1,5 @@
 import React from 'react'; 
-import { View } from 'react-native';
+import { View, StyleSheet, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 
 import colors from '../../utility/styles/colors';
@@ -18,12 +18,12 @@ const CustomTextInput = (props) => {
 
     return (
         <View
-         style={}
+         style={[styles.containerStyle, containerStyle]}
         > 
             {LeftComponent}
             <TextInput
                 {...additionalProps}
-                style={}
+                style={[styles.textInputStyle, GenericStyles.fill, style]}
                 ref={refCallback}
             />
             {RightComponent}

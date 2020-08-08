@@ -36,10 +36,10 @@ const SignUp = ({appSettings}) => {
 
     const handleSubmit = async () => {
         if (isSubmitting) return;
-        var submittedData = validateSignUp()
-        if (submittedData != true) {
-            return 
-        }
+        // var submittedData = validateSignUp()
+        // if (submittedData != true) {
+        //     return 
+        // }
         // toggleSubmitting(true)
         // await signUpStart({email, password, fullName, phone, userType})
         // await registration(userData)
@@ -48,10 +48,10 @@ const SignUp = ({appSettings}) => {
     }
 
     const navigateToIntoSliders = () => {
-        alert("Navigating")
+        // alert("Navigating")
         navigation.reset({
             index: 0,
-            routes: [{ name: 'AppSlider' }]
+            routes: [{ name: 'otp' }]
         })
     }
 

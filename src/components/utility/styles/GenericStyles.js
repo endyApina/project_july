@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-import colors from '../common/colors';
+import colors from './colors';
 
 /**
  * mr - margin right
@@ -26,6 +26,11 @@ export const GenericStyles = StyleSheet.create({
   mt24: {
     marginTop: 24,
   },
+  otpButton: {
+    marginTop: 24,
+    marginLeft: 100,
+    width: 150, 
+  },
   mr4: {
     marginRight: 4,
   },
@@ -47,6 +52,7 @@ export const GenericStyles = StyleSheet.create({
   },
   fill: {
     flex: 1,
+    backgroundColor: '#f2f2f2',
   },
   capitalize: {
     textTransform: 'capitalize',
