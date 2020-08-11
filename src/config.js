@@ -41,3 +41,5 @@ export const appModes = {
 	}
  
 };
+
+export const API_STRING = 'http://milky-way-api.us-east-1.elasticbeanstalk.com/api/v1'

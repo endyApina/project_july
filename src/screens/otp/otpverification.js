@@ -196,6 +196,8 @@ const OtpVerification = props => {
                 thirdTextInputRef.current.focus();
                 } else if (index === 2) {
                 fourthTextInputRef.current.focus();
+                } else if (index === 3) {
+                navigateToIntro()
                 }
             }
         };
@@ -210,11 +212,11 @@ const OtpVerification = props => {
             // auto focus to previous InputText if value is blank and existing value is also blank
             if (value === 'Backspace' && otpArray[index] === '') {
                 if (index === 1) {
-                // firstTextInputRef.current.focus();
+                firstTextInputRef.current.focus();
                 } else if (index === 2) {
-                // secondTextInputRef.current.focus();
+                secondTextInputRef.current.focus();
                 } else if (index === 3) {
-                // thirdTextInputRef.current.focus();
+                thirdTextInputRef.current.focus();
                 }
         
                 /**

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Text, StyleSheet } from "react-native";
 
 import { connect } from 'react-redux';
@@ -9,15 +9,20 @@ import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { SigninContainer } from './Signin.styles';
 import { createStructuredSelector } from 'reselect';
 import { appSettings } from '../../config';
+import { emailSignInStart } from '../../redux/user/user.action';
+import {selectIsSubmittingLogin} from '../../redux/user/user.selector';
+// import { emailSignIn } from '../../util/user.util';
 
-const SignIn = ({}) => {
+const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
     const [userData, updateData] = useState({email: '', password: ''});
     const {email, password} = userData;
     const [isSubmitting, toggleSubmitting] = useState(false);
     const { transparentBorder, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings
 
     const handleSubmit = () => {
-        console.log("Submitting")
+        let validity = validateSignIn()
+        if (validity != true) return;
+        emailSignInStart({email, password})
     };
 
     const handleChange = data => {
@@ -25,6 +30,18 @@ const SignIn = ({}) => {
         const val = data[key];
         updateData({...userData, [key]: val});
     };
+
+    const validateSignIn = () => {
+        if (email === "" || password === "") {
+            alert("Kindly Fill All details")
+            return false 
+        }
+        return true
+    }
+
+    useEffect(() => {
+        toggleSubmitting(isSubmittingForm);
+    }, [isSubmittingForm])
   
     return (
         <SigninContainer>
@@ -57,6 +74,7 @@ const SignIn = ({}) => {
             />
             <CustomButton 
             onPress={handleSubmit} 
+            loading={isSubmitting}
             space={'20px'} 
             uppercase={'true'} 
             width={defaultButtonWidth} 
@@ -73,6 +91,11 @@ const SignIn = ({}) => {
 
 const mapStateToProps = createStructuredSelector ({
     appSettings: selectAppSettings,
+    isSubmittingForm: selectIsSubmittingLogin
+});
+
+const mapDispatchToProps = dispath => ({
+    emailSignInStart: emailAndPassword => dispath(emailSignInStart(emailAndPassword))
 })
 
-export default connect(mapStateToProps)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

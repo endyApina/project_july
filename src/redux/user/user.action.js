@@ -1,13 +1,23 @@
 import UserActionTypes from './user.types';
 
-export const signInStart = emailAndPassword => ({
-	type: UserActionTypes.Sign_IN_START,
-	payload: user
+export const emailSignInStart = emailAndPassword => ({
+	type: UserActionTypes.SIGN_IN_START,
+	payload: emailAndPassword
 })
 
 export const signInSuccess = user => ({
 	type: UserActionTypes.SIGN_IN_SUCCESS,
 	payload: user
+});
+
+export const toggleSubmittingLogin = status => ({
+	type: UserActionTypes.TOGGLE_SUBMITTING_LOGIN,
+	payload: status
+});
+
+export const toggleSubmittingRegister = status => ({
+	type: UserActionTypes.TOGGLE_SUBMITTING_REGISTER,
+	payload: status
 });
 
 export const signInFailure = error => ({

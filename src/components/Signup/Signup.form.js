@@ -1,4 +1,4 @@
-import React, {useState} from 'react'; 
+import React, { useState, useEffect} from 'react'; 
 import CustomButton from '../forms/custom-button/custom-button.component';
 import CustomInput from '../forms/custom-input/custom-input.component';
 import ButtonText from '../forms/button-text/button-text.component';
@@ -12,9 +12,10 @@ import { signUpStart } from '../../redux/user/user.action';
 import {registration} from '../../util/user.util';
 import {Picker} from "react-native";
 import { useNavigation } from '@react-navigation/native';
+import {selectIsSubmittingRegister} from '../../redux/user/user.selector';
 // import CustomSelectInput from '../forms/custom-select-input/custom-select';
 
-const SignUp = ({appSettings}) => {
+const SignUp = ({appSettings, isSubmittingForm, signUpStart}) => {
     const [ userData, updateData ] = useState({ 
         fullName: '', 
         email: '',  
@@ -34,20 +35,19 @@ const SignUp = ({appSettings}) => {
         })
     }
 
+    useEffect(() => {
+        toggleSubmitting(isSubmittingForm);
+    }, [isSubmittingForm])
+
     const handleSubmit = async () => {
         if (isSubmitting) return;
-        // var submittedData = validateSignUp()
-        // if (submittedData != true) {
-        //     return 
-        // }
-        // toggleSubmitting(true)
-        // await signUpStart({email, password, fullName, phone, userType})
-        // await registration(userData)
-        // toggleSubmitting(false);
-        navigateToIntoSliders()
+        var submittedData = validateSignUp()
+        // if (submittedData != true) return
+        // signUpStart({email, password, fullName, phone, userType})
+        navigateToIntroSliders()
     }
 
-    const navigateToIntoSliders = () => {
+    const navigateToIntroSliders = () => {
         // alert("Navigating")
         navigation.reset({
             index: 0,
@@ -139,6 +139,7 @@ const SignUp = ({appSettings}) => {
             onPress={() => handleSubmit()} 
             space={'20px'} 
             uppercase={'true'} 
+            loading={isSubmittingForm}
             width={defaultButtonWidth} 
             color={buttonTextColor} 
             bgcolor={defaultButtonBackgroundColor} 
@@ -153,6 +154,7 @@ const SignUp = ({appSettings}) => {
 
 const mapStateToProps = createStructuredSelector ({
     appSettings: selectAppSettings,
+    isSubmittingForm: selectIsSubmittingRegister
 })
 
 const mapDispatchToProps = dispatch => ({
