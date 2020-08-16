@@ -2,7 +2,6 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import Signup from '../../components/Signup/Signup.form';
 
 import { RegsitrationContainer } from './Registration.styles';
 import SignUp from '../../components/Signup/Signup.form';
