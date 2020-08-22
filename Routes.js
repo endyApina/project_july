@@ -52,7 +52,7 @@ const Routes = ({appSettings, isConnecting}) => {
 							color: 'transparent',
 						},
 					}}
-					initialRouteName="Landing"
+					initialRouteName="Login"
                 >
                     <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
                     <Stack.Screen name="Registration" component={RegistrationScreen} options={{ title: 'Sign Up' }} />

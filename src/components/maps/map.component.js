@@ -8,7 +8,8 @@ import {selectAppSettings} from '../../redux/settings/settings.selector'
 import { connect } from 'react-redux';
 import CustomButton from '../forms/custom-button/custom-button.component';
 import ButtonText from '../forms/button-text/button-text.component'
-import { MapContainer, MapViewContainer, TouchableOpacityContainer, SearchViewContainer, ButtonContainer } from './map.styles';
+import { MapContainer, RenderContentView, MapViewContainer, TouchableOpacityContainer, SearchViewContainer, ButtonContainer } from './map.styles';
+import BottomSheet from 'react-native-bottomsheet-reanimated';
 
 navigator.geolocation = require('@react-native-community/geolocation');
 
@@ -38,12 +39,19 @@ const Map = ({appSettings}) => {
     }, (error) => console.log(JSON.stringify(error)), 
     {enableHighAccuracy: false, timeout: 20000, maximumAge: 1000});
 
+    const sheetRef = React.useRef(null);
+
 	useEffect(() => {
 		findPosition();
-	}, []);
+    }, []);
+    
+    const renderContent = () => {
+        <RenderContentView>
+            <Text>Swipe down to close</Text>
+        </RenderContentView>
+    }
 
     return (
-
         <View>
             <MapViewContainer
                 provider={PROVIDER_GOOGLE}
@@ -51,7 +59,7 @@ const Map = ({appSettings}) => {
             />
             <TouchableOpacityContainer>
                 <CustomButton
-                    onPress={() => {}}
+                    onPress={() => {sheetRef.current.snapTo(10)}}
                     space={'20px'} 
                     uppercase={'true'} 
                     width={defaultButtonWidth} 
@@ -63,6 +71,13 @@ const Map = ({appSettings}) => {
                     <ButtonText weight={'bold'}>{'Get Gas'}</ButtonText>
                 </CustomButton>
             </TouchableOpacityContainer>
+
+            <BottomSheet 
+                ref={sheetRef}
+                snapPoints={[450, 300, 100]}
+                borderRadius={10}
+                renderContent={renderContent}
+            />
         </View>
     )
 }

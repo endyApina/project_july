@@ -9,16 +9,18 @@ const INITIAL_STATE = {
 
 const userReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
+    case UserActionTypes.SIGN_IN_SUCCESS:
+        return {
+            ...state,
+            currentUser: action.payload,
+            isSubmittingLogin: false,
+            isSubmittingRegister: false, 
+            error: null
+        };
     case UserActionTypes.CONNECTING_TO_SERVER: 
         return {
             ...state, 
             connectingToServer: action.payload
-        };
-    case UserActionTypes.SIGN_IN_SUCCESS: 
-        return {
-            ...state, 
-            currentUser: action.payload, 
-            error: null
         };
     case UserActionTypes.TOGGLE_SUBMITTING_REGISTER:
         return {

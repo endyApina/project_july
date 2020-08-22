@@ -51,3 +51,8 @@ export const ButtonContainer = styled.View`
     paddingTop: 10px;
 `;
 
+export const RenderContentView = styled.View`
+    backgroundColor: white;
+    padding: 16; 
+    height: 20;
+`;

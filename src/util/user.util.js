@@ -1,9 +1,44 @@
-export const emailSignIn = async (payload) => {
-    // alert(JSON.stringify(email, password, fullName, phone, userType))
-    console.error("Here")
-    let user = "Here"
-    return user
-    // return payload
+export function* emailSignUp(signUpData, REG_API) {
+    var responseBody;
+
+    yield fetch(REG_API, {
+        method: 'POST', 
+        headers: {
+            'source': 'mobile', 
+            'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify(signUpData)
+    })
+    .then((response) => response.json())
+    .then(data => {
+        responseBody = data
+        return data
+    }).catch(error => {
+        responseBody = error
+    })
+    return responseBody
+}
+
+export function* CALL_POST_API(postData, LOGIN_API) {
+    var responseBody;
+
+    yield fetch(LOGIN_API, {
+        method: 'POST', 
+        headers: {
+            'source': 'mobile', 
+            'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify(postData)
+    })
+    .then((response) => response.json())
+    .then(data => {
+        responseBody = data
+        return data
+    }).catch(error => {
+        responseBody = error
+    })
+
+    return responseBody
 }
 
 export const registration = async (payload) => {

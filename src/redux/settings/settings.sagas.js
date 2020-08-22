@@ -3,10 +3,11 @@ import { updateAppMode } from './settings.actions';
 import { appModes } from '../../config';
 import UserActionTypes from '../user/user.types';
 
-export function* getAppMode({ payload: { appMode } }) {
+export function* getAppMode() {
     try {
-        const userAppMode =appModes[appMode];
-        yield put(updateAppMode(userAppMode));
+        console.log("Get APP mode")
+        // const userAppMode =appModes[appMode];
+        // yield put(updateAppMode(userAppMode));
     } catch(error) {
         //Do Something
     }

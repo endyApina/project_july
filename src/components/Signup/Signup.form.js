@@ -42,9 +42,9 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart}) => {
     const handleSubmit = async () => {
         if (isSubmitting) return;
         var submittedData = validateSignUp()
-        // if (submittedData != true) return
-        // signUpStart({email, password, fullName, phone, userType})
-        navigateToIntroSliders()
+        if (submittedData != true) return
+        signUpStart({email, password, fullName, phone, userType})
+        // navigateToIntroSliders()
     }
 
     const navigateToIntroSliders = () => {

@@ -42,4 +42,8 @@ export const appModes = {
  
 };
 
-export const API_STRING = 'http://milky-way-api.us-east-1.elasticbeanstalk.com/api/v1'
+const API_BASE = 'http://milky-way-api.us-east-1.elasticbeanstalk.com/api/v1/'
+
+export const API_STRING = 'http://milky-way-api.us-east-1.elasticbeanstalk.com/api/v1/'
+export const REG_API = API_BASE + 'auth/signup'
+export const LOGIN_API = API_BASE + 'auth/signin'

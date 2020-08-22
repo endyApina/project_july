@@ -8,6 +8,7 @@ import ButtonText from '../forms/button-text/button-text.component';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { SigninContainer } from './Signin.styles';
 import { createStructuredSelector } from 'reselect';
+import { useNavigation } from '@react-navigation/native';
 import { appSettings } from '../../config';
 import { emailSignInStart } from '../../redux/user/user.action';
 import {selectIsSubmittingLogin} from '../../redux/user/user.selector';
@@ -18,12 +19,22 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
     const {email, password} = userData;
     const [isSubmitting, toggleSubmitting] = useState(false);
     const { transparentBorder, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings
+    const navigation = useNavigation();
 
     const handleSubmit = () => {
         let validity = validateSignIn()
-        if (validity != true) return;
-        emailSignInStart({email, password})
+        // if (validity != true) return;
+        // emailSignInStart({email, password})
+        navigateToNextSlide()
     };
+
+    const navigateToNextSlide = () => {
+        // alert("Navigating")
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Landing' }]
+        })
+    }
 
     const handleChange = data => {
         const key = Object.keys(data)[0];

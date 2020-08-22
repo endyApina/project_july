@@ -1,39 +1,59 @@
 import { takeLatest, call, all, put } from 'redux-saga/effects';
 import UserActionTypes from './user.types';
-import { signUpSuccess, connectingToServer, signInFailure, toggleSubmittingLogin, toggleSubmittingRegister } from './user.action';
+import axios from 'axios';
+import { signUpSuccess, connectingToServer, signInFailure, toggleSubmittingLogin, toggleSubmittingRegister, signInSuccess } from './user.action';
 
-import { emailSignIn, getCurrentUser } from '../../util/user.util';
-import {API_STRING} from '../../config';
+import { emailSignUp, getCurrentUser, CALL_POST_API } from '../../util/user.util';
+import { API_STRING, REG_API, LOGIN_API } from '../../config';
 
 export function* signUp({payload: {email, password, fullName, userType, phone}}) {
+    let tempName = fullName.split(" ")
+    let firstName = tempName[0]
+    let lastName = tempName[1]
+    if (tempName[2]) {
+        lastName = lastName + " " + tempName[2]
+    }
     const data = {
         email: email, 
         password: password, 
-        fullName: fullName, 
         userType: userType, 
-        phone: phone
+        firstName: firstName, 
+        lastName: lastName, 
+        phoneNumber: phone
     }
     try {
         yield put(toggleSubmittingRegister(true))
-        const response = fetch(API_STRING, {
-            method: 'POST', 
-            headers: {
-                'source': 'mobile', 
-                'Content-Type': 'application/json'
-            }, 
-            body: JSON.stringify(data)
+        var user;
+
+       yield emailSignUp(data, REG_API).next().value.then(resp => {
+           console.log(resp)
+            if (resp.statusCode === 201) {
+                const uuid = resp.data.uuid 
+                user = uuid;
+            }
         })
-        .then(data => {
-            alert(JSON.stringify(data))
-        })
-        // const {user} = yield call(emailSignIn(email, password, fullName, phone, userType));
-        // yield signUpFailure(error)
-        // yield put(connectingToServer(true))
-        // // yield put(signUpSuccess({user, additionalData: {appMode: 'default' }}))
-        // yield console.error(user)
+        // console.log("Calling sign up succes")
+        yield put(signInSuccess(user));
     } catch(error) {
-        yield signUpFailure(error)
+        console.log(error)
+        // yield signUpFailure(error)
     }
+}
+
+export function* signInAfterSignUp({payload: user}) {
+    try {
+        yield put(signInSuccess({user: user}))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export function* onSignUpSuccess() {
+    yield takeLatest(
+        console.log("sign up success"),
+        UserActionTypes.SIGN_UP_SUCCESS, 
+        signInAfterSignUp
+    )
 }
 
 export function* onSignUpStart() {
@@ -44,18 +64,19 @@ export function* onSignUpStart() {
 }
 
 export function* signInWithEmail({payload: {email, password } }) {
+    const data = {
+        email: email, 
+        password: password
+    }
     try {
         yield put(toggleSubmittingLogin(true))
-        var formData = new FormData();
-        formData.append('email', email);
-        formData.append('password', password); 
+        var response; 
 
-        const response = yield fetch('http://milky-way-api.us-east-1.elasticbeanstalk.com/api/v1/auth/signup', {
-            method: 'POST', 
-            body: formData
+        yield CALL_POST_API(data, LOGIN_API).next().value.then(resp => {
+            response = resp
         })
-
-        alert(JSON.stringify(response))
+        console.log(response)
+        // yield signInSuccess()
     } catch(error) {
         yield put(signInFailure(error));
     }
