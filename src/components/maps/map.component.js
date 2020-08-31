@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState, useRef } from 'react'; 
 import { Marker } from 'react-native-maps';
+import {StyleSheet} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
-import CustomInput from '../forms/custom-input/custom-input.component';
 import { Text, View, TextInput, Button } from 'react-native';
 import { createStructuredSelector } from 'reselect';
 import {selectAppSettings} from '../../redux/settings/settings.selector'
 import { connect } from 'react-redux';
 import CustomButton from '../forms/custom-button/custom-button.component';
 import ButtonText from '../forms/button-text/button-text.component'
-import { MapContainer, RenderContentView, MapViewContainer, TouchableOpacityContainer, SearchViewContainer, ButtonContainer } from './map.styles';
+import { MapContainer, BottomSheetPanelHandle, BottomSheetHeader, RenderContentView, MapViewContainer, TouchableOpacityContainer, SearchViewContainer, ButtonContainer } from './map.styles';
+// import BottomSheet from 'reanimated-bottom-sheet';
 import BottomSheet from 'react-native-bottomsheet-reanimated';
+import BottomSheetComponent from './bottom-sheet/bottom-sheet.component';
+import BottomHeader from './bottom-sheet-header/bottom-sheet.component';
 
 navigator.geolocation = require('@react-native-community/geolocation');
 
@@ -21,6 +24,9 @@ const Map = ({appSettings}) => {
         longitudeDelta: 0
     };
     const [region, setRegion] = useState(initialRegion);
+	const originalSnapPoint = [300, 700, 1000];
+	const [snapPoints, setSnapPoints] = useState(originalSnapPoint);
+    const [showBottomSheet, toggleBottomSheet] = useState(false)
     const [value, onChangeText] = React.useState('');
     const { transparentBorder, inputSpace, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
 
@@ -45,40 +51,31 @@ const Map = ({appSettings}) => {
 		findPosition();
     }, []);
     
-    const renderContent = () => {
-        <RenderContentView>
-            <Text>Swipe down to close</Text>
-        </RenderContentView>
-    }
+    const bottomSheetStyles = StyleSheet.create({
+        bottomSheetBorder: {
+            borderRadius: 30,
+        }
+    });
 
     return (
+        <>
         <View>
             <MapViewContainer
                 provider={PROVIDER_GOOGLE}
                 region={region}
             />
-            <TouchableOpacityContainer>
-                <CustomButton
-                    onPress={() => {sheetRef.current.snapTo(10)}}
-                    space={'20px'} 
-                    uppercase={'true'} 
-                    width={defaultButtonWidth} 
-                    color={buttonTextColor} 
-                    bgcolor={'#4265ff'} 
-                    box-shadow={boxShadow}
-                    radius={'10px'}
-                >
-                    <ButtonText weight={'bold'}>{'Get Gas'}</ButtonText>
-                </CustomButton>
-            </TouchableOpacityContainer>
-
-            <BottomSheet 
+            <BottomSheet
                 ref={sheetRef}
-                snapPoints={[450, 300, 100]}
-                borderRadius={10}
-                renderContent={renderContent}
+                snapPoints={snapPoints}
+                containerStyle={bottomSheetStyles.bottomSheetBorder}
+                body={<BottomSheetComponent />}
+                header={<BottomHeader />}
+                enabledContentTapInteraction={false}
+                enabledInnerScrolling = {false}
+                initialPosition = {"40%"}
             />
         </View>
+        </>
     )
 }
 

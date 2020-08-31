@@ -9,7 +9,6 @@ import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { SigninContainer } from './Signin.styles';
 import { createStructuredSelector } from 'reselect';
 import { useNavigation } from '@react-navigation/native';
-import { appSettings } from '../../config';
 import { emailSignInStart } from '../../redux/user/user.action';
 import {selectIsSubmittingLogin} from '../../redux/user/user.selector';
 // import { emailSignIn } from '../../util/user.util';
@@ -23,9 +22,9 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
 
     const handleSubmit = () => {
         let validity = validateSignIn()
-        // if (validity != true) return;
-        // emailSignInStart({email, password})
-        navigateToNextSlide()
+        if (validity != true) return;
+        emailSignInStart({email, password})
+        // navigateToNextSlide()
     };
 
     const navigateToNextSlide = () => {

@@ -1,10 +1,10 @@
 import { takeLatest, call, all, put } from 'redux-saga/effects';
 import UserActionTypes from './user.types';
 import axios from 'axios';
-import { signUpSuccess, connectingToServer, signInFailure, toggleSubmittingLogin, toggleSubmittingRegister, signInSuccess } from './user.action';
+import { signUpSuccess, connectingToServer, signInFailure, toggleSubmittingLogin, toggleSubmittingRegister, signInSuccess, toggleForgettingPassword } from './user.action';
 
 import { emailSignUp, getCurrentUser, CALL_POST_API } from '../../util/user.util';
-import { API_STRING, REG_API, LOGIN_API } from '../../config';
+import { API_STRING, REG_API, LOGIN_API, FORGOT_PASSWORD_API } from '../../config';
 
 export function* signUp({payload: {email, password, fullName, userType, phone}}) {
     let tempName = fullName.split(" ")
@@ -75,10 +75,41 @@ export function* signInWithEmail({payload: {email, password } }) {
         yield CALL_POST_API(data, LOGIN_API).next().value.then(resp => {
             response = resp
         })
-        console.log(response)
-        // yield signInSuccess()
+        // console.log(response)
+        const responseBody = response.message 
+        // if (responseBody == "These credentials do not match our records.") {
+        //     alert("Invalid Login Details. Forgot Password? ")
+        //     yield put(toggleSubmittingLogin(false))
+        //     return 
+        // }
+        // yield put(toggleSubmittingLogin(false))
+        // yield put(toggleUserLoggedIn(true))
+        yield put(signInSuccess(data))
+        yield put(toggleSubmittingLogin(false))
+        // yield put(toggleUserLoggedIn(true))
     } catch(error) {
         yield put(signInFailure(error));
+    }
+}
+
+export function* forgetPasswordStart({payload: email}) {
+    const data ={
+        email: email
+    }
+    try {
+        yield put(toggleForgettingPassword(true))
+        var response; 
+
+        yield CALL_POST_API(data, FORGOT_PASSWORD_API).next().value.then(resp => {
+            console.log(resp)
+        }).then(error => {
+            console.log(error)
+        })
+
+        alert(response)
+        yield put(toggleForgettingPassword(false))
+    } catch (error) {
+        //do something
     }
 }
 
@@ -89,6 +120,13 @@ export function* onEmailSignInStart() {
     )
 }
 
+export function* onForgetPasswordStart() {
+    yield takeLatest(
+        UserActionTypes.FORGET_PASSWORD_START, 
+        forgetPasswordStart
+    )
+}
+
 export function* userSagas() {
-    yield all([call(onSignUpStart), call(onEmailSignInStart)])
+    yield all([call(onSignUpStart), call(onEmailSignInStart), call(onForgetPasswordStart)])
 }

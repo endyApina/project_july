@@ -1,0 +1,6 @@
+module Pods_projectjuly {
+  umbrella header "Pods-projectjuly-umbrella.h"
+
+  export *
+  module * { export * }
+}

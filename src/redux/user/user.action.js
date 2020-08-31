@@ -5,6 +5,11 @@ export const emailSignInStart = emailAndPassword => ({
 	payload: emailAndPassword
 })
 
+export const startForgetPassword = email => ({
+	type: UserActionTypes.FORGET_PASSWORD_START,
+	payload: email
+})
+
 export const signInSuccess = user => ({
 	type: UserActionTypes.SIGN_IN_SUCCESS,
 	payload: user
@@ -17,6 +22,16 @@ export const toggleSubmittingLogin = status => ({
 
 export const toggleSubmittingRegister = status => ({
 	type: UserActionTypes.TOGGLE_SUBMITTING_REGISTER,
+	payload: status
+});
+
+export const toggleForgettingPassword = status => ({
+	type: UserActionTypes.TOGGLE_SUBMITTING_FORGOT_PASSWORD,
+	payload: status
+});
+
+export const toggleUserLoggedIn = status => ({
+	type: UserActionTypes.TOGGLE_USER_LOGGED_IN,
 	payload: status
 });
 

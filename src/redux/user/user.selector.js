@@ -21,3 +21,13 @@ export const selectIsSubmittingRegister = createSelector(
 	[selectUser],
 	user => user.isSubmittingRegister
 );
+
+export const selectUserLoggedIn = createSelector(
+	[selectUser],
+	user => user.userLoggedIn
+);
+
+export const selectIsSubmittingForgotPassword = createSelector(
+	[selectUser],
+	user => user.isForgettingPassword
+);

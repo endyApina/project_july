@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import LoginScreen from './src/screens/Login/Login.screen';
 import RegistrationScreen from './src/screens/Registration/Registration.screen';
+import ForgotPasswordScreen from './src/screens/ForgotPassword/forgot.screen';
 import Landing from './src/screens/Landing/index';
 import OtpVerification from './src/screens/otp/otpverification';
 import { selectConnectionStatus } from './src/redux/user/user.selector';
@@ -57,6 +58,7 @@ const Routes = ({appSettings, isConnecting}) => {
                     <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
                     <Stack.Screen name="Registration" component={RegistrationScreen} options={{ title: 'Sign Up' }} />
                     <Stack.Screen name="Landing" component={Landing} options={{title: 'Landing'}} />
+                    <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{title: 'Forgot Password'}} />
                     <Stack.Screen 
                         name="AppSlider" 
                         component={AppSlider} 
