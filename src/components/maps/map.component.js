@@ -24,7 +24,7 @@ const Map = ({appSettings}) => {
         longitudeDelta: 0
     };
     const [region, setRegion] = useState(initialRegion);
-	const originalSnapPoint = [300, 700, 1000];
+	const originalSnapPoint = [350, 700, 1000];
 	const [snapPoints, setSnapPoints] = useState(originalSnapPoint);
     const [showBottomSheet, toggleBottomSheet] = useState(false)
     const [value, onChangeText] = React.useState('');
@@ -59,7 +59,7 @@ const Map = ({appSettings}) => {
 
     return (
         <>
-        <View>
+        <MapContainer>
             <MapViewContainer
                 provider={PROVIDER_GOOGLE}
                 region={region}
@@ -73,8 +73,9 @@ const Map = ({appSettings}) => {
                 enabledContentTapInteraction={false}
                 enabledInnerScrolling = {false}
                 initialPosition = {"40%"}
+                enabledInnerScrolling={true}
             />
-        </View>
+        </MapContainer>
         </>
     )
 }

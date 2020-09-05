@@ -1,6 +1,11 @@
 import React from 'react';
-import { ListItem } from 'react-native-elements'
+import { ListItem, Avatar, Text, Divider } from 'react-native-elements'
 import {View} from 'react-native';
+import { connect } from 'react-redux'; 
+import { createStructuredSelector } from 'reselect';
+import { selectAppSettings } from '../../../redux/settings/settings.selector';
+import { toStationDetails } from '../../../session';
+import { useNavigation } from '@react-navigation/native';
 
 const list = [
     {
@@ -15,31 +20,73 @@ const list = [
       subtitle: '41, Yaba, Lagos',
       distance: '4m'
     },
+    {
+      name: 'Peninsula Gas',
+      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+      subtitle: '41, Yaba, Lagos',
+      distance: '4m'
+    },
+    {
+      name: 'Peninsula Gas',
+      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+      subtitle: '41, Yaba, Lagos',
+      distance: '4m'
+    },
 ]
 
-const VendorList = () => {
+const VendorList = ({appSettings}) => {
+    const navigation = useNavigation();
 
     const pressedList = () => {
-        alert("Pressed")
+        // alert("Pressed")
+        toStationDetails(navigation)
     }
+
+    const renderLeftElement = (avatar) => (
+        <View> 
+            <Avatar 
+                source={{uri: avatar}}
+                size='medium'
+                // rounded
+            />
+        </View>
+    )
+    const renderRightElement = (text) => (
+        <View> 
+            <Text>{text}</Text>
+        </View>
+    )
 
     return (
         <View>
             {
                 list.map((l, i) => (
                 <ListItem
-                    key={i}
-                    leftAvatar={{ source: { uri: l.avatar_url }, rounded: false }}
-                    title={l.name}
-                    subtitle={l.subtitle}
-                    bottomDivider
-                    rightElement={l.distance}
                     onPress={pressedList}
-                />
+                >
+                    <ListItem.Content right>
+                        {renderLeftElement(l.avatar_url)}
+                    </ListItem.Content>
+                    <ListItem.Content>
+                        <ListItem.Title right>
+                            {l.name}
+                        </ListItem.Title>
+                        <ListItem.Subtitle>
+                            {l.subtitle}
+                        </ListItem.Subtitle>
+                    </ListItem.Content>
+                    <ListItem.Content right>
+                        {renderRightElement(l.distance)}
+                    </ListItem.Content>
+                </ListItem>
                 ))
             }
         </View>
     )
 }
 
-export default React.memo(VendorList)
+const mapStateToProps = createStructuredSelector({
+    appSettings: selectAppSettings,
+})
+
+export default connect(mapStateToProps)(VendorList)

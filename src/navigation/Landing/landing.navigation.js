@@ -6,7 +6,8 @@ import RegistrationScreen from '../../screens/Login/Login.screen';
 import ForgotPasswordScreen from '../../screens/ForgotPassword/forgot.screen';
 import Landing from '../../screens/Landing/index';
 import OtpVerification from '../../screens/otp/otpverification';
-import AppSlider from '../../screens/AppIntroSlider/index'
+import AppSlider from '../../screens/AppIntroSlider/index'; 
+import StationScreen from '../../screens/station/station.sreen';
 
 const Stack = createStackNavigator()
 
@@ -23,12 +24,13 @@ const MainNavigation = () => {
           color: 'transparent',
         },
       }}
-      initialRouteName="Login"
+      initialRouteName="Landing"
     >
       <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
       <Stack.Screen name="Registration" component={RegistrationScreen} options={{ title: 'Sign Up' }} />
       <Stack.Screen name="Landing" component={Landing} options={{title: 'Landing'}} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{title: 'Forgot Password'}} />
+      <Stack.Screen name="Station" component={StationScreen} options={{title: 'Station Screen'}} />
       <Stack.Screen 
           name="AppSlider" 
           component={AppSlider} 

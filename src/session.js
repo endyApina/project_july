@@ -13,6 +13,10 @@ export const toHome = (navigation) => {
 	});
 };
 
+export const toStationDetails = (navigation) => {
+	navigation.navigate('Station');
+};
+
 // export const navigateHome = (navigation) => {
 // 	navigation.navigate('Home');
 // };

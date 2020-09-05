@@ -3,7 +3,7 @@ import MapView from 'react-native-maps';
 import { Dimensions, TouchableOpacity } from 'react-native';
 
 export const MapContainer = styled.View`
-    height: 100%;
+    height: ${Dimensions.get('window').height}px;
 `; 
 
 export const MarkerViewContainer = styled.View`
