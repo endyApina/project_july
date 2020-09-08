@@ -1,11 +1,3 @@
-// export const toLogin = (navigation) => {
-// 	navigation.closeDrawer();
-// 	navigation.reset({
-// 		index: 0,
-// 		routes: [{ name: 'Login' }],
-// 	});
-// };
-
 export const toHome = (navigation) => {
 	navigation.reset({
 		index: 0,
@@ -14,9 +6,9 @@ export const toHome = (navigation) => {
 };
 
 export const toStationDetails = (navigation) => {
-	navigation.navigate('Station');
+	navigation.navigate('Create Order');
 };
 
-// export const navigateHome = (navigation) => {
-// 	navigation.navigate('Home');
-// };
+export const toConfirmRequest = (navigation) => {
+	navigation.navigate('Confirm Request');
+};

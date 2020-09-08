@@ -12,25 +12,29 @@ const list = [
       name: 'Forte Gas Station',
       avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
       subtitle: '21, Lekki-Ajah Express Way',
-      distance: '1km'
+      distance: '1km', 
+      id: 0
     },
     {
       name: 'Peninsula Gas',
       avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
       subtitle: '41, Yaba, Lagos',
-      distance: '4m'
+      distance: '4m', 
+      id: 1
     },
     {
       name: 'Peninsula Gas',
       avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
       subtitle: '41, Yaba, Lagos',
-      distance: '4m'
+      distance: '4m', 
+      id: 2
     },
     {
       name: 'Peninsula Gas',
       avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
       subtitle: '41, Yaba, Lagos',
-      distance: '4m'
+      distance: '4m', 
+      id: 3
     },
 ]
 
@@ -63,6 +67,7 @@ const VendorList = ({appSettings}) => {
                 list.map((l, i) => (
                 <ListItem
                     onPress={pressedList}
+                    key={l.id}
                 >
                     <ListItem.Content right>
                         {renderLeftElement(l.avatar_url)}

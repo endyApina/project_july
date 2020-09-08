@@ -8,6 +8,7 @@ import Landing from '../../screens/Landing/index';
 import OtpVerification from '../../screens/otp/otpverification';
 import AppSlider from '../../screens/AppIntroSlider/index'; 
 import StationScreen from '../../screens/station/station.sreen';
+import ConfirmRequestScreen from '../../screens/ConfirmRequest/confirm-request.screen';
 
 const Stack = createStackNavigator()
 
@@ -30,7 +31,8 @@ const MainNavigation = () => {
       <Stack.Screen name="Registration" component={RegistrationScreen} options={{ title: 'Sign Up' }} />
       <Stack.Screen name="Landing" component={Landing} options={{title: 'Landing'}} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{title: 'Forgot Password'}} />
-      <Stack.Screen name="Station" component={StationScreen} options={{title: 'Station Screen'}} />
+      <Stack.Screen name="Create Order" component={StationScreen} options={{title: 'Station Screen'}} />
+      <Stack.Screen name="Confirm Request" component={ConfirmRequestScreen} options={{title: 'Confirm Request'}} />
       <Stack.Screen 
           name="AppSlider" 
           component={AppSlider} 

@@ -2,12 +2,16 @@ import * as React from 'react';
 import { createStructuredSelector } from 'reselect';
 import { selectAppSettings } from '../../../redux/settings/settings.selector';
 import { connect } from 'react-redux';
+import {StyleSheet} from 'react-native';
 import ButtonText from '../../forms/button-text/button-text.component';
 import { View, Text } from 'react-native'; 
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { Divider } from 'react-native-paper';
 import { ContentContainer, AboutText, TimeText, DaysText, RatingIconContainer, RatingText, RatingContainer, KGContainer, KGText, PricingText, LineContainer, LocationContatainer } from './content.styles';
 import CustomButton from '../../forms/custom-button/custom-button.component';
+import BottomSheet from 'react-native-bottomsheet-reanimated';
+import BottomSheetComponent from '../bottom-sheet-content/bottom-sheet.content'; 
+import BottomHeader from '../station-bottom-sheet-header/bottom-sheet';
 
 const Location = () => {
   return (
@@ -85,8 +89,18 @@ const Description = () => {
 }
 
 const StationContent = ({appSettings}) => {
+	const originalSnapPoint = [0, 500];
+  const [snapPoints, setSnapPoints] = React.useState(originalSnapPoint);
+  const [initialPoint, setInitialPoint] = React.useState("0%");
+  const sheetRef = React.useRef(null);
+  const bottomSheetStyles = StyleSheet.create({
+    bottomSheetBorder: {
+        borderRadius: 30,
+    }
+  });
   const { transparentBorder, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
   return (
+    <>
     <ContentContainer> 
       <Location />
       <Divider />
@@ -98,7 +112,7 @@ const StationContent = ({appSettings}) => {
       <Divider />
       <Description />
       <CustomButton 
-        onPress={() => ({})} 
+        onPress={() => (sheetRef.current.snapTo(1))} 
         loading={false}
         space={'20px'} 
         uppercase={'true'} 
@@ -109,8 +123,23 @@ const StationContent = ({appSettings}) => {
         radius={'10px'}
       >
         <ButtonText weight={'bold'}>{'Place Order'}</ButtonText>
-      </CustomButton>
+      </CustomButton>      
     </ContentContainer>
+      <BottomSheet
+      ref={sheetRef}
+      snapPoints={snapPoints}
+      isBackDrop={true}
+      isBackDropDismissByPress={true}
+      isRoundBorderWithTipHeader={true}
+      bottomSheerColor={'#e8e6e6'}
+      containerStyle={bottomSheetStyles.bottomSheetBorder}
+      body={<BottomSheetComponent />}
+      header={<BottomHeader />}
+      enabledContentTapInteraction={false}
+      enabledInnerScrolling = {false}
+      initialPosition = {initialPoint}
+    />
+  </>
   )
 }
 

@@ -1,8 +1,10 @@
 import styled from 'styled-components/native';
+import { Dimensions, TouchableOpacity } from 'react-native';
 
 export const ContentContainer = styled.View`
   flex: 1.5;
   color: #ebebeb;
+  height: ${Dimensions.get('window').height}px;
 `;
 
 export const LineContainer = styled.View`

@@ -71,9 +71,8 @@ const Map = ({appSettings}) => {
                 body={<BottomSheetComponent />}
                 header={<BottomHeader />}
                 enabledContentTapInteraction={false}
-                enabledInnerScrolling = {false}
+                enabledInnerScrolling = {true}
                 initialPosition = {"40%"}
-                enabledInnerScrolling={true}
             />
         </MapContainer>
         </>
