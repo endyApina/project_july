@@ -8,12 +8,6 @@ import { DefaultTheme, Provider as PaperProvider  } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { View, SafeAreaView, Text, Alert } from 'react-native';
 import { UserProfileContainer, UserProfileTextContainer, ButtonContainer } from './Route.styles'; 
-
-import LoginScreen from './src/screens/Login/Login.screen';
-import RegistrationScreen from './src/screens/Registration/Registration.screen';
-import ForgotPasswordScreen from './src/screens/ForgotPassword/forgot.screen';
-import Landing from './src/screens/Landing/index';
-import OtpVerification from './src/screens/otp/otpverification';
 import { selectConnectionStatus } from './src/redux/user/user.selector';
 import AppSlider from './src/screens/AppIntroSlider/index';
 import { createStructuredSelector } from 'reselect';

@@ -11,7 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import { useNavigation } from '@react-navigation/native';
 import { emailSignInStart } from '../../redux/user/user.action';
 import {selectIsSubmittingLogin} from '../../redux/user/user.selector';
-// import { emailSignIn } from '../../util/user.util';
+import { toHome } from '../../session';
 
 const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
     const [userData, updateData] = useState({email: '', password: ''});
@@ -23,17 +23,9 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
     const handleSubmit = () => {
         let validity = validateSignIn()
         if (validity != true) return;
-        emailSignInStart({email, password})
-        // navigateToNextSlide()
+        // emailSignInStart({email, password})
+        toHome(navigation)
     };
-
-    const navigateToNextSlide = () => {
-        // alert("Navigating")
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'Landing' }]
-        })
-    }
 
     const handleChange = data => {
         const key = Object.keys(data)[0];

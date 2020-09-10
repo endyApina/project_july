@@ -12,3 +12,7 @@ export const toStationDetails = (navigation) => {
 export const toConfirmRequest = (navigation) => {
 	navigation.navigate('Confirm Request');
 };
+
+export const toSuccess = (navigation) => {
+	navigation.navigate('Success');
+};

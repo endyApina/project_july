@@ -9,6 +9,7 @@ import OtpVerification from '../../screens/otp/otpverification';
 import AppSlider from '../../screens/AppIntroSlider/index'; 
 import StationScreen from '../../screens/station/station.sreen';
 import ConfirmRequestScreen from '../../screens/ConfirmRequest/confirm-request.screen';
+import Success from '../../screens/SuccessScreen/success.component';
 
 const Stack = createStackNavigator()
 
@@ -25,7 +26,7 @@ const MainNavigation = () => {
           color: 'transparent',
         },
       }}
-      initialRouteName="Landing"
+      initialRouteName="Login"
     >
       <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
       <Stack.Screen name="Registration" component={RegistrationScreen} options={{ title: 'Sign Up' }} />
@@ -33,6 +34,7 @@ const MainNavigation = () => {
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{title: 'Forgot Password'}} />
       <Stack.Screen name="Create Order" component={StationScreen} options={{title: 'Station Screen'}} />
       <Stack.Screen name="Confirm Request" component={ConfirmRequestScreen} options={{title: 'Confirm Request'}} />
+      <Stack.Screen name="Success" component={Success} options={{title: 'Success'}} />
       <Stack.Screen 
           name="AppSlider" 
           component={AppSlider} 

@@ -1,6 +1,7 @@
 import React from 'react'; 
 import { View, Switch } from 'react-native'; 
 import { connect } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 import { Divider } from 'react-native-paper';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { createStructuredSelector } from 'reselect';
@@ -8,6 +9,7 @@ import { Avatar, CustomButtonController, BoldWeightText, ViewContainer, VISACont
 import { Fontisto } from '@expo/vector-icons';
 import CustomButton from '../../components/forms/custom-button/custom-button.component';
 import ButtonText from '../../components/forms/button-text/button-text.component';
+import { toSuccess } from '../../session';
 
 const VendorRow = () => {
   return (
@@ -89,6 +91,12 @@ const PickupRow = () => {
 
 const ConfirmRequestScreen = ({appSettings}) => {
   const { transparentBorder, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
+  const navigation = useNavigation();
+
+  const handleConfirmRequest = () => {
+    toSuccess(navigation)
+  }
+
   return (
     <View>
       <Avatar source={require('../../../assets/gas-station.png')} />
@@ -106,7 +114,7 @@ const ConfirmRequestScreen = ({appSettings}) => {
       <Divider />
       <CustomButtonController> 
         <CustomButton 
-          onPress={() => ({})} 
+          onPress={handleConfirmRequest} 
           loading={false}
           space={'20px'} 
           uppercase={'true'} 
