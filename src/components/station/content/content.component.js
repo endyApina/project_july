@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createStructuredSelector } from 'reselect';
 import { selectAppSettings } from '../../../redux/settings/settings.selector';
 import { connect } from 'react-redux';
-import {StyleSheet} from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import ButtonText from '../../forms/button-text/button-text.component';
 import { View, Text } from 'react-native'; 
 import { Entypo, FontAwesome } from '@expo/vector-icons';
@@ -125,7 +125,7 @@ const StationContent = ({appSettings}) => {
         <ButtonText weight={'bold'}>{'Place Order'}</ButtonText>
       </CustomButton>      
     </ContentContainer>
-      <BottomSheet
+    {/* <BottomSheet
       ref={sheetRef}
       snapPoints={snapPoints}
       isBackDrop={true}
@@ -138,7 +138,7 @@ const StationContent = ({appSettings}) => {
       enabledContentTapInteraction={false}
       enabledInnerScrolling = {false}
       initialPosition = {initialPoint}
-    />
+    /> */}
   </>
   )
 }

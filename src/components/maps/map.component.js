@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'; 
 import { Marker } from 'react-native-maps';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
-import { Text, View, TextInput, Button } from 'react-native';
+import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { createStructuredSelector } from 'reselect';
 import {selectAppSettings} from '../../redux/settings/settings.selector'
 import { connect } from 'react-redux';
@@ -58,24 +58,29 @@ const Map = ({appSettings}) => {
     });
 
     return (
-        <>
-        <MapContainer>
-            <MapViewContainer
-                provider={PROVIDER_GOOGLE}
-                region={region}
-            />
-            <BottomSheet
-                ref={sheetRef}
-                snapPoints={snapPoints}
-                containerStyle={bottomSheetStyles.bottomSheetBorder}
-                body={<BottomSheetComponent />}
-                header={<BottomHeader />}
-                enabledContentTapInteraction={false}
-                enabledInnerScrolling = {true}
-                initialPosition = {"40%"}
-            />
-        </MapContainer>
-        </>
+        <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+            style={{flex: 1}}
+        >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
+                <MapContainer>
+                    <MapViewContainer
+                        provider={PROVIDER_GOOGLE}
+                        region={region}
+                    />
+                    <BottomSheet
+                        ref={sheetRef}
+                        snapPoints={snapPoints}
+                        containerStyle={bottomSheetStyles.bottomSheetBorder}
+                        body={<BottomSheetComponent />}
+                        header={<BottomHeader />}
+                        enabledContentTapInteraction={false}
+                        enabledInnerScrolling = {true}
+                        initialPosition = {"50%"}
+                    />
+                </MapContainer>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
 }
 

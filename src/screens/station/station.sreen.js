@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Text } from 'react-native-elements';
-import { View, StatusBar } from 'react-native';
+import { View, StatusBar, SafeAreaView, ScrollView } from 'react-native';
 import { StationContainer } from './station.styles';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
@@ -11,10 +11,14 @@ import StationContent from '../../components/station/content/content.component';
 const StationScreen = ({appSettings}) => {
   const {mainColor, defaultColor, backgroundColor} = appSettings;
   return (
-    <StationContainer bgcolor={backgroundColor}>
-      <ImageHeader />
-      <StationContent />
-    </StationContainer>
+    <SafeAreaView>
+      <ScrollView> 
+        <StationContainer bgcolor={backgroundColor}>
+          <ImageHeader />
+          <StationContent />
+        </StationContainer>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 

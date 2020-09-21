@@ -4,7 +4,6 @@ import { Dimensions, TouchableOpacity } from 'react-native';
 export const ContentContainer = styled.View`
   flex: 1.5;
   color: #ebebeb;
-  height: ${Dimensions.get('window').height}px;
 `;
 
 export const LineContainer = styled.View`
@@ -16,6 +15,7 @@ export const LineContainer = styled.View`
 export const LocationContatainer = styled.Text`
   font-size: 13px;
   padding-bottom: 5px;
+  padding-top: 15px;
   margin-bottom: 10px;
   color: #2e2e2e;
   flexDirection: row;
