@@ -16,3 +16,11 @@ export const toConfirmRequest = (navigation) => {
 export const toSuccess = (navigation) => {
 	navigation.navigate('Success');
 };
+
+export const toOrderScreen = (navigation) => {
+	navigation.navigate('Place_Order');
+};
+
+export const toBecomeVendor = (navigation) => {
+	navigation.navigate('Become a Vendor')
+}

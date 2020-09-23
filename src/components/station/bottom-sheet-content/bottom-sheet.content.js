@@ -66,7 +66,7 @@ const BottomSheetComponent = ({appSettings}) => {
             loading={false}
             space={'20px'} 
             uppercase={'true'} 
-            width={'330px'} 
+            width={'335px'} 
             color={buttonTextColor} 
             bgcolor={defaultButtonBackgroundColor} 
             box-shadow={boxShadow}

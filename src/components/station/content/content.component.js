@@ -12,6 +12,8 @@ import CustomButton from '../../forms/custom-button/custom-button.component';
 import BottomSheet from 'react-native-bottomsheet-reanimated';
 import BottomSheetComponent from '../bottom-sheet-content/bottom-sheet.content'; 
 import BottomHeader from '../station-bottom-sheet-header/bottom-sheet';
+import { useNavigation } from '@react-navigation/native';
+import { toOrderScreen } from '../../../session';
 
 const Location = () => {
   return (
@@ -98,6 +100,11 @@ const StationContent = ({appSettings}) => {
         borderRadius: 30,
     }
   });
+  const navigation = useNavigation();
+  const placeOrder = () => {
+    toOrderScreen(navigation)
+  }
+
   const { transparentBorder, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
   return (
     <>
@@ -112,7 +119,7 @@ const StationContent = ({appSettings}) => {
       <Divider />
       <Description />
       <CustomButton 
-        onPress={() => (sheetRef.current.snapTo(1))} 
+        onPress={placeOrder} 
         loading={false}
         space={'20px'} 
         uppercase={'true'} 
