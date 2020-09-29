@@ -3,6 +3,8 @@ import { Dimensions, TouchableOpacity } from 'react-native';
 
 export const SettingsContainer = styled.View`
   height: ${Dimensions.get('window').height}px;
+  paddingLeft: 20px;
+  paddingRight: 20px;
 `;
 
 export const AvatarContainer = styled.View`
@@ -12,4 +14,14 @@ export const AvatarContainer = styled.View`
 
 export const EmailTextContainer = styled.View`
 
+`;
+
+export const HelloContainer = styled.View`
+  marginTop: 15px;
+  paddingTop: 30px;
+  paddingLeft: 5px;
+`;
+
+export const HelloText = styled.Text`
+  fontSize: 20px;
 `;

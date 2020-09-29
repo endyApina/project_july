@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { View, Text, Image } from 'react-native';
 import Maps from '../../components/maps/map.component'; 
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, Feather, Entypo } from '@expo/vector-icons';
 import SettingsScreen from '../Settings/settings.screen';
+import { Avatar, Badge } from 'react-native-elements';
+// import { Badge, Avatar } from 'react-native-paper';
 
 function Notifications() {
     return (
@@ -13,28 +15,35 @@ function Notifications() {
     );
   }
 
-function Profile() {
+function UserProfileBottomIcon() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Profile!</Text>
+    <View>
+      <Avatar 
+        rounded
+        source={{
+          uri: 'https://randomuser.me/api/portraits/men/41.jpg',
+        }}
+        size="small"
+      />
+
+      <Badge
+        status="success"
+        containerStyle={{position: 'absolute', top: -4, right: -4}}
+      />
     </View>
-  );
+  )
 }
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 const Landing = ({}) => {
     return (
         <Tab.Navigator
-            initialRouteName="Maps"
-            activeColor="#ed1f27"
-            labelStyle={{fontSize: 12}}
-            style={{ backgroundColor: 'tomato' }}
-            barStyle={{backgroundColor: '#f0f0f0'}}
+            initialRouteName="Home"
         >
             <Tab.Screen 
-                name="Maps"
-                component={Maps}
+                name="Home"
+                component={SettingsScreen}
                 options={{
                     tabBarLabel: 'Home', 
                     tabBarIcon: ({ color }) => (
@@ -43,22 +52,22 @@ const Landing = ({}) => {
                 }}
             />
             <Tab.Screen
-              name="Notifications"
-              component={Notifications}
+              name="Maps"
+              component={Maps}
               options={{
-                tabBarLabel: 'Notifications',
+                tabBarLabel: 'Maps',
                 tabBarIcon: ({ color }) => (
-                  <MaterialCommunityIcons name="bell" color={color} size={26} />
+                  <Feather name="map-pin" size={26} color={color} />
                 ),
               }}
             />
             <Tab.Screen
-              name="Settings"
-              component={SettingsScreen}
+              name="Profile"
+              component={Notifications}
               options={{
-                tabBarLabel: 'Settings',
+                tabBarLabel: 'Profile',
                 tabBarIcon: ({ color }) => (
-                  <Feather name="settings" size={26} color={color} />
+                  <UserProfileBottomIcon />
                 ),
               }}
             />

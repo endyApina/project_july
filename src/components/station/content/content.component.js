@@ -9,9 +9,6 @@ import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { Divider } from 'react-native-paper';
 import { ContentContainer, AboutText, TimeText, DaysText, RatingIconContainer, RatingText, RatingContainer, KGContainer, KGText, PricingText, LineContainer, LocationContatainer } from './content.styles';
 import CustomButton from '../../forms/custom-button/custom-button.component';
-import BottomSheet from 'react-native-bottomsheet-reanimated';
-import BottomSheetComponent from '../bottom-sheet-content/bottom-sheet.content'; 
-import BottomHeader from '../station-bottom-sheet-header/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 import { toOrderScreen } from '../../../session';
 
@@ -132,20 +129,6 @@ const StationContent = ({appSettings}) => {
         <ButtonText weight={'bold'}>{'Place Order'}</ButtonText>
       </CustomButton>      
     </ContentContainer>
-    {/* <BottomSheet
-      ref={sheetRef}
-      snapPoints={snapPoints}
-      isBackDrop={true}
-      isBackDropDismissByPress={true}
-      isRoundBorderWithTipHeader={true}
-      bottomSheerColor={'#e8e6e6'}
-      containerStyle={bottomSheetStyles.bottomSheetBorder}
-      body={<BottomSheetComponent />}
-      header={<BottomHeader />}
-      enabledContentTapInteraction={false}
-      enabledInnerScrolling = {false}
-      initialPosition = {initialPoint}
-    /> */}
   </>
   )
 }

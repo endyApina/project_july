@@ -12,6 +12,8 @@ import ConfirmRequestScreen from '../../screens/ConfirmRequest/confirm-request.s
 import Success from '../../screens/SuccessScreen/success.component';
 import OrderScreen from '../../components/station/station-order/order.component';
 import BecomeVendorScreen from '../../screens/vendor/BecomeVendor/vendor.screen';
+import PaymentScreen from '../../screens/Payments/payment.screen';
+import AddCardScreen from '../../screens/Payments/AddCard/addcard.screen';
 
 const Stack = createStackNavigator()
 
@@ -32,12 +34,14 @@ const MainNavigation = () => {
     >
       <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
       <Stack.Screen name="Registration" component={RegistrationScreen} options={{ title: 'Sign Up' }} />
-      <Stack.Screen name="Landing" component={Landing} options={{title: 'Landing'}} />
+      <Stack.Screen name="Landing" component={Landing} options={{title: ''}} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{title: 'Forgot Password'}} />
       <Stack.Screen name="Create Order" component={StationScreen} options={{title: 'Station Screen'}} />
       <Stack.Screen name="Confirm Request" component={ConfirmRequestScreen} options={{title: 'Confirm Request'}} />
       <Stack.Screen name="Place_Order" component={OrderScreen} options={{title: 'Place Order'}} />
       <Stack.Screen name="Success" component={Success} options={{title: 'Success'}} />
+      <Stack.Screen name="Payments" component={PaymentScreen} options={{title: 'Payments'}} />
+      <Stack.Screen name="Add Card" component={AddCardScreen} options={{title: 'Add Card'}} />
       <Stack.Screen name="Become a Vendor" component={BecomeVendorScreen} options={{title: 'Become A Vendor'}} />
       <Stack.Screen 
           name="AppSlider" 

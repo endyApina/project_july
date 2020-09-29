@@ -23,4 +23,12 @@ export const toOrderScreen = (navigation) => {
 
 export const toBecomeVendor = (navigation) => {
 	navigation.navigate('Become a Vendor')
-}
+};
+
+export const toPayments = (navigation) => {
+	navigation.navigate('Payments')
+};
+
+export const toAddCard = (navigation) => {
+	navigation.navigate('Add Card')
+};
