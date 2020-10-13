@@ -19,7 +19,7 @@ const LoginScreen = ({ navigation, appSettings, userLoggedIn, selectCurrentUser 
         alert()
         navigateToLanding()
     }
-
+    
     useEffect(() => {
         if(userLoggedIn) toHome(navigation)
     }, [userLoggedIn])

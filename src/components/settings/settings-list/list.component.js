@@ -1,13 +1,13 @@
 import React from 'react'; 
 import { View } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements';
-import {toBecomeVendor, toPayments} from '../../../session';
+import {toBecomeVendor, toNotification, toPayments, toLogin} from '../../../session';
 import { useNavigation } from '@react-navigation/native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
 const list = [
   {
-    title: 'Notification', 
+    title: 'Notifications', 
     icon: 'av-timer'
   }, 
   {
@@ -45,8 +45,16 @@ const SettingsList = () => {
     if (title === "Payments") {
       toPayments(navigation)
     }
+
+    if (title === "Notifications") {
+      toNotification(navigation)
+    }
   
     alert(val.title)
+  }
+
+  const handleSignOut = () => {
+    toLogin(navigation)
   }
 
   return (
@@ -97,6 +105,7 @@ const SettingsList = () => {
         containerStyle={{
           backgroundColor: 'transparent',
         }}
+        onPress={handleSignOut}
       >
         <SimpleLineIcons name="logout" size={24} color="red" />
         <ListItem.Content>

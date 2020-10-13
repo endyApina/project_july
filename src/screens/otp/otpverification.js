@@ -247,9 +247,9 @@ const OtpVerification = props => {
                     Verification
                 </CustomTextHeader>
               <CustomText>
-                Hey! We send a One-Time-Password to your registration {' '}
-                {otpRequestData.email_id ? 'email' : 'mobile number'}{' .'}
-                Please, do enter it below. 
+                Hey! We sent a One-Time-Password to your registration {' '}
+                {otpRequestData.email_id ? 'email' : 'mobile number'}{'. '}
+                Kindly enter it below. 
               </CustomText>
               <View style={[GenericStyles.row, GenericStyles.mt12]}>
                 {[
@@ -336,9 +336,6 @@ const styles = StyleSheet.create({
       textDecorationLine: 'underline',
     },
     otpText: {
-      fontWeight: 'bold',
-      color: colors.BLUE,
-      fontSize: 18,
       width: '100%',
     },
 });

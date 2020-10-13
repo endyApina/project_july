@@ -64,7 +64,7 @@ export const GenericStyles = StyleSheet.create({
     color: colors.RED,
   },
   centerAlignedText: {
-    textAlign: 'center',
+    // textAlign: 'center',
   },
   centerAligned: {
     justifyContent: 'center',

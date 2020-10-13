@@ -12,12 +12,20 @@ import { connect } from 'react-redux';
 const ForgotPasswordScreen = ({ navigation, appSettings }) => {
     const {mainColor, defaltColor, backgroundColor } = appSettings;
 
+    const handleBackToLogin = () => {
+        navigation.reset({
+            index: 0, 
+            routes: [{name: 'Login'}]
+        })
+    }
+
+
     return (
         <ForgotPasswordContainer bgcolor={backgroundColor}>
             <StatusBar backgroundColor={'red'} barStyle={'light-content'} />
             <Avatar source={require('../../../assets/logo.png')} />
             <ForgotPassword />
-			      <CustomTextContainer txtcolor={'blue'} onPress={() => navigation.push('Login')}>Back to Login</CustomTextContainer>
+			      <CustomTextContainer txtcolor={'blue'} onPress={handleBackToLogin}>Back to Login</CustomTextContainer>
         </ForgotPasswordContainer>
     );
 };

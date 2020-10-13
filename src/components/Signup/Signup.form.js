@@ -2,8 +2,7 @@ import React, { useState, useEffect} from 'react';
 import CustomButton from '../forms/custom-button/custom-button.component';
 import CustomInput from '../forms/custom-input/custom-input.component';
 import ButtonText from '../forms/button-text/button-text.component';
-
-import { SignupContainer} from './Signup.styles';
+import { SignupContainer, FormContainer} from './Signup.styles';
 import { createStructuredSelector } from 'reselect';
 import {appSettings} from '../../config';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
@@ -44,7 +43,9 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart}) => {
         var submittedData = validateSignUp()
         if (submittedData != true) return
         signUpStart({email, password, fullName, phone, userType})
-        // navigateToIntroSliders()
+        setTimeout(() => {
+            navigateToIntroSliders()
+        }, 2000);
     }
 
     const navigateToIntroSliders = () => {
@@ -62,7 +63,7 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart}) => {
     }
 
     const validateSignUp = () => {
-        if (fullName === "" || email === "" || password === "" || phone === "" || userType === "") {
+        if (fullName === "" || email === "" || password === "" || phone === "") {
             alert("Kindly Fill All details")
             return false 
         }
@@ -71,80 +72,82 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart}) => {
 
     return (
         <SignupContainer>
-            <CustomInput 
-                onChangeText={text => handleChange({ fullName: text })}
-                value={fullName}
-                placeholder={'Full Name'}
-                bgcolor={defaultInputBgColor}
-                space={inputSpace} 
-                placeholderTextColor={defaultInputPlaceholderColor} 
-                width={defaultInputWidth} 
-                radius={inputRadius} 
-                border={transparentBorder} 
-                // underline={'white'} 
-                txtcolor={defaultInputTextColor} 
-            />
-            <CustomInput 
-                onChangeText={text => handleChange({ email: text })}
-                value={email}
-                placeholder={'Email'}
-                bgcolor={defaultInputBgColor}
-                space={inputSpace} 
-                placeholderTextColor={defaultInputPlaceholderColor} 
-                width={defaultInputWidth} 
-                radius={inputRadius} 
-                border={transparentBorder} 
-                // underline={'white'} 
-                txtcolor={defaultInputTextColor} 
-            />
-            <CustomInput 
-                onChangeText={text => handleChange({ phone: text })}
-                value={phone}
-                placeholder={'Phone'}
-                bgcolor={defaultInputBgColor}
-                space={inputSpace} 
-                placeholderTextColor={defaultInputPlaceholderColor} 
-                width={defaultInputWidth} 
-                radius={inputRadius} 
-                border={transparentBorder} 
-                // underline={'white'} 
-                txtcolor={defaultInputTextColor} 
-            />
-            <CustomInput 
-                onChangeText={text => handleChange({ password: text })}
-                value={password}
-                placeholder={'Password'}
-                bgcolor={defaultInputBgColor}
-                space={inputSpace} 
-                placeholderTextColor={defaultInputPlaceholderColor} 
-                width={defaultInputWidth} 
-                radius={inputRadius} 
-                border={transparentBorder} 
-                forPassword={true}
-                txtcolor={defaultInputTextColor} 
-            />
-            <Picker
-                // selectedValue={(userData && userData.userType) || "vendor"}
-                selectedValue={userType}
-                space={inputSpace}
-                style={{width: defaultInputWidth}}
-                onValueChange={(itemValue, itemIndex) => {
-                    handleChange({ userType: itemValue })
-                }}
-            >
-                <Picker.Item label="Customer" value="customer" />
-                <Picker.Item label="Vendor" value="vendor" />
-            </Picker>
+            <FormContainer>
+                <CustomInput 
+                    onChangeText={text => handleChange({ fullName: text })}
+                    value={fullName}
+                    placeholder={'Full Name'}
+                    bgcolor={defaultInputBgColor}
+                    space={inputSpace} 
+                    placeholderTextColor={defaultInputPlaceholderColor} 
+                    width={defaultInputWidth} 
+                    radius={inputRadius} 
+                    border={transparentBorder} 
+                    // underline={'white'} 
+                    txtcolor={defaultInputTextColor} 
+                />
+                <CustomInput 
+                    onChangeText={text => handleChange({ email: text })}
+                    value={email}
+                    placeholder={'Email'}
+                    bgcolor={defaultInputBgColor}
+                    space={inputSpace} 
+                    placeholderTextColor={defaultInputPlaceholderColor} 
+                    width={defaultInputWidth} 
+                    radius={inputRadius} 
+                    border={transparentBorder} 
+                    // underline={'white'} 
+                    txtcolor={defaultInputTextColor} 
+                />
+                <CustomInput 
+                    onChangeText={text => handleChange({ phone: text })}
+                    value={phone}
+                    placeholder={'Phone'}
+                    bgcolor={defaultInputBgColor}
+                    space={inputSpace} 
+                    placeholderTextColor={defaultInputPlaceholderColor} 
+                    width={defaultInputWidth} 
+                    radius={inputRadius} 
+                    border={transparentBorder} 
+                    // underline={'white'} 
+                    txtcolor={defaultInputTextColor} 
+                />
+                <CustomInput 
+                    onChangeText={text => handleChange({ password: text })}
+                    value={password}
+                    placeholder={'Password'}
+                    bgcolor={defaultInputBgColor}
+                    space={inputSpace} 
+                    placeholderTextColor={defaultInputPlaceholderColor} 
+                    width={defaultInputWidth} 
+                    radius={inputRadius} 
+                    border={transparentBorder} 
+                    forPassword={true}
+                    txtcolor={defaultInputTextColor} 
+                />
+                {/* <Picker
+                    // selectedValue={(userData && userData.userType) || "vendor"}
+                    selectedValue={userType}
+                    space={inputSpace}
+                    style={{width: defaultInputWidth}}
+                    onValueChange={(itemValue, itemIndex) => {
+                        handleChange({ userType: itemValue })
+                    }}
+                >
+                    <Picker.Item label="Customer" value="customer" />
+                    <Picker.Item label="Vendor" value="vendor" />
+                </Picker> */}
+            </FormContainer>
             <CustomButton 
-            onPress={() => handleSubmit()} 
-            space={'20px'} 
-            uppercase={'true'} 
-            loading={isSubmittingForm}
-            width={defaultButtonWidth} 
-            color={buttonTextColor} 
-            bgcolor={defaultButtonBackgroundColor} 
-            box-shadow={boxShadow}
-            radius={'10px'}
+                onPress={() => handleSubmit()} 
+                space={'20px'} 
+                uppercase={'true'} 
+                loading={isSubmittingForm}
+                width={defaultButtonWidth} 
+                color={buttonTextColor} 
+                bgcolor={defaultButtonBackgroundColor} 
+                box-shadow={boxShadow}
+                radius={'10px'}
             >
                 <ButtonText weight={'bold'}>{'Register'}</ButtonText>
             </CustomButton>

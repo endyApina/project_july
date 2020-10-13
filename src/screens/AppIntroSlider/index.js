@@ -7,7 +7,8 @@ import { createStructuredSelector } from 'reselect';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { connect } from 'react-redux';
 import { StyleSheet, View, Text, Image, ImageBackground } from 'react-native';
-
+import { toHome } from '../../session';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
     MainContainer: {
@@ -152,37 +153,6 @@ class AppSlider extends Component {
     }
 
 }
-
-// const AppSlider = ({navigation, appSetting}) => {
-//     const [setAppMode, showMainApp] = useState(false)
-
-//     const onDoneAllSlides = () => {
-//         setAppMode(true)
-//     }
-
-//     const onSkipSlides = () => {
-//         setAppMode(false)
-//     }
-
-//     const navigateToMainApp = () => {
-//         navigation.push('Landing')
-//     }
-
-//     if (!showMainApp) {
-//         return (
-//             <Landing />
-//         )
-//     } else {
-//         return (
-//             <AppIntroSlider 
-//                 data={Slides}
-//                 onDone={onDoneAllSlides}
-//                 showSkipButton={true}
-//                 onSkip={onSkipSlides}
-//             />
-//         )
-//     }
-// }
 
 const mapStateToProps = createStructuredSelector ({
     appSettings: selectAppSettings,

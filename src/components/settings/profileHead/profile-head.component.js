@@ -1,10 +1,8 @@
 import React from 'react'; 
 import { ListItem, Avatar } from 'react-native-elements';
-import { View } from 'react-native';
 import { connect } from 'react-redux'; 
 import { createStructuredSelector } from 'reselect';
 import { selectAppSettings } from '../../../redux/settings/settings.selector';
-import { List } from 'react-native-paper';
 import { ProfileHeadContainer } from './profile-head.styles';
 
 const AvatarElement = () => {

@@ -32,3 +32,15 @@ export const toPayments = (navigation) => {
 export const toAddCard = (navigation) => {
 	navigation.navigate('Add Card')
 };
+
+export const toNotification = (navigation) => {
+	navigation.navigate('Notifications')
+}
+
+export const toLogin = (navigation) => {
+	navigation.reset({
+		index: 0,
+		routes: [{ name: 'Login' }]
+	})
+	// navigation.navigate('Login')
+}

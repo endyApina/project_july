@@ -13,7 +13,7 @@ import CustomTextContainer from '../../components/forms/custom-text/custom-text.
 import {selectCurrentUser} from '../../redux/user/user.selector';
 
 const RegistrationScreen = ({appSettings, currentUser}) => {
-    const { mainColor, defaultColor } = appSettings;
+    const { mainColor, defaultColor, backgroundColor } = appSettings;
     const navigation = useNavigation();
 
     const navigateToNextSlide = () => {
@@ -30,13 +30,13 @@ const RegistrationScreen = ({appSettings, currentUser}) => {
 
     return (
         <ScrollView>
-            <RegsitrationContainer>
-            <Avatar source={require('../../../assets/logo.png')} />
-            {/* <CustomHeader tintColor={mainColor} headerBg={defaultColor}  /> */}
-			{/* <PageTitle title={'Sign Up.'} maincolor={mainColor} subcolor={mainColor} /> */}
-            <SignUp />
-			<CustomTextContainer txtcolor={mainColor} onPress={() => navigation.navigate('Login')}>Already have an account? Login</CustomTextContainer>
-        </RegsitrationContainer>
+            <RegsitrationContainer bgcolor={backgroundColor}>
+                <Avatar source={require('../../../assets/logo.png')} />
+                {/* <CustomHeader tintColor={mainColor} headerBg={defaultColor}  /> */}
+                {/* <PageTitle title={'Sign Up.'} maincolor={mainColor} subcolor={mainColor} /> */}
+                <SignUp />
+                <CustomTextContainer txtcolor={mainColor} onPress={() => navigation.navigate('Login')}>Already have an account? Login</CustomTextContainer>
+            </RegsitrationContainer>
         </ScrollView>
     )
 }

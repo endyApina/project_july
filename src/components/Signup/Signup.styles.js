@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import {Dimensions} from 'react-native';
 
 export const SignupContainer = styled.View`
     align-items: center;
@@ -11,4 +12,11 @@ export const Avatar = styled.Image`
     margin-left: 110px;
     margin-top: 15px;
     margin-bottom: 15px;
+`;
+
+export const FormContainer = styled.View`
+    marginTop: 15px;
+    paddingTop: 10px;
+    paddingBottom: 10px;
+    marginBottom: 10px;
 `;
