@@ -6,5 +6,5 @@ export const CustomButtonContainer = styled(Button)`
     width: ${({ width }) => width ? width : '100%'};
     margin: ${({ space }) => space ? space : '10px'};
     border-radius: ${({ radius }) => radius ? radius: '10px'};
-    elevation: ${({ elevation }) => elevation ? elevation : 0};
+    elevation: ${({ elevation }) => elevation ? elevation : 10};
 `;

@@ -4,12 +4,9 @@ import CustomInput from '../forms/custom-input/custom-input.component';
 import ButtonText from '../forms/button-text/button-text.component';
 import { SignupContainer, FormContainer} from './Signup.styles';
 import { createStructuredSelector } from 'reselect';
-import {appSettings} from '../../config';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { connect } from 'react-redux';
 import { signUpStart } from '../../redux/user/user.action';
-import {registration} from '../../util/user.util';
-import {Picker} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import {selectIsSubmittingRegister} from '../../redux/user/user.selector';
 // import CustomSelectInput from '../forms/custom-select-input/custom-select';
@@ -24,7 +21,7 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart}) => {
     })
     const navigation = useNavigation();
     const { fullName, email, password, phone, userType } = userData;
-    const { transparentBorder, inputSpace, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
+    const { transparentBorder,  AppMainColor, AppMainColorShadow, inputSpace, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
     const [isSubmitting, toggleSubmitting] = useState(false);
 
     const updateType = (type) => {
@@ -125,18 +122,6 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart}) => {
                     forPassword={true}
                     txtcolor={defaultInputTextColor} 
                 />
-                {/* <Picker
-                    // selectedValue={(userData && userData.userType) || "vendor"}
-                    selectedValue={userType}
-                    space={inputSpace}
-                    style={{width: defaultInputWidth}}
-                    onValueChange={(itemValue, itemIndex) => {
-                        handleChange({ userType: itemValue })
-                    }}
-                >
-                    <Picker.Item label="Customer" value="customer" />
-                    <Picker.Item label="Vendor" value="vendor" />
-                </Picker> */}
             </FormContainer>
             <CustomButton 
                 onPress={() => handleSubmit()} 
@@ -145,8 +130,8 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart}) => {
                 loading={isSubmittingForm}
                 width={defaultButtonWidth} 
                 color={buttonTextColor} 
-                bgcolor={defaultButtonBackgroundColor} 
-                box-shadow={boxShadow}
+                bgcolor={AppMainColor} 
+                box-shadow={AppMainColorShadow}
                 radius={'10px'}
             >
                 <ButtonText weight={'bold'}>{'Register'}</ButtonText>

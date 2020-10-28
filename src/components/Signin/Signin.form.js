@@ -17,7 +17,7 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
     const [userData, updateData] = useState({email: '', password: ''});
     const {email, password} = userData;
     const [isSubmitting, toggleSubmitting] = useState(false);
-    const { transparentBorder, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings
+    const { transparentBorder, boxShadow, AppMainColor, buttonTextColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings
     const navigation = useNavigation();
 
     const handleSubmit = () => {
@@ -53,7 +53,7 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
                 autoCompleteType={'email'}
                 placeholder={'Email/Username'}
                 bgcolor={defaultInputBgColor}
-                space={'20px'} 
+                space={'5px'} 
                 placeholderTextColor={defaultInputPlaceholderColor} 
                 width={defaultInputWidth} 
                 radius={inputRadius} 
@@ -81,7 +81,7 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
             uppercase={'true'} 
             width={defaultButtonWidth} 
             color={buttonTextColor} 
-            bgcolor={defaultButtonBackgroundColor} 
+            bgcolor={AppMainColor} 
             box-shadow={boxShadow}
             radius={'10px'}
             >

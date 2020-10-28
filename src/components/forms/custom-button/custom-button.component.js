@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CustomButtonContainer } from './custom-button.styles';
+import { CustomButtonContainer, ChildContainer } from './custom-button.styles';
 
 const CustomButton = ({ children, ...otherProps }) => (
 	<CustomButtonContainer {...otherProps}>

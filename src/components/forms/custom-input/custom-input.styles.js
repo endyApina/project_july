@@ -24,6 +24,7 @@ export const TextInputContainer = styled.TextInput`
     padding-left:25px;
     background-color: transparent;
     elevation: 0;
+    height: 45px;
 `;
 
 export const IonIconsContainer = styled(Ionicons)`

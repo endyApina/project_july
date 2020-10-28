@@ -11,7 +11,7 @@ export const appSettings = {
 	defaultButtonWidth: '99%',
 	defaultButtonWeight: 'bold',
 	defaultButtonRadius: '5px',
-	defaultButtonBackgroundColor: '#0042b5',
+	defaultButtonBackgroundColor: '#0042b5', //
 	buttonTextColor: 'white',
 	personIcon: 'md-person',
 	emailIcon: 'md-mail',
@@ -24,6 +24,9 @@ export const appSettings = {
 	defaultInputTextColor: 'black',
 	boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)',
 	sliderOneBackgroundColor: '#0a52f0',
+	AppMainColor: '#ed1f27',
+	AppMainColorShadow: '#e8565c',
+	LoginCustomTextColor: 'black',
 };
 
 export const appModes = {

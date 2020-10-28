@@ -1,18 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react'; 
-import { Marker } from 'react-native-maps';
 import {StyleSheet, Platform} from 'react-native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {PROVIDER_GOOGLE} from 'react-native-maps';
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { createStructuredSelector } from 'reselect';
 import {selectAppSettings} from '../../redux/settings/settings.selector'
 import { connect } from 'react-redux';
-import CustomButton from '../forms/custom-button/custom-button.component';
-import ButtonText from '../forms/button-text/button-text.component'
-import { MapContainer, BottomSheetPanelHandle, BottomSheetHeader, RenderContentView, MapViewContainer, TouchableOpacityContainer, SearchViewContainer, ButtonContainer } from './map.styles';
-// import BottomSheet from 'reanimated-bottom-sheet';
-import BottomSheet from 'react-native-bottomsheet-reanimated';
-import BottomSheetComponent from './bottom-sheet/bottom-sheet.component';
-import BottomHeader from './bottom-sheet-header/bottom-sheet.component';
+import { MapContainer, MapViewContainer } from './map.styles';
 
 navigator.geolocation = require('@react-native-community/geolocation');
 
@@ -24,11 +17,6 @@ const Map = ({appSettings}) => {
         longitudeDelta: 0
     };
     const [region, setRegion] = useState(initialRegion);
-	const originalSnapPoint = [350, 700, 1000];
-	const [snapPoints, setSnapPoints] = useState(originalSnapPoint);
-    const [showBottomSheet, toggleBottomSheet] = useState(false)
-    const [value, onChangeText] = React.useState('');
-    const { transparentBorder, inputSpace, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
 
     const findPosition = payload => navigator.geolocation.getCurrentPosition(position => {
         var lat = parseFloat(position.coords.latitude); 
@@ -50,12 +38,6 @@ const Map = ({appSettings}) => {
 	useEffect(() => {
 		findPosition();
     }, []);
-    
-    const bottomSheetStyles = StyleSheet.create({
-        bottomSheetBorder: {
-            borderRadius: 30,
-        }
-    });
 
     return (
         <KeyboardAvoidingView
@@ -68,7 +50,7 @@ const Map = ({appSettings}) => {
                         provider={PROVIDER_GOOGLE}
                         region={region}
                     />
-                    <BottomSheet
+                    {/* <BottomSheet
                         ref={sheetRef}
                         snapPoints={snapPoints}
                         containerStyle={bottomSheetStyles.bottomSheetBorder}
@@ -77,7 +59,7 @@ const Map = ({appSettings}) => {
                         enabledContentTapInteraction={false}
                         enabledInnerScrolling = {true}
                         initialPosition = {"50%"}
-                    />
+                    /> */}
                 </MapContainer>
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
