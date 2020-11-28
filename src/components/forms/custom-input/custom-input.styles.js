@@ -21,10 +21,10 @@ export const TextInputContainer = styled.TextInput`
     padding: 10px;
     border-radius: ${({ radius }) => radius};
     color: ${({ txtcolor }) => txtcolor ? txtcolor : '#000'};
-    padding-left:25px;
+    padding-left: ${({ paddingLeft }) => paddingLeft ? paddingLeft : '25px'};
     background-color: transparent;
     elevation: 0;
-    height: 45px;
+    height: ${({inputHeight}) => inputHeight ? inputHeight : '45px'};
 `;
 
 export const IonIconsContainer = styled(Ionicons)`

@@ -6,6 +6,9 @@ import { createStructuredSelector } from 'reselect';
 import {selectAppSettings} from '../../redux/settings/settings.selector'
 import { connect } from 'react-redux';
 import { MapContainer, MapViewContainer } from './map.styles';
+import BottomSheetComponent from './bottom-sheet/bottom-sheet.component';
+import BottomHeader from './bottom-sheet-header/bottom-sheet.component';
+import BottomSheet from 'react-native-bottomsheet-reanimated';
 
 navigator.geolocation = require('@react-native-community/geolocation');
 
@@ -34,10 +37,18 @@ const Map = ({appSettings}) => {
     {enableHighAccuracy: false, timeout: 20000, maximumAge: 1000});
 
     const sheetRef = React.useRef(null);
+	const originalSnapPoint = [350, 700, 1000];
+	const [snapPoints, setSnapPoints] = useState(originalSnapPoint);
 
 	useEffect(() => {
 		findPosition();
     }, []);
+
+    const bottomSheetStyles = StyleSheet.create({
+        bottomSheetBorder: {
+            borderRadius: 30,
+        }
+    });
 
     return (
         <KeyboardAvoidingView
@@ -50,7 +61,7 @@ const Map = ({appSettings}) => {
                         provider={PROVIDER_GOOGLE}
                         region={region}
                     />
-                    {/* <BottomSheet
+                    <BottomSheet
                         ref={sheetRef}
                         snapPoints={snapPoints}
                         containerStyle={bottomSheetStyles.bottomSheetBorder}
@@ -59,7 +70,7 @@ const Map = ({appSettings}) => {
                         enabledContentTapInteraction={false}
                         enabledInnerScrolling = {true}
                         initialPosition = {"50%"}
-                    /> */}
+                    />
                 </MapContainer>
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>

@@ -71,7 +71,7 @@ export const SmallerText = styled.Text`
 `;
 
 export const PromotionContainer = styled.View`
-  backgroundColor: #fdba03;
+  backgroundColor: ${({bgcolor}) => bgcolor ? bgcolor : '#fdba03'};
   height: 110px;
   borderRadius: 10px;
   marginTop: 20px;

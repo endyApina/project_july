@@ -15,12 +15,13 @@ const AvatarElement = () => {
   )
 }
 
-const ProfileHead = ({}) => {
+const ProfileHead = ({appSettings}) => {
+  const {AppMainColor} = appSettings;
   return (
     <ProfileHeadContainer> 
       <ListItem
         containerStyle={{
-          backgroundColor: '#002feb',
+          backgroundColor: AppMainColor,
           borderTopLeftRadius: 15,
           borderBottomRightRadius: 15,
           borderTopRightRadius: 15,

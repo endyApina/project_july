@@ -10,7 +10,7 @@ import CustomButton from '../../../components/forms/custom-button/custom-button.
 import ButtonText from '../../../components/forms/button-text/button-text.component';
 import CustomInput from '../../../components/forms/custom-input/custom-input.component';
 
-const CardNumberSection = () => {
+const CardNumberSection = ({appColor}) => {
   return (
     <AddCardRowContainer>
       <CardText>
@@ -28,7 +28,7 @@ const CardNumberSection = () => {
             txtcolor={'#4a4a4a'} 
         />
         <VISAContainer>
-          <FontAwesome name="cc-visa" size={30} color="blue" />
+          <FontAwesome name="cc-visa" size={30} color={appColor} />
         </VISAContainer>
       </CardContainer>
     </AddCardRowContainer>
@@ -122,7 +122,7 @@ const HeaderSection = () => {
   )
 }
 
-const AddCardButton = () => {
+const AddCardButton = ({appColor}) => {
   return (
     <AddCardContainer>
       <CustomButton 
@@ -132,7 +132,7 @@ const AddCardButton = () => {
         uppercase={'true'} 
         width={'300px'} 
         color={'white'} 
-        bgcolor={'blue'} 
+        bgcolor={appColor} 
         // box-shadow={}
         radius={'10px'}
         >
@@ -142,14 +142,15 @@ const AddCardButton = () => {
   )
 }
 
-const AddCardScreen = () => {
+const AddCardScreen = ({appSettings}) => {
+  const { AppMainColor} = appSettings;
   return (
     <>
       <HeaderSection />
-      <CardNumberSection />
+      <CardNumberSection appColor={AppMainColor}/>
       <CardHolderSection />
       <ExpireCVVSection />
-      <AddCardButton />
+      <AddCardButton appColor={AppMainColor} />
     </>
   )
 }

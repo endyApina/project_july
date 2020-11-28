@@ -76,15 +76,12 @@ const Slides = [
     },
   ];
 
-class AppSlider extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            showRealApp: false
-        };
-    }
+const AppSlider = ({appSettings}) => {
+    const [showRealApp, toggleAppSettings] = useState(false); 
+    const {mainColor, defaltColor, sliderOneBackgroundColor } = appSettings;
+    const navigation = useNavigation();
 
-    _renderNextButton = () => {
+    const renderNextButton = () => {
         return (
             <View style={styles.buttonCircle}>
               <Icon
@@ -95,7 +92,7 @@ class AppSlider extends Component {
             </View>
         );
     }
-    _renderDoneButton = () => {
+    const renderDoneButton = () => {
         return (
             <View style={styles.buttonCircle}>
               <Icon
@@ -106,14 +103,13 @@ class AppSlider extends Component {
             </View>
         );
     }
-    _onDone = () => {
-        this.setState({showRealApp: true})
+    const onDone = () => {
+        toHome(navigation)
     }
-    _onSkip = () => {
-        this.setState({showRealApp: true})
+    const onSkip = () => {
+        toHome(navigation)
     }
-    _renderItem = ({item}) => {
-        const {mainColor, defaltColor, sliderOneBackgroundColor } = this.props.appSettings;
+    const renderItem = ({item}) => {
         return (
             <View style={{backgroundColor: sliderOneBackgroundColor}} >
                 <ImageBackground
@@ -128,30 +124,20 @@ class AppSlider extends Component {
         );
     };
 
-    render() {
-    const {mainColor, defaltColor, sliderOneBackgroundColor } = this.props.appSettings;
-        if (this.state.showRealApp) {
-            return (
-                <Landing />
-            )
-        } else {
-            return (
-                <AppIntroSlider 
-                data={Slides}
-                style={{backgroundColor: sliderOneBackgroundColor}}
-                renderItem={this._renderItem}
-                onDone={this._onDone}
-                showSkipButton={true}
-                onSkip={this._onSkip}
-                showDoneButton={true}
-                showNextButton={true}
-                renderDoneButton={this._renderDoneButton}
-                renderNextButton={this._renderNextButton}
-            />
-            )
-        }
-    }
-
+    return (
+        <AppIntroSlider 
+            data={Slides}
+            style={{backgroundColor: sliderOneBackgroundColor}}
+            renderItem={renderItem}
+            onDone={onDone}
+            showSkipButton={true}
+            onSkip={onSkip}
+            showDoneButton={true}
+            showNextButton={true}
+            renderDoneButton={renderDoneButton}
+            renderNextButton={renderNextButton}
+        />
+    )
 }
 
 const mapStateToProps = createStructuredSelector ({

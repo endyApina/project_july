@@ -6,14 +6,7 @@ import { MaterialCommunityIcons, Feather, Entypo } from '@expo/vector-icons';
 import SettingsScreen from '../Settings/settings.screen';
 import { Avatar, Badge } from 'react-native-elements';
 // import { Badge, Avatar } from 'react-native-paper';
-
-function Notifications() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Notifications!</Text>
-      </View>
-    );
-  }
+import ProfileScreen from '../Profile/';
 
 function UserProfileBottomIcon() {
   return (
@@ -26,10 +19,10 @@ function UserProfileBottomIcon() {
         size="small"
       />
 
-      <Badge
+      {/* <Badge
         status="success"
         containerStyle={{position: 'absolute', top: -4, right: -4}}
-      />
+      /> */}
     </View>
   )
 }
@@ -63,7 +56,7 @@ const Landing = ({}) => {
             />
             <Tab.Screen
               name="Profile"
-              component={Notifications}
+              component={ProfileScreen}
               options={{
                 tabBarLabel: 'Profile',
                 tabBarIcon: ({ color }) => (

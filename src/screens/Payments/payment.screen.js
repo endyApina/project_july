@@ -10,11 +10,11 @@ import CheckBox from '@react-native-community/checkbox';
 import { toAddCard, toPayments } from '../../session';
 import { useNavigation } from '@react-navigation/native';
 
-const CardSection = ({}) => {
+const CardSection = ({appColor}) => {
   return (
     <CardContainer>
       <VISAContainer>
-        <FontAwesome name="cc-visa" size={30} color="blue" />
+        <FontAwesome name="cc-visa" size={30} color={appColor} />
       </VISAContainer>
       <CardText> 
         {'\u2B24'}
@@ -29,7 +29,7 @@ const CardSection = ({}) => {
         <CheckBox
           disabled={false}
           value={true}
-          onFillColor={'blue'}
+          onFillColor={appColor}
           onTintColor={'white'}
           onCheckColor={'white'}
         />
@@ -89,17 +89,17 @@ const DiscountDetails = () => {
   )
 }
 
-const PromotionSection = () => {
+const PromotionSection = ({bgcolor}) => {
   return (
-    <PromotionContainer>
+    <PromotionContainer bgcolor={bgcolor}>
       <CardContainer>
         <DiscountDetails />
         <PaymentFloatRight>
           <CheckBox
             disabled={false}
             value={true}
-            onFillColor={'#d29f0e'}
-            onTintColor={'#d29f0e'}
+            onFillColor={bgcolor}
+            onTintColor={'white'}
             onCheckColor={'white'}
           />
         </PaymentFloatRight>
@@ -108,13 +108,13 @@ const PromotionSection = () => {
   )
 }
 
-const PaymentScreen = ({}) => {
+const PaymentScreen = ({appSettings}) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false)
   const navigation = useNavigation();
+  const { AppMainColor} = appSettings;
 
   const navigateToAddCard = () => {
     toAddCard(navigation)
-    // alert("Hyeio")
   }
 
   const PaymentCardSection = () => {
@@ -140,7 +140,7 @@ const PaymentScreen = ({}) => {
           {"Payment Methods"}
         </PaymentMethod>
         <Divider />
-        <CardSection />
+        <CardSection appColor={AppMainColor} />
         <Divider />
         <CashSection />
         <Divider />
@@ -148,7 +148,7 @@ const PaymentScreen = ({}) => {
         <Divider />
         <SmallestText body={"Promotions"} />
         <Divider />
-        <PromotionSection />
+        <PromotionSection bgcolor={AppMainColor} />
       </ScreenContainer>
     </PaymentScreenContainer>
   )
