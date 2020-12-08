@@ -27,6 +27,11 @@ export const selectUserLoggedIn = createSelector(
 	user => user.userLoggedIn
 );
 
+export const selectSignUpStatus = createSelector(
+	[selectUser], 
+	user => user.signUpSuccess
+)
+
 export const selectIsSubmittingForgotPassword = createSelector(
 	[selectUser],
 	user => user.isForgettingPassword

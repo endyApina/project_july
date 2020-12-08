@@ -17,7 +17,6 @@ const RegistrationScreen = ({appSettings, currentUser}) => {
     const navigation = useNavigation();
 
     const navigateToNextSlide = () => {
-        // alert("Navigating")
         navigation.reset({
             index: 0,
             routes: [{ name: 'otp' }]

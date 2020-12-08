@@ -16,20 +16,28 @@ import { isIOS, logErrorWithMessage } from '../../components/utility/helperFunct
 import TimerText from './timerText';
 import { useNavigation } from '@react-navigation/native';
 
-const RESEND_OTP_TIME_LIMIT = 30; 
+import { connect } from 'react-redux';
+import { selectAppSettings } from '../../redux/settings/settings.selector';
+import { createStructuredSelector } from 'reselect';
+import { selectCurrentUser } from '../../redux/user/user.selector';
+
+import { otpVerificationStart, startForgetPassword } from '../../redux/user/user.action';
+
+const RESEND_OTP_TIME_LIMIT = 2; 
 const AUTO_SUBMIT_OTP_TIME_LIMIT = 4; 
 
 let resendOtpTimerInterval; 
 let autoSubmitOtpTimerInterval; 
 
-const OtpVerification = props => {
-    const {otpRequestData, attempts} = props; 
+const OtpVerification = ({otpVerificationStart, startForgetPassword, currentUser, otpRequestData, attempts}) => {
+    // const {otpRequestData, attempts} = props; 
     const navigation = useNavigation();
 
     const [attemptsRemaining, setAttemptsRemaining] = useState(attempts);
-    const [otpArray, setOtpArray] = useState(['', '', '', '']); 
+    const [otpArray, setOtpArray] = useState(['', '', '', '', '', '']); 
     const [submittingOtp, setSubmittingOtp] = useState(false); 
     const [errorMessage, setErrorMessage] = useState('');
+    const [userPhoneNumber, setPhoneNumber] = useState('');
 
     // in secs, if value is greater than 0 then button will be disabled
     const [resendButtonDisabledTime, setResendButtonDisabledTime] = useState(
@@ -46,6 +54,8 @@ const OtpVerification = props => {
     const secondTextInputRef = useRef(null);
     const thirdTextInputRef = useRef(null);
     const fourthTextInputRef = useRef(null);
+    const fifthTextInputRef = useRef(null);
+    const sixthTextInputRef = useRef(null);
 
     // a reference to autoSubmitOtpTimerIntervalCallback to always get updated value of autoSubmitOtpTime
     const autoSubmitOtpTimerIntervalCallbackReference = useRef();
@@ -65,47 +75,6 @@ const OtpVerification = props => {
             }
         };
     }, [resendButtonDisabledTime]);
-    
-    //   useEffect(() => {
-    //     // docs: https://github.com/faizalshap/react-native-otp-verify
-    
-    //     RNOtpVerify.getOtp()
-    //       .then(p =>
-    //         RNOtpVerify.addListener(message => {
-    //           try {
-    //             if (message) {
-    //               const messageArray = message.split('\n');
-    //               if (messageArray[2]) {
-    //                 const otp = messageArray[2].split(' ')[0];
-    //                 if (otp.length === 4) {
-    //                   setOtpArray(otp.split(''));
-    
-    //                   // to auto submit otp in 4 secs
-    //                   setAutoSubmitOtpTime(AUTO_SUBMIT_OTP_TIME_LIMIT);
-    //                   startAutoSubmitOtpTimer();
-    //                 }
-    //               }
-    //             }
-    //           } catch (error) {
-    //             logErrorWithMessage(
-    //               error.message,
-    //               'RNOtpVerify.getOtp - read message, OtpVerification',
-    //             );
-    //           }
-    //         }),
-    //       )
-    //       .catch(error => {
-    //         logErrorWithMessage(
-    //           error.message,
-    //           'RNOtpVerify.getOtp, OtpVerification',
-    //         );
-    //       });
-    
-    //     // remove listener on unmount
-    //     return () => {
-    //       RNOtpVerify.removeListener();
-    //     };
-    //   }, []);
     
     const startResendOtpTimer = () => {
         if (resendOtpTimerInterval) {
@@ -149,7 +118,7 @@ const OtpVerification = props => {
       const onResendOtpButtonPress = () => {
         // clear last OTP
         if (firstTextInputRef) {
-          setOtpArray(['', '', '', '']);
+          setOtpArray(['', '', '', '', '', '']);
           firstTextInputRef.current.focus();
         }
     
@@ -157,6 +126,9 @@ const OtpVerification = props => {
         startResendOtpTimer();
     
         // resend OTP Api call
+        console.log(currentUser.phoneNumber)
+        setPhoneNumber(currentUser.phoneNumber)
+        otpVerificationStart(currentUser.phoneNumber)
         // todo
         console.log('todo: Resend OTP');
       };
@@ -165,7 +137,7 @@ const OtpVerification = props => {
         // API call
         // todo
         console.log('todo: Submit OTP');
-        navigateToIntro();
+        // navigateToIntro();
       };
 
     const navigateToIntro = () => {
@@ -197,7 +169,12 @@ const OtpVerification = props => {
                 } else if (index === 2) {
                 fourthTextInputRef.current.focus();
                 } else if (index === 3) {
-                navigateToIntro()
+                fifthTextInputRef.current.focus(); 
+                } else if (index === 4) {
+                sixthTextInputRef.current.focus(); 
+                } else if (index === 5) {
+                // navigateToIntro()
+                console.log(otpArray)
                 }
             }
         };
@@ -217,6 +194,12 @@ const OtpVerification = props => {
                 secondTextInputRef.current.focus();
                 } else if (index === 3) {
                 thirdTextInputRef.current.focus();
+                } else if (index === 4) {
+                fourthTextInputRef.current.focus();
+                } else if (index === 5) {
+                fifthTextInputRef.current.focus();
+                } else if (index === 6) {
+                sixthTextInputRef.current.focus();
                 }
         
                 /**
@@ -257,6 +240,8 @@ const OtpVerification = props => {
                   secondTextInputRef,
                   thirdTextInputRef,
                   fourthTextInputRef,
+                  fifthTextInputRef, 
+                  sixthTextInputRef,
                 ].map((textInputRef, index) => (
                   <CustomTextInput
                     containerStyle={[GenericStyles.fill, GenericStyles.mr12]}
@@ -353,5 +338,15 @@ OtpVerification.propTypes = {
     otpRequestData: PropTypes.object.isRequired,
     attempts: PropTypes.number.isRequired,
 };
+
+const mapStateToProps = createStructuredSelector ({
+  appSettings: selectAppSettings, 
+  currentUser: selectCurrentUser
+})
+
+const mapDispatchToProps = dispath => ({
+  otpVerificationStart: phoneNumber => dispath(otpVerificationStart(phoneNumber)),
+  startForgetPassword: phoneNumber => dispath(startForgetPassword(phoneNumber))
+})
   
-export default OtpVerification;
+export default connect(mapStateToProps, mapDispatchToProps)(OtpVerification);

@@ -5,6 +5,11 @@ export const emailSignInStart = emailAndPassword => ({
 	payload: emailAndPassword
 })
 
+export const otpVerificationStart = phoneNumber => ({
+	type: UserActionTypes.OTP_VERIFICATION_START, 
+	payload: phoneNumber
+})
+
 export const startForgetPassword = email => ({
 	type: UserActionTypes.FORGET_PASSWORD_START,
 	payload: email

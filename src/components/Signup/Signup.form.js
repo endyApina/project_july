@@ -8,21 +8,21 @@ import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { connect } from 'react-redux';
 import { signUpStart } from '../../redux/user/user.action';
 import { useNavigation } from '@react-navigation/native';
-import {selectIsSubmittingRegister} from '../../redux/user/user.selector';
+import {selectIsSubmittingRegister, selectSignUpStatus} from '../../redux/user/user.selector';
 // import CustomSelectInput from '../forms/custom-select-input/custom-select';
 
-const SignUp = ({appSettings, isSubmittingForm, signUpStart}) => {
+const SignUp = ({appSettings, isSubmittingForm, signUpStart, signUpSuccessStatus}) => {
     const [ userData, updateData ] = useState({ 
         fullName: '', 
         email: '',  
         phone: '', 
-        userType: '', 
         password: '',
     })
     const navigation = useNavigation();
-    const { fullName, email, password, phone, userType } = userData;
+    const { fullName, email, password, phone } = userData;
     const { transparentBorder,  AppMainColor, AppMainColorShadow, inputSpace, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
     const [isSubmitting, toggleSubmitting] = useState(false);
+    // const [successSignUp, toggleSignUpSuccess] = useState(false);
 
     const updateType = (type) => {
         updateData({
@@ -35,14 +35,22 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart}) => {
         toggleSubmitting(isSubmittingForm);
     }, [isSubmittingForm])
 
+    // useEffect(() => {
+    //     toggleSignUpSuccess(signUpSuccessStatus);
+    // }, [signUpSuccessStatus])
+
+    // if (successSignUp) {
+    //     alert("Logged IN")
+    // }
+
     const handleSubmit = async () => {
         if (isSubmitting) return;
         var submittedData = validateSignUp()
         if (submittedData != true) return
-        signUpStart({email, password, fullName, phone, userType})
-        setTimeout(() => {
-            navigateToIntroSliders()
-        }, 2000);
+        signUpStart({email, password, fullName, phone})
+        // setTimeout(() => {
+        //     navigateToIntroSliders()
+        // }, 2000);
     }
 
     const navigateToIntroSliders = () => {
@@ -63,6 +71,11 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart}) => {
         if (fullName === "" || email === "" || password === "" || phone === "") {
             alert("Kindly Fill All details")
             return false 
+        }
+        var passwordLength = password.length
+        if (passwordLength < 7) {
+            alert("Password requires minimum of 8 characters")
+            return false
         }
         return true
     }
@@ -142,7 +155,8 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart}) => {
 
 const mapStateToProps = createStructuredSelector ({
     appSettings: selectAppSettings,
-    isSubmittingForm: selectIsSubmittingRegister
+    isSubmittingForm: selectIsSubmittingRegister, 
+    signUpSuccessStatus: selectSignUpStatus,
 })
 
 const mapDispatchToProps = dispatch => ({

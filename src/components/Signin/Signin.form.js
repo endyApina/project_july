@@ -12,8 +12,8 @@ import {selectIsSubmittingLogin} from '../../redux/user/user.selector';
 import { toHome } from '../../session';
 
 const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
-    const [userData, updateData] = useState({email: '', password: ''});
-    const {email, password} = userData;
+    const [userData, updateData] = useState({phone: '', password: ''});
+    const {phone, password} = userData;
     const [isSubmitting, toggleSubmitting] = useState(false);
     const { transparentBorder, boxShadow, AppMainColor, buttonTextColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings
     const navigation = useNavigation();
@@ -21,8 +21,8 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
     const handleSubmit = () => {
         let validity = validateSignIn()
         if (validity != true) return;
-        // emailSignInStart({email, password})
-        toHome(navigation)
+        emailSignInStart({phone, password})
+        // toHome(navigation)
     };
 
     const handleChange = data => {
@@ -32,7 +32,7 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
     };
 
     const validateSignIn = () => {
-        if (email === "" || password === "") {
+        if (phone === "" || password === "") {
             alert("Kindly Fill All details")
             return false 
         }
@@ -46,10 +46,9 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
     return (
         <SigninContainer>
             <CustomInput 
-                onChangeText={text => handleChange({ email: text })}
-                value={email}
-                autoCompleteType={'email'}
-                placeholder={'Email/Username'}
+                onChangeText={text => handleChange({ phone: text })}
+                value={phone}
+                placeholder={'Phone Number'}
                 bgcolor={defaultInputBgColor}
                 space={'5px'} 
                 placeholderTextColor={defaultInputPlaceholderColor} 

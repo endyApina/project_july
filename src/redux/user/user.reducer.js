@@ -6,7 +6,8 @@ const INITIAL_STATE = {
     connectingToServer: false,
 	isSubmittingLogin: false,
     isSubmittingRegister: false,
-    isForgettingPassword: false, 
+    isForgettingPassword: false,
+    signUpSuccess: false,  
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -20,6 +21,14 @@ const userReducer = (state = INITIAL_STATE, action) => {
             userLoggedIn: true, 
             error: null
         };
+    case UserActionTypes.SIGN_UP_SUCCESS: 
+        return {
+            ...state, 
+            currentUser: action.payload,
+            isSubmittingRegister: false, 
+            signUpSuccess: true, 
+            error: null
+        }
     case UserActionTypes.CONNECTING_TO_SERVER: 
         return {
             ...state, 
@@ -33,12 +42,12 @@ const userReducer = (state = INITIAL_STATE, action) => {
     case UserActionTypes.TOGGLE_SUBMITTING_FORGOT_PASSWORD:
         return {
             ...state,
-            userLoggedIn: action.payload,
+            isForgettingPassword: action.payload,
         };
     case UserActionTypes.TOGGLE_USER_LOGGED_IN:
         return {
             ...state,
-            isForgettingPassword: action.payload,
+            userLoggedIn: action.payload,
         };
     case UserActionTypes.SIGN_UP_FAILURE:
     case UserActionTypes.SIGN_IN_FAILURE: 

@@ -11,10 +11,10 @@ import { useNavigation } from '@react-navigation/native';
 import { startForgetPassword, emailSignInStart } from '../../redux/user/user.action';
 import { selectIsSubmittingForgotPassword } from '../../redux/user/user.selector';
 
-const ForgotPassword = ({startForgetPassword, appSettings, isSubmittingPassword, emailSignInStart}) => {
+const ForgotPassword = ({startForgetPassword, appSettings, isForgettingPassword}) => {
     const [email, updateEmail] = useState('');
     const [isSubmitting, toggleSubmitting] = useState(false);
-    const { transparentBorder, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings
+    const { transparentBorder, boxShadow, AppMainColor, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings
     const navigation = useNavigation();
 
     const handleSubmit = () => {
@@ -40,8 +40,8 @@ const ForgotPassword = ({startForgetPassword, appSettings, isSubmittingPassword,
     }
 
     useEffect(() => {
-        toggleSubmitting(isSubmittingPassword);
-    }, [isSubmittingPassword])
+        toggleSubmitting(isForgettingPassword);
+    }, [isForgettingPassword])
   
     return (
         <ForgetPasswordContainer>
@@ -61,12 +61,12 @@ const ForgotPassword = ({startForgetPassword, appSettings, isSubmittingPassword,
             />
             <CustomButton 
             onPress={handleSubmit} 
-            loading={isSubmitting}
+            loading={isForgettingPassword}
             space={'20px'} 
             uppercase={'true'} 
             width={defaultButtonWidth} 
             color={buttonTextColor} 
-            bgcolor={defaultButtonBackgroundColor} 
+            bgcolor={AppMainColor} 
             box-shadow={boxShadow}
             radius={'10px'}
             >
@@ -78,12 +78,11 @@ const ForgotPassword = ({startForgetPassword, appSettings, isSubmittingPassword,
 
 const mapStateToProps = createStructuredSelector ({
     appSettings: selectAppSettings,
-    isSubmittingPassword: selectIsSubmittingForgotPassword
+    isForgettingPassword: selectIsSubmittingForgotPassword
 });
 
 const mapDispatchToProps = dispath => ({
     startForgetPassword: email => dispath(startForgetPassword(email)),
-    emailSignInStart: email => dispath(emailSignInStart(email))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword);
