@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
-import RNOtpVerify from 'react-native-otp-verify'; 
+import { StyleSheet, View, ActivityIndicator} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 import { GenericStyles } from '../../components/utility/styles/GenericStyles';
 import CustomScreenContainer from '../../components/forms/custom-screen-container/custom-screen-container';
@@ -19,9 +19,9 @@ import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser } from '../../redux/user/user.selector';
+import { selectCurrentUser, selectSignUpData } from '../../redux/user/user.selector';
 
-import { otpVerificationStart, startForgetPassword } from '../../redux/user/user.action';
+import { otpVerificationStart, startForgetPassword, startOTPVerification } from '../../redux/user/user.action';
 
 const RESEND_OTP_TIME_LIMIT = 2; 
 const AUTO_SUBMIT_OTP_TIME_LIMIT = 4; 
@@ -29,8 +29,8 @@ const AUTO_SUBMIT_OTP_TIME_LIMIT = 4;
 let resendOtpTimerInterval; 
 let autoSubmitOtpTimerInterval; 
 
-const OtpVerification = ({otpVerificationStart, startForgetPassword, currentUser, otpRequestData, attempts}) => {
-    // const {otpRequestData, attempts} = props; 
+const OtpVerification = ({otpVerificationStart, signUpData, otpRequestData, attempts, sendOTPToken}) => {
+
     const navigation = useNavigation();
 
     const [attemptsRemaining, setAttemptsRemaining] = useState(attempts);
@@ -65,6 +65,10 @@ const OtpVerification = ({otpVerificationStart, startForgetPassword, currentUser
         // in that case we have to start auto submit timer
         autoSubmitOtpTimerIntervalCallbackReference.current = autoSubmitOtpTimerIntervalCallback;
     });
+
+    useEffect(() => {
+      setPhoneNumber(signUpData.phoneNumber)
+    })
 
     useEffect(() => {
         startResendOtpTimer();
@@ -114,6 +118,8 @@ const OtpVerification = ({otpVerificationStart, startForgetPassword, currentUser
       const refCallback = textInputRef => node => {
         textInputRef.current = node;
       };
+
+      // setPhoneNumber(signUpData.phoneNumber)
     
       const onResendOtpButtonPress = () => {
         // clear last OTP
@@ -126,9 +132,14 @@ const OtpVerification = ({otpVerificationStart, startForgetPassword, currentUser
         startResendOtpTimer();
     
         // resend OTP Api call
-        console.log(currentUser.phoneNumber)
-        setPhoneNumber(currentUser.phoneNumber)
-        otpVerificationStart(currentUser.phoneNumber)
+        console.log("About to get current user")
+        console.log(signUpData)
+        console.log(signUpData.phoneNumber)
+
+        // const user = AsyncStorage.getItem("login_data")
+        // const localStorageData = JSON.parse(user)
+        // console.log(localStorageData)
+        // otpVerificationStart(signUpData.phoneNumber)
         // todo
         console.log('todo: Resend OTP');
       };
@@ -137,7 +148,22 @@ const OtpVerification = ({otpVerificationStart, startForgetPassword, currentUser
         // API call
         // todo
         console.log('todo: Submit OTP');
+        console.log(otpArray)
+        let verificationCode = "";
+        if (Array.isArray(otpArray)) {
+          otpArray.forEach(data => {
+            verificationCode = verificationCode + data
+          });
+        }
+        console.log(verificationCode)
+        var data = {
+          phoneNumber: userPhoneNumber, 
+          token: verificationCode, 
+          actionType: "activate_account"
+        }
+        console.log(data)
         // navigateToIntro();
+        sendOTPToken(data)
       };
 
     const navigateToIntro = () => {
@@ -173,8 +199,9 @@ const OtpVerification = ({otpVerificationStart, startForgetPassword, currentUser
                 } else if (index === 4) {
                 sixthTextInputRef.current.focus(); 
                 } else if (index === 5) {
+                  otpArray[index] = value;
                 // navigateToIntro()
-                console.log(otpArray)
+                  console.log(otpArray)
                 }
             }
         };
@@ -341,12 +368,14 @@ OtpVerification.propTypes = {
 
 const mapStateToProps = createStructuredSelector ({
   appSettings: selectAppSettings, 
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser, 
+  signUpData: selectSignUpData, 
 })
 
 const mapDispatchToProps = dispath => ({
   otpVerificationStart: phoneNumber => dispath(otpVerificationStart(phoneNumber)),
-  startForgetPassword: phoneNumber => dispath(startForgetPassword(phoneNumber))
+  startForgetPassword: phoneNumber => dispath(startForgetPassword(phoneNumber)), 
+  sendOTPToken: verificationData => dispath(startOTPVerification(verificationData)),
 })
   
 export default connect(mapStateToProps, mapDispatchToProps)(OtpVerification);

@@ -1,10 +1,10 @@
 import { takeLatest, call, all, put } from 'redux-saga/effects';
 import UserActionTypes from './user.types';
 import axios from 'axios';
-import { signUpSuccess, connectingToServer, signInFailure, toggleSubmittingLogin, toggleSubmittingRegister, signInSuccess, toggleForgettingPassword } from './user.action';
+import { signUpSuccess, signInFailure, toggleSubmittingLogin, toggleSubmittingRegister, signInSuccess, toggleForgettingPassword, toggleVerifiedUser, signUpStart, updateCurrentUser, updateSignUpData } from './user.action';
 
-import { emailSignUp, getCurrentUser, CALL_POST_API } from '../../util/user.util';
-import { REG_API, LOGIN_API, FORGOT_PASSWORD_API, RESEND_OTP } from '../../config';
+import { emailSignUp, CALL_POST_API } from '../../util/user.util';
+import { REG_API, LOGIN_API, FORGOT_PASSWORD_API, RESEND_OTP, VEIRFY_OTP } from '../../config';
 
 export function* signUp({payload: {email, password, fullName, phone}}) {
     let tempName = fullName.split(" ")
@@ -29,12 +29,20 @@ export function* signUp({payload: {email, password, fullName, phone}}) {
         lastName: lastName, 
         phoneNumber: phone
     }
+
+    const signUpSuccessData = {
+        id: 0, 
+        otpToken: "", 
+        phoneNumber: "", 
+        tokenId: "", 
+        uuid: ""
+    }
     try {
         yield put(toggleSubmittingRegister(true))
         var user;
 
         yield emailSignUp(data, REG_API).next().value.then(resp => {
-            // console.log(resp)
+            console.log(resp)
             const responseBody = resp.data
             if (responseBody) {
                 if (Array.isArray(responseBody)) {
@@ -54,7 +62,16 @@ export function* signUp({payload: {email, password, fullName, phone}}) {
                         console.log(errors)
                     }
                 }
+
+                signUpSuccessData.id = responseBody.id 
+                signUpSuccessData.otpToken = responseBody.otpToken 
+                signUpSuccessData.phoneNumber = responseBody.phoneNumber
+                signUpSuccessData.tokenId = responseBody.tokenId
+                signUpSuccessData.uuid = responseBody.uuid 
+
             }
+
+            console.log(signUpSuccessData)
             // let responseBody = resp.data
             // console.log(responseBody)
             // if (responseBody.errors != null) {
@@ -67,7 +84,7 @@ export function* signUp({payload: {email, password, fullName, phone}}) {
         })
         yield put(toggleSubmittingRegister(false))
         // console.log("Calling sign up succes")
-        yield put(signUpSuccess(data));
+        yield put(signUpSuccess(data, signUpSuccessData));
     } catch(error) {
         console.log(error)
         // yield signUpFailure(error)
@@ -102,6 +119,15 @@ export function* signInWithEmail({payload: {phone, password } }) {
         phoneNumber: phone, 
         password: password
     }
+
+    const signUpSuccessData = {
+        id: 0, 
+        otpToken: "", 
+        phoneNumber: phone, 
+        tokenId: "", 
+        uuid: ""
+    }
+
     try {
         yield put(toggleSubmittingLogin(true))
         var response; 
@@ -109,12 +135,30 @@ export function* signInWithEmail({payload: {phone, password } }) {
         yield CALL_POST_API(data, LOGIN_API).next().value.then(resp => {
             response = resp
         })
-        // console.log(response)
+        console.log(response)
         console.log(response.data)
 
-        if (response.data == "These credentials do not match our records") {
-            alert(response.data + "\n Kindly check your password")
+        if (response.message) {
+            if (response.message == "Your account have not been verified") {
+                signUpSuccessData.otpToken = response.token 
+                yield put(updateSignUpData(signUpSuccessData))
+                yield put(toggleVerifiedUser(2))
+            }
         }
+
+        if (response.data) {
+            responseData = response.data
+            if (Array.isArray(responseData)) {
+                responseData.forEach(data => {
+                    console.log(data)
+                    if (data.msg == "These credentials do not match our records") {
+                        alert(data.msg + "\n Kindly check your password")
+                    }
+                });
+            }
+        }
+
+        
 
         if (response.data == "Unverified account") {
             alert(response.data + "\n Kindly check email for verification code")
@@ -159,6 +203,20 @@ export function* forgetPasswordStart({payload: email}) {
     }
 }
 
+export function* sendOTPToken({payload: verificationData}) {
+    console.log("send OTP")
+    console.log(verificationData)
+    try {
+        yield CALL_POST_API(verificationData, VEIRFY_OTP).next().value.then(resp => {
+            console.log(resp)
+        }).then(error => {
+            console.log(error)
+        })
+    } catch (error) {
+        //do something 
+    }
+}
+
 export function* verifyOTP({payload: phoneNumber}) {
     console.log("Verify")
     const data = {
@@ -170,6 +228,9 @@ export function* verifyOTP({payload: phoneNumber}) {
     try {
         yield CALL_POST_API(data, RESEND_OTP).next().value.then(resp => {
             console.log(resp)
+            if (resp.data) {
+                console.log(resp.data)
+            }
         }).then(error => {
             console.log(error)
         })
@@ -200,6 +261,13 @@ export function* onForgetPasswordStart() {
     )
 }
 
+export function* onSendOTP() {
+    yield takeLatest(
+        UserActionTypes.SEND_VERIFICATION_OTP, 
+        sendOTPToken
+    )
+}
+
 export function* userSagas() {
-    yield all([call(onSignUpStart), call(onEmailSignInStart), call(onForgetPasswordStart), call(onOTPVerificationStart)])
+    yield all([call(onSignUpStart), call(onEmailSignInStart), call(onForgetPasswordStart), call(onOTPVerificationStart), call(onSendOTP)])
 }

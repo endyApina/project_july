@@ -6,11 +6,12 @@ import CustomTextContainer from '../../components/forms/custom-text/custom-text.
 
 import { createStructuredSelector } from 'reselect';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
-import { selectUserLoggedIn, selectCurrentUser } from '../../redux/user/user.selector';
+import { selectUserLoggedIn, selectCurrentUser, selectVerifiedUser } from '../../redux/user/user.selector';
 import { connect } from 'react-redux';
-import { toHome } from '../../session';
+import { toHome, toOTP } from '../../session';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginScreen = ({ navigation, appSettings, userLoggedIn, selectCurrentUser }) => {
+const LoginScreen = ({ navigation, appSettings, userLoggedIn, verifiedUser }) => {
     const {backgroundColor, LoginCustomTextColor } = appSettings;
     const [isLoggedIn, toggleUserLoggedIn] = useState(false); 
     const [user, updateUser] = useState('');
@@ -23,6 +24,12 @@ const LoginScreen = ({ navigation, appSettings, userLoggedIn, selectCurrentUser 
     useEffect(() => {
         if(userLoggedIn) toHome(navigation)
     }, [userLoggedIn])
+
+    useEffect(() => {
+        if(verifiedUser == 2) {
+            toOTP(navigation)
+        }
+    }, [verifiedUser])
 
     return (
         <LoginContainer bgcolor={backgroundColor}>
@@ -46,7 +53,8 @@ const LoginScreen = ({ navigation, appSettings, userLoggedIn, selectCurrentUser 
 const mapStateToProps = createStructuredSelector ({
     appSettings: selectAppSettings,
     userLoggedIn: selectUserLoggedIn, 
-    currentUser: selectCurrentUser
+    currentUser: selectCurrentUser, 
+    verifiedUser: selectVerifiedUser, 
 });
 
 export default connect(mapStateToProps)(LoginScreen);

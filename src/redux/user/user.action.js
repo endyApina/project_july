@@ -25,6 +25,21 @@ export const toggleSubmittingLogin = status => ({
 	payload: status
 });
 
+export const updateCurrentUser = (user) => ({
+	type: UserActionTypes.UPDATE_CURRENT_USER, 
+	payload: user
+})
+
+export const updateSignUpData = data => ({
+	type: UserActionTypes.UPDATE_SIGNUP_DATA, 
+	payload: data
+})
+
+export const toggleVerifiedUser = status => ({
+	type: UserActionTypes.TOGGLE_VERIFIED_USER, 
+	payload: status
+})
+
 export const toggleSubmittingRegister = status => ({
 	type: UserActionTypes.TOGGLE_SUBMITTING_REGISTER,
 	payload: status
@@ -40,9 +55,9 @@ export const toggleUserLoggedIn = status => ({
 	payload: status
 });
 
-export const signInFailure = error => ({
+export const signInFailure = user => ({
 	type: UserActionTypes.SIGN_IN_FAILURE,
-	payload: error
+	payload: user
 });
 
 export const checkUserSession = () => ({
@@ -67,9 +82,15 @@ export const signUpStart = userData => ({
 	payload: userData
 });
 
-export const signUpSuccess = user  => ({
+export const startOTPVerification = verificationData => ({
+	type: UserActionTypes.SEND_VERIFICATION_OTP, 
+	payload: verificationData
+})
+
+export const signUpSuccess = (user, signUpData)  => ({
 	type: UserActionTypes.SIGN_UP_SUCCESS,
-	payload: user
+	payload: user, 
+	data: signUpData,
 });
 
 export const signUpFailure = error => ({

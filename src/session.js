@@ -33,6 +33,13 @@ export const toAddCard = (navigation) => {
 	navigation.navigate('Add Card')
 };
 
+export const toOTP = (navigation) => {
+	navigation.reset({
+		index: 0,
+		routes: [{ name: 'otp' }]
+	})
+}
+
 export const toNotification = (navigation) => {
 	navigation.navigate('Notifications')
 }

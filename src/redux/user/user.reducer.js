@@ -8,6 +8,8 @@ const INITIAL_STATE = {
     isSubmittingRegister: false,
     isForgettingPassword: false,
     signUpSuccess: false,  
+    verifiedUser: 0,
+    signUpData: null,
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -25,6 +27,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
         return {
             ...state, 
             currentUser: action.payload,
+            signUpData: action.data,
             isSubmittingRegister: false, 
             signUpSuccess: true, 
             error: null
@@ -39,6 +42,11 @@ const userReducer = (state = INITIAL_STATE, action) => {
             ...state,
             isSubmittingRegister: action.payload,
         };
+    case UserActionTypes.TOGGLE_VERIFIED_USER: 
+        return {
+            ...state, 
+            verifiedUser: action.payload
+        }
     case UserActionTypes.TOGGLE_SUBMITTING_FORGOT_PASSWORD:
         return {
             ...state,
@@ -51,6 +59,13 @@ const userReducer = (state = INITIAL_STATE, action) => {
         };
     case UserActionTypes.SIGN_UP_FAILURE:
     case UserActionTypes.SIGN_IN_FAILURE: 
+        return {
+            ...state, 
+            currentUser: action.payload, 
+            isSubmittingLogin: false, 
+            userLoggedIn: false, 
+            error: null
+        }
     case UserActionTypes.SIGN_OUT_FAILURE: 
        return {
            ...state, 
@@ -63,6 +78,16 @@ const userReducer = (state = INITIAL_STATE, action) => {
             ...state,
             isSubmittingLogin: action.payload,
         };
+    case UserActionTypes.UPDATE_CURRENT_USER: 
+        return {
+            ...state, 
+            currentUser: action.payload
+        }
+    case UserActionTypes.UPDATE_SIGNUP_DATA: 
+        return {
+            ...state, 
+            signUpData: action.payload
+        }
     default: 
         return state; 
     }

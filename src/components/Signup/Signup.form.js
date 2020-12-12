@@ -35,22 +35,11 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart, signUpSuccessStatus
         toggleSubmitting(isSubmittingForm);
     }, [isSubmittingForm])
 
-    // useEffect(() => {
-    //     toggleSignUpSuccess(signUpSuccessStatus);
-    // }, [signUpSuccessStatus])
-
-    // if (successSignUp) {
-    //     alert("Logged IN")
-    // }
-
     const handleSubmit = async () => {
         if (isSubmitting) return;
         var submittedData = validateSignUp()
         if (submittedData != true) return
         signUpStart({email, password, fullName, phone})
-        // setTimeout(() => {
-        //     navigateToIntroSliders()
-        // }, 2000);
     }
 
     const navigateToIntroSliders = () => {

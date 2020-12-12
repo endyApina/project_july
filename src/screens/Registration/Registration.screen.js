@@ -42,7 +42,7 @@ const RegistrationScreen = ({appSettings, currentUser}) => {
 
 const mapStateToProps = createStructuredSelector({
     appSettings: selectAppSettings,
-    currentUser: selectCurrentUser
+    currentUser: selectCurrentUser, 
 })
 
 export default connect(mapStateToProps)(RegistrationScreen);

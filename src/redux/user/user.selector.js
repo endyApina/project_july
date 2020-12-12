@@ -7,6 +7,11 @@ export const selectCurrentUser = createSelector(
 	user => user.currentUser
 );
 
+export const selectSignUpData = createSelector(
+	[selectUser], 
+	user => user.signUpData
+)
+
 export const selectConnectionStatus = createSelector(
 	[selectUser],
 	user => user.connectingToServer
@@ -21,6 +26,11 @@ export const selectIsSubmittingRegister = createSelector(
 	[selectUser],
 	user => user.isSubmittingRegister
 );
+
+export const selectVerifiedUser = createSelector(
+	[selectUser], 
+	user => user.verifiedUser
+)
 
 export const selectUserLoggedIn = createSelector(
 	[selectUser],
