@@ -19,7 +19,7 @@ import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser, selectSignUpData } from '../../redux/user/user.selector';
+import { selectCurrentUser, selectSignUpData, selectOTPStatus } from '../../redux/user/user.selector';
 
 import { otpVerificationStart, startForgetPassword, startOTPVerification } from '../../redux/user/user.action';
 
@@ -29,7 +29,7 @@ const AUTO_SUBMIT_OTP_TIME_LIMIT = 4;
 let resendOtpTimerInterval; 
 let autoSubmitOtpTimerInterval; 
 
-const OtpVerification = ({otpVerificationStart, signUpData, otpRequestData, attempts, sendOTPToken}) => {
+const OtpVerification = ({otpVerificationStart, verificationStatus, signUpData, otpRequestData, attempts, sendOTPToken}) => {
 
     const navigation = useNavigation();
 
@@ -69,6 +69,17 @@ const OtpVerification = ({otpVerificationStart, signUpData, otpRequestData, atte
     useEffect(() => {
       setPhoneNumber(signUpData.phoneNumber)
     })
+
+    const navigateToLogin = () => {
+      navigation.reset({
+        index: 0, 
+        routes: [{name: 'Login'}]
+      })
+    }
+
+    useEffect(() => {
+      if (verificationStatus) navigateToLogin()
+    }, [verificationStatus])
 
     useEffect(() => {
         startResendOtpTimer();
@@ -370,6 +381,7 @@ const mapStateToProps = createStructuredSelector ({
   appSettings: selectAppSettings, 
   currentUser: selectCurrentUser, 
   signUpData: selectSignUpData, 
+  verificationStatus: selectOTPStatus,
 })
 
 const mapDispatchToProps = dispath => ({

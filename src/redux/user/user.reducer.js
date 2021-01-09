@@ -1,6 +1,7 @@
 import UserActionTypes from './user.types';
 const INITIAL_STATE = {
     currentUser: null, 
+    appUserData: null, 
     userLoggedIn: false, 
     error: null, 
     connectingToServer: false,
@@ -10,6 +11,7 @@ const INITIAL_STATE = {
     signUpSuccess: false,  
     verifiedUser: 0,
     signUpData: null,
+    otpVerificationStatus: false, 
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -17,7 +19,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
     case UserActionTypes.SIGN_IN_SUCCESS:
         return {
             ...state,
-            currentUser: action.payload,
+            appUserData: action.payload,
             isSubmittingLogin: false,
             isSubmittingRegister: false, 
             userLoggedIn: true, 
@@ -82,6 +84,11 @@ const userReducer = (state = INITIAL_STATE, action) => {
         return {
             ...state, 
             currentUser: action.payload
+        }
+    case UserActionTypes.TOGGLE_OTP_STATUS: 
+        return {
+            ...state, 
+            otpVerificationStatus: action.payload
         }
     case UserActionTypes.UPDATE_SIGNUP_DATA: 
         return {

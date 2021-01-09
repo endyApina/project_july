@@ -7,6 +7,16 @@ export const selectCurrentUser = createSelector(
 	user => user.currentUser
 );
 
+export const selectAppUserData = createSelector(
+	[selectUser], 
+	user => user.appUserData
+)
+
+export const selectOTPStatus = createSelector(
+	[selectUser], 
+	user => user.otpVerificationStatus
+)
+
 export const selectSignUpData = createSelector(
 	[selectUser], 
 	user => user.signUpData

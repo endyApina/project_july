@@ -1,7 +1,7 @@
 import { takeLatest, call, all, put } from 'redux-saga/effects';
 import UserActionTypes from './user.types';
 import axios from 'axios';
-import { signUpSuccess, signInFailure, toggleSubmittingLogin, toggleSubmittingRegister, signInSuccess, toggleForgettingPassword, toggleVerifiedUser, signUpStart, updateCurrentUser, updateSignUpData } from './user.action';
+import { signUpSuccess, signInFailure, toggleSubmittingLogin, toggleSubmittingRegister, signInSuccess, toggleForgettingPassword, toggleVerifiedUser, signUpStart, updateCurrentUser, updateSignUpData, toggleOTPStatus } from './user.action';
 
 import { emailSignUp, CALL_POST_API } from '../../util/user.util';
 import { REG_API, LOGIN_API, FORGOT_PASSWORD_API, RESEND_OTP, VEIRFY_OTP } from '../../config';
@@ -128,6 +128,29 @@ export function* signInWithEmail({payload: {phone, password } }) {
         uuid: ""
     }
 
+    const loginSuccessData = {
+        accessToken: "", 
+        userDetails: {
+            activated: 0, 
+            activationCode: null, 
+            createdAt: "", 
+            email: "", 
+            id: 0, 
+            phoneNumber: "", 
+            profile: {
+                createdAt: "", 
+                firstName: "",
+                id: 0, 
+                lastName: "", 
+                updatedAt: "",
+                userId: 0
+            }, 
+            updatedAt: "", 
+            userType: "", 
+            uuid: "",
+        }
+    }
+
     try {
         yield put(toggleSubmittingLogin(true))
         var response; 
@@ -135,8 +158,6 @@ export function* signInWithEmail({payload: {phone, password } }) {
         yield CALL_POST_API(data, LOGIN_API).next().value.then(resp => {
             response = resp
         })
-        console.log(response)
-        console.log(response.data)
 
         if (response.message) {
             if (response.message == "Your account have not been verified") {
@@ -147,7 +168,7 @@ export function* signInWithEmail({payload: {phone, password } }) {
         }
 
         if (response.data) {
-            responseData = response.data
+            var responseData = response.data
             if (Array.isArray(responseData)) {
                 responseData.forEach(data => {
                     console.log(data)
@@ -156,9 +177,28 @@ export function* signInWithEmail({payload: {phone, password } }) {
                     }
                 });
             }
-        }
 
-        
+            if (responseData.accessToken) {
+                loginSuccessData.accessToken = responseData.accessToken
+                loginSuccessData.userDetails.activated = responseData.userDetails.activated
+                loginSuccessData.userDetails.activationCode = responseData.userDetails.activationCode
+                loginSuccessData.userDetails.createdAt = responseData.userDetails.createdAt
+                loginSuccessData.userDetails.email = responseData.userDetails.email 
+                loginSuccessData.userDetails.id = responseData.userDetails.id 
+                loginSuccessData.userDetails.phoneNumber = responseData.userDetails.phoneNumber
+                loginSuccessData.userDetails.profile.createdAt = responseData.userDetails.profile.createdAt
+                loginSuccessData.userDetails.profile.firstName = responseData.userDetails.profile.firstName
+                loginSuccessData.userDetails.profile.id = responseData.userDetails.profile.id
+                loginSuccessData.userDetails.profile.lastName = responseData.userDetails.profile.lastName
+                loginSuccessData.userDetails.profile.updatedAt = responseData.userDetails.profile.updatedAt 
+                loginSuccessData.userDetails.profile.userId = responseData.userDetails.profile.userId
+                loginSuccessData.userDetails.updatedAt = responseData.userDetails.updatedAt
+                loginSuccessData.userDetails.userType = responseData.userDetails.userType 
+                loginSuccessData.userDetails.uuid = responseData.userDetails.uuid 
+
+                yield put(signInSuccess(responseData))
+            }
+        }
 
         if (response.data == "Unverified account") {
             alert(response.data + "\n Kindly check email for verification code")
@@ -171,7 +211,7 @@ export function* signInWithEmail({payload: {phone, password } }) {
         // }
         // yield put(toggleSubmittingLogin(false))
         // yield put(toggleUserLoggedIn(true))
-        // yield put(signInSuccess(data))
+        console.log(loginSuccessData)
         yield put(toggleSubmittingLogin(false))
         // yield put(toggleUserLoggedIn(true))
     } catch(error) {
@@ -205,15 +245,23 @@ export function* forgetPasswordStart({payload: email}) {
 
 export function* sendOTPToken({payload: verificationData}) {
     console.log("send OTP")
-    console.log(verificationData)
+    var verificationStatus = false;
     try {
         yield CALL_POST_API(verificationData, VEIRFY_OTP).next().value.then(resp => {
             console.log(resp)
+            if (resp.message) {
+                if (resp.message == "Account activated successfully") {
+                    verificationStatus = true 
+                }
+            }
         }).then(error => {
             console.log(error)
         })
     } catch (error) {
         //do something 
+    }
+    if (verificationStatus) {
+        yield put(toggleOTPStatus(true))
     }
 }
 

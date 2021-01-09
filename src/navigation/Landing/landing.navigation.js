@@ -40,6 +40,7 @@ const MainNavigation = () => {
         component={Landing} 
         options={{
           title: '', 
+          headerShown: false,
           headerStyle: {
             backgroundColor: '#dbdbdb',
           }

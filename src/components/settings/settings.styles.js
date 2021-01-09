@@ -9,5 +9,5 @@ export const SettingsContainer = styled.View`
 `;
 
 export const SettingsViewContainer = styled.View`
-
+  marginTop: 20px;
 `;

@@ -1,8 +1,9 @@
-import React from 'react'; 
+import React, {useEffect, useState} from 'react'; 
 import { ListItem, Avatar } from 'react-native-elements';
 import { connect } from 'react-redux'; 
 import { createStructuredSelector } from 'reselect';
 import { selectAppSettings } from '../../../redux/settings/settings.selector';
+import { selectAppUserData } from '../../../redux/user/user.selector';
 import { ProfileHeadContainer } from './profile-head.styles';
 
 const AvatarElement = () => {
@@ -15,7 +16,16 @@ const AvatarElement = () => {
   )
 }
 
-const ProfileHead = ({appSettings}) => {
+const ProfileHead = ({appSettings, appUserData}) => {
+
+  const [userData, updateUserData] = useState('')
+
+  useEffect(() => {
+    if (appUserData) updateUserData(appUserData)
+  }, [appUserData])
+
+  // console.log(userData)
+
   const {AppMainColor} = appSettings;
   return (
     <ProfileHeadContainer> 
@@ -56,6 +66,7 @@ const ProfileHead = ({appSettings}) => {
 
 const mapStateToProps = createStructuredSelector({
   appSettings: selectAppSettings, 
+  appUserData: selectAppUserData,
 })
 
 export default connect(mapStateToProps)(ProfileHead)

@@ -1,7 +1,7 @@
 import styled from 'styled-components'; 
 
 export const ProfileViewContainer = styled.View`
-  marginTop: 60px;
+  marginTop: 160px;
   marginLeft: 30px;
   marginRight: 30px;
 `;

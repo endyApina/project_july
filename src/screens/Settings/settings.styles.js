@@ -3,6 +3,7 @@ import { Dimensions, TouchableOpacity } from 'react-native';
 
 export const SettingsContainer = styled.View`
   height: ${Dimensions.get('window').height}px;
+  marginTop: 60px;
   paddingLeft: 20px;
   paddingRight: 20px;
 `;
