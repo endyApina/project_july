@@ -1,18 +1,22 @@
 import React, { useEffect, useState, useRef } from 'react'; 
 import {StyleSheet, Platform} from 'react-native';
-import {PROVIDER_GOOGLE} from 'react-native-maps';
+import {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { createStructuredSelector } from 'reselect';
 import {selectAppSettings} from '../../redux/settings/settings.selector'
 import { connect } from 'react-redux';
-import { MapContainer, MapViewContainer } from './map.styles';
+import { MapContainer, MapViewContainer, MarkerTextContainer, MarkerViewContainer } from './map.styles';
 import BottomSheetComponent from './bottom-sheet/bottom-sheet.component';
 import BottomHeader from './bottom-sheet-header/bottom-sheet.component';
 import BottomSheet from 'react-native-bottomsheet-reanimated';
+import {CALL_GET_API} from './util';
+import { selectAppUserData } from '../../redux/user/user.selector';
+import {GET_ALL_GAS_STATION} from '../../config'
 
 navigator.geolocation = require('@react-native-community/geolocation');
 
-const Map = ({appSettings}) => {
+const Map = ({appSettings, appUserData}) => {
+    const [userToken, updateToken] = useState('')
     var initialRegion = {
         latitude: 0, 
         longitude: 0, 
@@ -37,11 +41,19 @@ const Map = ({appSettings}) => {
     {enableHighAccuracy: false, timeout: 20000, maximumAge: 1000});
 
     const sheetRef = React.useRef(null);
-	const originalSnapPoint = [350, 700, 1000];
-	const [snapPoints, setSnapPoints] = useState(originalSnapPoint);
+	const originalSnapPoint = [250];
+    const [snapPoints, setSnapPoints] = useState(originalSnapPoint);
+
+    useEffect(() => {
+        updateToken(appUserData.accessToken)
+    }, [])
 
 	useEffect(() => {
 		findPosition();
+    }, []);
+
+    useEffect(() => {
+        CALL_GET_API(userToken, GET_ALL_GAS_STATION)
     }, []);
 
     const bottomSheetStyles = StyleSheet.create({
@@ -60,7 +72,16 @@ const Map = ({appSettings}) => {
                     <MapViewContainer
                         provider={PROVIDER_GOOGLE}
                         region={region}
-                    />
+                    >
+                        <Marker
+                            coordinate={{latitude: region.latitude, longitude: region.longitude}}
+                            title={"Marker"}
+                        > 
+                            {/* <MarkerViewContainer> 
+                                <MarkerTextContainer>{"Hello Marker"}</MarkerTextContainer>
+                            </MarkerViewContainer> */}
+                        </Marker>
+                    </MapViewContainer>
                     <BottomSheet
                         ref={sheetRef}
                         snapPoints={snapPoints}
@@ -69,7 +90,7 @@ const Map = ({appSettings}) => {
                         header={<BottomHeader />}
                         enabledContentTapInteraction={false}
                         enabledInnerScrolling = {true}
-                        initialPosition = {"50%"}
+                        initialPosition = {"35%"}
                     />
                 </MapContainer>
             </TouchableWithoutFeedback>
@@ -79,6 +100,7 @@ const Map = ({appSettings}) => {
 
 const mapStateToProps = createStructuredSelector({
     appSettings: selectAppSettings,
+    appUserData: selectAppUserData,
 })
 
 

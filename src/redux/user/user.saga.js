@@ -171,7 +171,6 @@ export function* signInWithEmail({payload: {phone, password } }) {
             var responseData = response.data
             if (Array.isArray(responseData)) {
                 responseData.forEach(data => {
-                    console.log(data)
                     if (data.msg == "These credentials do not match our records") {
                         alert(data.msg + "\n Kindly check your password")
                     }
