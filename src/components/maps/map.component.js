@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'; 
-import {StyleSheet, Platform} from 'react-native';
-import {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import {StyleSheet, Platform, View, Text} from 'react-native';
+import {PROVIDER_GOOGLE, Marker, Callout} from 'react-native-maps';
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { createStructuredSelector } from 'reselect';
 import {selectAppSettings} from '../../redux/settings/settings.selector'
@@ -9,11 +9,29 @@ import { MapContainer, MapViewContainer, MarkerTextContainer, MarkerViewContaine
 import BottomSheetComponent from './bottom-sheet/bottom-sheet.component';
 import BottomHeader from './bottom-sheet-header/bottom-sheet.component';
 import BottomSheet from 'react-native-bottomsheet-reanimated';
-import {CALL_GET_API} from './util';
+import {startAPICall} from './util';
 import { selectAppUserData } from '../../redux/user/user.selector';
 import {GET_ALL_GAS_STATION} from '../../config'
 
 navigator.geolocation = require('@react-native-community/geolocation');
+
+const customCoordinates = [
+    {
+        lng: 3.469209, 
+        lat: 6.445233,
+        name: "Modupe's Shop"
+    }, 
+    {
+        lng: 3.468547, 
+        lat: 6.439606, 
+        name: "Benson's Shop"
+    }, 
+    {
+        lng: 3.463923, 
+        lat: 6.440523, 
+        name: "Peninsula"
+    }
+]
 
 const Map = ({appSettings, appUserData}) => {
     const [userToken, updateToken] = useState('')
@@ -43,9 +61,11 @@ const Map = ({appSettings, appUserData}) => {
     const sheetRef = React.useRef(null);
 	const originalSnapPoint = [250];
     const [snapPoints, setSnapPoints] = useState(originalSnapPoint);
+    const [coords, updateCoords] = useState([]);
 
     useEffect(() => {
         updateToken(appUserData.accessToken)
+        // console.log(appUserData)
     }, [])
 
 	useEffect(() => {
@@ -53,7 +73,8 @@ const Map = ({appSettings, appUserData}) => {
     }, []);
 
     useEffect(() => {
-        CALL_GET_API(userToken, GET_ALL_GAS_STATION)
+        var coordinates = startAPICall(GET_ALL_GAS_STATION)
+        updateCoords(coordinates)
     }, []);
 
     const bottomSheetStyles = StyleSheet.create({
@@ -73,14 +94,35 @@ const Map = ({appSettings, appUserData}) => {
                         provider={PROVIDER_GOOGLE}
                         region={region}
                     >
-                        <Marker
-                            coordinate={{latitude: region.latitude, longitude: region.longitude}}
-                            title={"Marker"}
-                        > 
-                            {/* <MarkerViewContainer> 
-                                <MarkerTextContainer>{"Hello Marker"}</MarkerTextContainer>
-                            </MarkerViewContainer> */}
-                        </Marker>
+                        {
+                            customCoordinates.map((item, i) => (
+                                <Marker
+                                    key={i}
+                                    coordinate={{latitude: item.lat, longitude: item.lng}}
+                                    title={item.name}
+                                    // image={require('../../../assets/g2gapplogo.jpg')}
+                                > 
+                                    <Callout
+                                        style={{
+                                            width: 60
+                                        }}
+                                        key={i}
+                                        onPress={() => {
+                                            console.log(item)
+                                        }}
+                                    > 
+                                        <View> 
+                                            <Text> 
+                                                This is plain text
+                                            </Text>
+                                        </View>
+                                    </Callout>
+                                    {/* <MarkerViewContainer> 
+                                        <MarkerTextContainer>{"Hello Marker"}</MarkerTextContainer>
+                                    </MarkerViewContainer> */}
+                                </Marker>
+                            ))
+                        }
                     </MapViewContainer>
                     <BottomSheet
                         ref={sheetRef}

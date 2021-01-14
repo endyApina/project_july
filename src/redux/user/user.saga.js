@@ -5,6 +5,7 @@ import { signUpSuccess, signInFailure, toggleSubmittingLogin, toggleSubmittingRe
 
 import { emailSignUp, CALL_POST_API } from '../../util/user.util';
 import { REG_API, LOGIN_API, FORGOT_PASSWORD_API, RESEND_OTP, VEIRFY_OTP } from '../../config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function* signUp({payload: {email, password, fullName, phone}}) {
     let tempName = fullName.split(" ")
@@ -114,6 +115,15 @@ export function* onSignUpStart() {
     )
 }
 
+const storeLogin = async (data) => {
+    try {
+        const jsonData = JSON.stringify(data)
+      await AsyncStorage.setItem('user_data', jsonData)
+    } catch (e) {
+      // saving error
+    }
+}
+
 export function* signInWithEmail({payload: {phone, password } }) {
     const data = {
         phoneNumber: phone, 
@@ -194,6 +204,8 @@ export function* signInWithEmail({payload: {phone, password } }) {
                 loginSuccessData.userDetails.updatedAt = responseData.userDetails.updatedAt
                 loginSuccessData.userDetails.userType = responseData.userDetails.userType 
                 loginSuccessData.userDetails.uuid = responseData.userDetails.uuid 
+
+                storeLogin(loginSuccessData)
 
                 yield put(signInSuccess(responseData))
             }
