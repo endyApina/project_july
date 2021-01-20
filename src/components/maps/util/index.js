@@ -33,9 +33,9 @@ export const CALL_GET_API = async (apiURL, myToken) => {
   });
 
   const myJSON = await response.json(); 
-  console.log(myJSON)
+  // console.log(myJSON)
   let responseFeatures = myJSON.data.features
-  console.log(responseFeatures)
+  // console.log(responseFeatures)
   if (Array.isArray(responseFeatures)) {
     responseFeatures.forEach(resp => {
       let coordinatesArray = resp.geometry.coordinates 

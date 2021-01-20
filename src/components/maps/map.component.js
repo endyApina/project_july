@@ -11,7 +11,12 @@ import BottomHeader from './bottom-sheet-header/bottom-sheet.component';
 import BottomSheet from 'react-native-bottomsheet-reanimated';
 import {startAPICall} from './util';
 import { selectAppUserData } from '../../redux/user/user.selector';
-import {GET_ALL_GAS_STATION} from '../../config'
+import {GET_ALL_GAS_STATION} from '../../config';
+import { useNavigation } from '@react-navigation/native';
+import Geocoder from 'react-native-geocoding';
+import { MAP_API_KEY, UserGeoDataAsyncData } from '../../config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+Geocoder.init(MAP_API_KEY)
 
 navigator.geolocation = require('@react-native-community/geolocation');
 
@@ -33,7 +38,17 @@ const customCoordinates = [
     }
 ]
 
+const storeGeoCode = async (data) => {
+    try {
+        const jsonData = JSON.stringify(data)
+      await AsyncStorage.setItem(UserGeoDataAsyncData, jsonData)
+    } catch (e) {
+      // saving error
+    }
+}
+
 const Map = ({appSettings, appUserData}) => {
+    const navigation = useNavigation();
     const [userToken, updateToken] = useState('')
     var initialRegion = {
         latitude: 0, 
@@ -44,8 +59,25 @@ const Map = ({appSettings, appUserData}) => {
     const [region, setRegion] = useState(initialRegion);
 
     const findPosition = payload => navigator.geolocation.getCurrentPosition(position => {
+        console.log(position)
         var lat = parseFloat(position.coords.latitude); 
         var long = parseFloat(position.coords.longitude); 
+
+        Geocoder.from(position.coords.latitude, position.coords.longitude)
+        .then(json => {
+            // console.log(json);
+            var addressComponent = json.results[0].address_components;
+            console.log(addressComponent)
+            console.log(addressComponent[0])
+            var addressDetails = {
+                street: addressComponent[0].short_name + " " + addressComponent[1].short_name + " " + addressComponent[2].short_name,
+                lga: addressComponent[4].short_name,
+                state: addressComponent[5].short_name, 
+                lat: lat, 
+                lng: long,
+            }
+            storeGeoCode(addressDetails)
+        }).catch(err => console.log(err))
 
         var userRegion = {
             latitude: lat, 
@@ -65,7 +97,6 @@ const Map = ({appSettings, appUserData}) => {
 
     useEffect(() => {
         updateToken(appUserData.accessToken)
-        // console.log(appUserData)
     }, [])
 
 	useEffect(() => {
@@ -82,6 +113,11 @@ const Map = ({appSettings, appUserData}) => {
             borderRadius: 30,
         }
     });
+
+    const onCalloutTap = (stationID) => {
+        // console.log(stationID)
+        navigation.navigate('Create Order')
+    }
 
     return (
         <KeyboardAvoidingView
@@ -107,9 +143,7 @@ const Map = ({appSettings, appUserData}) => {
                                             width: 60
                                         }}
                                         key={i}
-                                        onPress={() => {
-                                            console.log(item)
-                                        }}
+                                        onPress={() => onCalloutTap(item)}
                                     > 
                                         <View> 
                                             <Text> 

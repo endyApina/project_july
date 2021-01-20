@@ -68,3 +68,34 @@ export const TimeText = styled.Text`
 export const AboutText = styled.Text`
 
 `;
+
+export const IncreamentSection = styled.View`
+
+`;
+
+export const AdditionButton = styled.TouchableOpacity`
+  paddingLeft: 3px;
+  paddingRight: 5px;
+  marginRight: 10px; 
+  marginLeft: 5px;
+`;
+
+export const SubtrationButton = styled.TouchableOpacity`
+  paddingLeft: 5px;
+  paddingRight: 3px;
+  marginRight: 5px; 
+  marginLeft: 10px;
+`;
+
+export const AdditionText = styled.Text`
+  fontSize: 18px;
+`;
+
+export const SubtrationText = styled.Text`
+fontSize: 18px;
+`;
+
+export const QuantityView = styled.View``
+
+export const IncreamentText = styled.Text`
+fontSize: 18px;`;

@@ -222,7 +222,7 @@ export function* signInWithEmail({payload: {phone, password } }) {
         // }
         // yield put(toggleSubmittingLogin(false))
         // yield put(toggleUserLoggedIn(true))
-        console.log(loginSuccessData)
+        // console.log(loginSuccessData)
         yield put(toggleSubmittingLogin(false))
         // yield put(toggleUserLoggedIn(true))
     } catch(error) {

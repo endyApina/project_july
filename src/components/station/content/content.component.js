@@ -1,18 +1,20 @@
-import * as React from 'react'; 
+import React, {useState, useEffect} from 'react'; 
 import { createStructuredSelector } from 'reselect';
 import { selectAppSettings } from '../../../redux/settings/settings.selector';
 import { connect } from 'react-redux';
-import { StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { StyleSheet, Button, TouchableOpacity } from 'react-native';
 import ButtonText from '../../forms/button-text/button-text.component';
 import { View, Text } from 'react-native'; 
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { Divider } from 'react-native-paper';
-import { ContentContainer, AboutText, TimeText, DaysText, RatingIconContainer, RatingText, RatingContainer, KGContainer, KGText, PricingText, LineContainer, LocationContatainer } from './content.styles';
+import { ContentContainer, AdditionText, SubtrationText, SubtrationButton, IncreamentText, QuantityView, AdditionButton, AboutText, TimeText, DaysText, RatingIconContainer, RatingText, RatingContainer, KGContainer, KGText, PricingText, IncreamentSection, LineContainer, LocationContatainer } from './content.styles';
 import CustomButton from '../../forms/custom-button/custom-button.component';
 import { useNavigation } from '@react-navigation/native';
 import { toOrderScreen } from '../../../session';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GET_STATION_BY_ID, OTP_PREFIX, UserAsyncData, StationAsyncData, UserGeoDataAsyncData, CREATE_ORDER_API } from '../../../config';
 
-const Location = () => {
+const Location = ({location}) => {
   return (
     <LocationContatainer> 
       <Entypo name="location-pin" size={18} color="black" />
@@ -21,13 +23,13 @@ const Location = () => {
           // paddingLeft: '15',
         }}
       >
-        {"285 Lekki-Epe Express Way Lekki."}
+        {location}
       </Text>
     </LocationContatainer>
   )
 }
 
-const Pricing = () => {
+const Pricing = ({weight, unit}) => {
   return (
     <LineContainer> 
       <PricingText> 
@@ -35,7 +37,7 @@ const Pricing = () => {
       </PricingText>
       <KGContainer>
         <KGText>
-          {"N 275 / kg"} 
+          {weight+" / "+unit} 
         </KGText>
       </KGContainer>
     </LineContainer>
@@ -59,7 +61,7 @@ const Ratings = () => {
   )
 }
 
-const WorkHours = () => {
+const WorkHours = ({hours}) => {
   return (
     <RatingContainer>
       <RatingText>
@@ -87,36 +89,183 @@ const Description = () => {
   )
 }
 
+
 const StationContent = ({appSettings}) => {
-	const originalSnapPoint = [0, 500];
-  const [snapPoints, setSnapPoints] = React.useState(originalSnapPoint);
-  const [initialPoint, setInitialPoint] = React.useState("0%");
-  const sheetRef = React.useRef(null);
-  const bottomSheetStyles = StyleSheet.create({
-    bottomSheetBorder: {
-        borderRadius: 30,
-    }
-  });
+  const [dataUnit, setDataUnit] = useState("")
+	const [userToken, setToken] = useState('');
+	const [stationData, updateStation] = useState(null); 
+  const [stationAmount, setAmount] = useState('');
+  const [stationUnit, setUnit] = useState('');
+  const [stationProperties, updateProperties] = useState({});
   const navigation = useNavigation();
-  const placeOrder = () => {
-    toOrderScreen(navigation)
+  const [address, updateAddress] = useState(""); 
+  const [geocodingData, updateGeocode] = useState({});
+
+	const getUserData = async () => {
+		try {
+      const jsonValue = await AsyncStorage.getItem(UserAsyncData)
+      // console.log(jsonValue)
+			if (jsonValue != null ) {
+				const parsedValue = JSON.parse(jsonValue)
+				const token = parsedValue.accessToken
+				setToken(token)
+				// console.log(userToken)
+			}
+			// return jsonValue != null ? JSON.parse(jsonValue) : null;
+		} catch(e) {
+			console.log(e)
+		}
   }
 
+  const getUserGeoData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem(UserGeoDataAsyncData)
+      if (jsonValue != null) {
+        // console.log(JSON.parse(jsonValue))
+        var addressComponent = JSON.parse(jsonValue)
+        updateAddress(addressComponent.street)
+        updateGeocode(addressComponent)
+      }
+    } catch(e) {
+
+    }
+  }
+  
+  const storeStationDetails = async (stationInfo) => {
+		try {
+			const jsonData = JSON.stringify(stationInfo) 
+			await AsyncStorage.setItem(StationAsyncData, jsonData) 
+		} catch (e) {
+			// err
+		}
+	}
+
+  const stationID = 1
+
+	useEffect(() => {
+		getUserData()
+	}, [])
+
+
+	useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
+
+    const apiToken = OTP_PREFIX + userToken
+    if (userToken == "") {
+      return 
+    }
+    console.log(apiToken)
+    fetch(GET_STATION_BY_ID+stationID, {
+      method: 'GET', 
+      headers: {
+        'source': 'mobile', 
+				'Content-Type': 'application/json', 
+				'Authorization': apiToken, 
+      }
+    }, {
+      signal: signal
+    })
+    .then(results => results.json())
+    .then(jsonValue => {
+      // console.log(data)
+      // console.log(jsonValue)
+      if (jsonValue != null && jsonValue.status != "error") {
+        setAmount(jsonValue.amount)
+        updateStation(jsonValue)
+        // console.log(stationData.measureUnit)
+        setUnit(jsonValue.measureUnit)
+        // console.log(stationData)
+      }
+    })
+
+    return function cleanUp() {
+      abortController.abort()
+    }
+  }, [userToken])
+  
+  useEffect(() => {
+    getUserGeoData()
+  }, [])
+
+
   const { transparentBorder, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
+
+  const [clicks, setClicks] = useState(0)
+  
+  const QuantitySection = () => {
+    return (
+      <IncreamentSection> 
+        <LineContainer> 
+          <PricingText> 
+            {"Quantity: "}
+          </PricingText>
+          <AdditionButton
+            onPress={() => {
+              setClicks(clicks+1)
+            }}
+          > 
+            <AdditionText>+</AdditionText>
+          </AdditionButton>
+          <QuantityView>  
+            <IncreamentText> 
+              {clicks}
+            </IncreamentText>
+          </QuantityView>
+          <SubtrationButton
+            onPress={() => {setClicks(clicks-1)}}
+          > 
+            <SubtrationText>-</SubtrationText>
+          </SubtrationButton>
+        </LineContainer>
+      </IncreamentSection>
+    )
+  }
+
+  const onSubmit = async () => {
+    const orderData = {
+      stationId: stationID, 
+      quantity: clicks, 
+      shipAddress: {
+        street: address,
+        lga:  geocodingData.lga, 
+        state: geocodingData.state, 
+        lat: geocodingData.lat, 
+        lng: geocodingData.lng
+      }
+    }
+
+    console.log(orderData)
+    const apiToken = OTP_PREFIX + userToken
+    const response = await fetch(CREATE_ORDER_API, {
+      method: 'POST', 
+      headers: {
+        'source': 'mobile', 
+				'Content-Type': 'application/json', 
+				'Authorization': apiToken, 
+      }, 
+      body: JSON.stringify(orderData)
+    });
+
+    const jsonValue = await response.json(); 
+    console.log(jsonValue)
+  }
+
   return (
     <>
     <ContentContainer> 
-      <Location />
+      <Location location={address} />
       <Divider />
-      <Pricing />
+      <Pricing weight={stationAmount} unit={stationUnit} />
       <Divider />
       <Ratings />
       <Divider />
-      <WorkHours />
+      <WorkHours hours={"hours"} />
       <Divider />
-      <Description />
+      {/* <Description /> */}
+      <QuantitySection />
       <CustomButton 
-        onPress={placeOrder} 
+        onPress={onSubmit} 
         loading={false}
         space={'20px'} 
         uppercase={'true'} 
