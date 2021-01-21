@@ -24,17 +24,17 @@ const customCoordinates = [
     {
         lng: 3.469209, 
         lat: 6.445233,
-        name: "Modupe's Shop"
+        name: "Romeo's Shop"
     }, 
     {
         lng: 3.468547, 
         lat: 6.439606, 
-        name: "Benson's Shop"
+        name: "Jane's Shop"
     }, 
     {
         lng: 3.463923, 
         lat: 6.440523, 
-        name: "Peninsula"
+        name: "Jules"
     }
 ]
 
@@ -57,9 +57,20 @@ const Map = ({appSettings, appUserData}) => {
         longitudeDelta: 0
     };
     const [region, setRegion] = useState(initialRegion);
+    const [appCoordinatesData, updateCoordinatesData] = useState({
+        userStreetName: "", 
+        userLGA: "", 
+        userLAT: "", 
+        userLNG: "", 
+        userStateName: "", 
+        shopLNG: "", 
+        shopLAT: "", 
+        shopStreetName: "", 
+        shopLGA: "", 
+        shopStateName: ""
+    })
 
     const findPosition = payload => navigator.geolocation.getCurrentPosition(position => {
-        console.log(position)
         var lat = parseFloat(position.coords.latitude); 
         var long = parseFloat(position.coords.longitude); 
 
@@ -67,16 +78,22 @@ const Map = ({appSettings, appUserData}) => {
         .then(json => {
             // console.log(json);
             var addressComponent = json.results[0].address_components;
-            console.log(addressComponent)
-            console.log(addressComponent[0])
-            var addressDetails = {
-                street: addressComponent[0].short_name + " " + addressComponent[1].short_name + " " + addressComponent[2].short_name,
-                lga: addressComponent[4].short_name,
-                state: addressComponent[5].short_name, 
-                lat: lat, 
-                lng: long,
-            }
-            storeGeoCode(addressDetails)
+            const street = addressComponent[0].short_name + " " + addressComponent[1].long_name + " " + addressComponent[2].long_name
+            const lga = addressComponent[4].long_name
+            const state = addressComponent[5].long_name
+            const customLat = lat
+            const customLng = long
+            updateCoordinatesData(prevState => {
+                return {
+                    ...prevState, 
+                    userStreetName: street, 
+                    userLGA: lga, 
+                    userLAT: customLat, 
+                    userLNG: customLng, 
+                    userStateName: state 
+                }
+            })
+
         }).catch(err => console.log(err))
 
         var userRegion = {
@@ -114,8 +131,36 @@ const Map = ({appSettings, appUserData}) => {
         }
     });
 
-    const onCalloutTap = (stationID) => {
-        // console.log(stationID)
+    const onCalloutTap = (stationData) => {
+        updateCoordinatesData(prevState => {
+            return {
+                ...prevState, 
+                shopLAT: stationData.lat, 
+                shopLNG: stationData.lng
+            }
+        })
+        Geocoder.from(stationData.lat, stationData.lng)
+        .then(json => {
+            // console.log(json);
+            var addressComponent = json.results[0].address_components;
+            const street = addressComponent[0].short_name + " " + addressComponent[1].long_name + " " + addressComponent[2].long_name
+            const lga = addressComponent[4].long_name
+            const state = addressComponent[5].long_name
+            updateCoordinatesData(prevState => {
+                return {
+                    ...prevState, 
+                    shopStreetName: street, 
+                    shopLGA: lga, 
+                    shopStateName: state 
+                }
+            })
+            // console.log(appCoordinatesData)
+        }).catch(err => console.log(err))
+        // console.log(appCoordinatesData)
+        if (appCoordinatesData.shopStreetName == "") {
+            return
+        }
+        storeGeoCode(appCoordinatesData)
         navigation.navigate('Create Order')
     }
 

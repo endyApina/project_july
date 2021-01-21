@@ -28,6 +28,13 @@ export const PricingText = styled.Text`
   padding-right: 5px;
 `;
 
+export const AddressText = styled.Text`
+  font-weight: bold;
+  padding-left: 10px;
+  padding-right: 5px;
+  font-size: 10px;
+`;
+
 export const KGContainer = styled.View`
   flex: 1;
   flexDirection: row;

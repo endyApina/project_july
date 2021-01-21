@@ -2,21 +2,24 @@ import React, {useState, useEffect} from 'react';
 import { createStructuredSelector } from 'reselect';
 import { selectAppSettings } from '../../../redux/settings/settings.selector';
 import { connect } from 'react-redux';
-import { StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Button, AlertIOS } from 'react-native';
 import ButtonText from '../../forms/button-text/button-text.component';
 import { View, Text } from 'react-native'; 
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { Divider } from 'react-native-paper';
-import { ContentContainer, AdditionText, SubtrationText, SubtrationButton, IncreamentText, QuantityView, AdditionButton, AboutText, TimeText, DaysText, RatingIconContainer, RatingText, RatingContainer, KGContainer, KGText, PricingText, IncreamentSection, LineContainer, LocationContatainer } from './content.styles';
+import { ContentContainer, AddressText, AdditionText, SubtrationText, SubtrationButton, IncreamentText, QuantityView, AdditionButton, AboutText, TimeText, DaysText, RatingIconContainer, RatingText, RatingContainer, KGContainer, KGText, PricingText, IncreamentSection, LineContainer, LocationContatainer } from './content.styles';
 import CustomButton from '../../forms/custom-button/custom-button.component';
 import { useNavigation } from '@react-navigation/native';
 import { toOrderScreen } from '../../../session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GET_STATION_BY_ID, OTP_PREFIX, UserAsyncData, StationAsyncData, UserGeoDataAsyncData, CREATE_ORDER_API } from '../../../config';
 
-const Location = ({location}) => {
+const Location = ({title, location}) => {
   return (
     <LocationContatainer> 
+      <AddressText>
+        {title}
+      </AddressText>
       <Entypo name="location-pin" size={18} color="black" />
       <Text
         style={{
@@ -100,6 +103,20 @@ const StationContent = ({appSettings}) => {
   const navigation = useNavigation();
   const [address, updateAddress] = useState(""); 
   const [geocodingData, updateGeocode] = useState({});
+  const [appCoordinatesData, updateCoordinatesData] = useState({
+      userStreetName: "", 
+      userLGA: "", 
+      userLAT: "", 
+      userLNG: "", 
+      userStateName: "", 
+      shopLNG: "", 
+      shopLAT: "",
+      shopStreetName: "", 
+      shopLGA: "", 
+      shopStateName: ""
+  })
+  const [submissionLoader, toggleLoader] = useState(false);
+  const [disableButton, toggleDisableButton] = useState(false);
 
 	const getUserData = async () => {
 		try {
@@ -121,9 +138,24 @@ const StationContent = ({appSettings}) => {
     try {
       const jsonValue = await AsyncStorage.getItem(UserGeoDataAsyncData)
       if (jsonValue != null) {
-        // console.log(JSON.parse(jsonValue))
+        console.log(JSON.parse(jsonValue))
         var addressComponent = JSON.parse(jsonValue)
-        updateAddress(addressComponent.street)
+        updateCoordinatesData(prevState => {
+          return {
+            ...prevState,
+            userStateName: addressComponent.userStateName, 
+            userLGA: addressComponent.userLGA, 
+            userLAT: addressComponent.userLAT, 
+            userLNG: addressComponent.userLNG, 
+            userStreetName: addressComponent.userStreetName, 
+            shopLNG: addressComponent.shopLNG, 
+            shopLAT: addressComponent.shopLAT, 
+            shopStreetName: addressComponent.shopStreetName, 
+            shopLGA: addressComponent.shopLGA, 
+            shopStateName: addressComponent.shopStateName
+          }
+        })
+        console.log(addressComponent)
         updateGeocode(addressComponent)
       }
     } catch(e) {
@@ -155,7 +187,6 @@ const StationContent = ({appSettings}) => {
     if (userToken == "") {
       return 
     }
-    console.log(apiToken)
     fetch(GET_STATION_BY_ID+stationID, {
       method: 'GET', 
       headers: {
@@ -168,14 +199,10 @@ const StationContent = ({appSettings}) => {
     })
     .then(results => results.json())
     .then(jsonValue => {
-      // console.log(data)
-      // console.log(jsonValue)
       if (jsonValue != null && jsonValue.status != "error") {
         setAmount(jsonValue.amount)
         updateStation(jsonValue)
-        // console.log(stationData.measureUnit)
         setUnit(jsonValue.measureUnit)
-        // console.log(stationData)
       }
     })
 
@@ -200,6 +227,16 @@ const StationContent = ({appSettings}) => {
           <PricingText> 
             {"Quantity: "}
           </PricingText>
+          <SubtrationButton
+            onPress={() => {setClicks(clicks-1)}}
+          > 
+            <SubtrationText>-</SubtrationText>
+          </SubtrationButton>
+          <QuantityView>  
+            <IncreamentText> 
+              {clicks}
+            </IncreamentText>
+          </QuantityView>
           <AdditionButton
             onPress={() => {
               setClicks(clicks+1)
@@ -207,32 +244,32 @@ const StationContent = ({appSettings}) => {
           > 
             <AdditionText>+</AdditionText>
           </AdditionButton>
-          <QuantityView>  
-            <IncreamentText> 
-              {clicks}
-            </IncreamentText>
-          </QuantityView>
-          <SubtrationButton
-            onPress={() => {setClicks(clicks-1)}}
-          > 
-            <SubtrationText>-</SubtrationText>
-          </SubtrationButton>
         </LineContainer>
       </IncreamentSection>
     )
   }
 
   const onSubmit = async () => {
+    toggleDisableButton(true)
+    toggleLoader(true)
     const orderData = {
       stationId: stationID, 
       quantity: clicks, 
       shipAddress: {
-        street: address,
-        lga:  geocodingData.lga, 
-        state: geocodingData.state, 
-        lat: geocodingData.lat, 
-        lng: geocodingData.lng
+        street: appCoordinatesData.shopLGA,
+        lga:  appCoordinatesData.userLGA, 
+        state: appCoordinatesData.userStateName, 
+        lat: appCoordinatesData.userLAT, 
+        lng: appCoordinatesData.userLNG
       }
+    }
+
+    if (clicks == 0) {
+      alert("Please input quantity")
+      // AlertIOS.alert("Please input quantity")
+      toggleDisableButton(false)
+      toggleLoader(false)
+      return
     }
 
     console.log(orderData)
@@ -249,12 +286,19 @@ const StationContent = ({appSettings}) => {
 
     const jsonValue = await response.json(); 
     console.log(jsonValue)
+    console.log(jsonValue.data)
+    setTimeout(() => {
+      toggleDisableButton(false)
+      toggleLoader(false)
+    }, 2000);
   }
 
   return (
     <>
     <ContentContainer> 
-      <Location location={address} />
+      <Location title={"My Location: "} location={appCoordinatesData.userStreetName} />
+      <Divider />
+      <Location title={"Station: "} location={appCoordinatesData.shopStreetName} />
       <Divider />
       <Pricing weight={stationAmount} unit={stationUnit} />
       <Divider />
@@ -266,7 +310,7 @@ const StationContent = ({appSettings}) => {
       <QuantitySection />
       <CustomButton 
         onPress={onSubmit} 
-        loading={false}
+        loading={submissionLoader}
         space={'20px'} 
         uppercase={'true'} 
         width={'330px'} 
@@ -274,6 +318,7 @@ const StationContent = ({appSettings}) => {
         bgcolor={defaultButtonBackgroundColor} 
         box-shadow={boxShadow}
         radius={'10px'}
+        disabled={disableButton}
       >
         <ButtonText weight={'bold'}>{'Place Order'}</ButtonText>
       </CustomButton>      
