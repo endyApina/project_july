@@ -13,6 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import { toOrderScreen } from '../../../session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GET_STATION_BY_ID, OTP_PREFIX, UserAsyncData, StationAsyncData, UserGeoDataAsyncData, CREATE_ORDER_API } from '../../../config';
+import {toOrders} from '../../../session';
 
 const Location = ({title, location}) => {
   return (
@@ -266,7 +267,6 @@ const StationContent = ({appSettings}) => {
 
     if (clicks == 0) {
       alert("Please input quantity")
-      // AlertIOS.alert("Please input quantity")
       toggleDisableButton(false)
       toggleLoader(false)
       return
@@ -290,6 +290,7 @@ const StationContent = ({appSettings}) => {
     setTimeout(() => {
       toggleDisableButton(false)
       toggleLoader(false)
+      toOrders(navigation)
     }, 2000);
   }
 

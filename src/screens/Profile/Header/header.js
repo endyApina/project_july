@@ -9,7 +9,7 @@ import { Entypo } from '@expo/vector-icons';
 const AvatarElement = () => {
   return (
     <Avatar 
-      source={{uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'}}
+      source={{uri: 'https://randomuser.me/api/portraits/women/21.jpg'}}
       size='xlarge'
       rounded
       containerStyle={{

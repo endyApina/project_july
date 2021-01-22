@@ -1,7 +1,7 @@
 import React from 'react'; 
 import { View } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements';
-import {toBecomeVendor, toNotification, toPayments, toLogin} from '../../../session';
+import {toBecomeVendor, toOrders, toNotification, toPayments, toLogin} from '../../../session';
 import { useNavigation } from '@react-navigation/native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
@@ -11,7 +11,7 @@ const list = [
     icon: 'av-timer'
   }, 
   {
-    title: 'Settings', 
+    title: 'Orders', 
     icon: 'settings'
   }, 
   {
@@ -48,6 +48,10 @@ const SettingsList = () => {
 
     if (title === "Notifications") {
       toNotification(navigation)
+    }
+
+    if (title === "Orders") {
+      toOrders(navigation)
     }
   
     alert(val.title)

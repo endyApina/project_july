@@ -14,7 +14,8 @@ import OrderScreen from '../../components/station/station-order/order.component'
 import BecomeVendorScreen from '../../screens/vendor/BecomeVendor/vendor.screen';
 import PaymentScreen from '../../screens/Payments/payment.screen';
 import AddCardScreen from '../../screens/Payments/AddCard/addcard.screen';
-import NotificationScreen from '../../screens/Notifications/notifications.screen'
+import NotificationScreen from '../../screens/Notifications/notifications.screen'; 
+import OrderHistory from '../../screens/orders';
 
 const Stack = createStackNavigator()
 
@@ -55,6 +56,7 @@ const MainNavigation = () => {
       <Stack.Screen name="Add Card" component={AddCardScreen} options={{title: 'Add Card'}} />
       <Stack.Screen name="Become a Vendor" component={BecomeVendorScreen} options={{title: 'Become A Vendor'}} />
       <Stack.Screen name="Notifications" component={NotificationScreen} options={{title: 'Notification'}} />
+      <Stack.Screen name="Orders" component={OrderHistory} options={{title: 'Orders'}} />
       <Stack.Screen 
           name="AppSlider" 
           component={AppSlider} 

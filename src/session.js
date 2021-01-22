@@ -44,6 +44,10 @@ export const toNotification = (navigation) => {
 	navigation.navigate('Notifications')
 }
 
+export const toOrders = (navigation) => {
+	navigation.navigate('Orders')
+}
+
 export const toLogin = (navigation) => {
 	navigation.reset({
 		index: 0,

@@ -15,12 +15,12 @@ const BottomSheetComponent = ({appSettings}) => {
     return (
         <View style={{
             backgroundColor: 'white',
-            padding: 16,
+            // padding: 16,
             height: 750
         }}>
 
         {/* <MapApp /> */}
-        <CustomInput 
+        {/* <CustomInput 
             // onChangeText={}
             value={searchField}
             autoCompleteType={'street-address'}
@@ -32,7 +32,7 @@ const BottomSheetComponent = ({appSettings}) => {
             border={transparentBorder} 
             // underline={'white'} 
             txtcolor={defaultInputTextColor} 
-        />
+        /> */}
 
         <VendorList />
         </View>

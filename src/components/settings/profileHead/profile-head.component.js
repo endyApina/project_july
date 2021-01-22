@@ -9,7 +9,7 @@ import { ProfileHeadContainer } from './profile-head.styles';
 const AvatarElement = () => {
   return (
     <Avatar
-      source={{uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'}}
+      source={{uri: 'https://randomuser.me/api/portraits/men/42.jpg'}}
       size='medium'
       rounded
     />

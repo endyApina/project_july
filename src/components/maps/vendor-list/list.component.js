@@ -10,28 +10,28 @@ import { useNavigation } from '@react-navigation/native';
 const list = [
     {
       name: 'Forte Gas Station',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+      avatar_url: 'https://randomuser.me/api/portraits/women/35.jpg',
       subtitle: '21, Lekki-Ajah Express Way',
       distance: '1km', 
       id: 0
     },
     {
       name: 'Peninsula Gas',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+      avatar_url: 'https://randomuser.me/api/portraits/women/11.jpg',
       subtitle: '41, Yaba, Lagos',
       distance: '4m', 
       id: 1
     },
     {
       name: 'Peninsula Gas',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+      avatar_url: 'https://randomuser.me/api/portraits/women/31.jpg',
       subtitle: '41, Yaba, Lagos',
       distance: '4m', 
       id: 2
     },
     {
       name: 'Peninsula Gas',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+      avatar_url: 'https://randomuser.me/api/portraits/women/26.jpg',
       subtitle: '41, Yaba, Lagos',
       distance: '4m', 
       id: 3

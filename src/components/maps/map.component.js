@@ -192,7 +192,7 @@ const Map = ({appSettings, appUserData}) => {
                                     > 
                                         <View> 
                                             <Text> 
-                                                This is plain text
+                                                {item.name}
                                             </Text>
                                         </View>
                                     </Callout>
