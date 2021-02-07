@@ -9,19 +9,56 @@ import { createStructuredSelector } from 'reselect';
 import { useNavigation } from '@react-navigation/native';
 import { emailSignInStart } from '../../redux/user/user.action';
 import {selectIsSubmittingLogin} from '../../redux/user/user.selector';
-import { toHome } from '../../session';
+import { toHome, toOTP } from '../../session';
+import axios from 'axios';
+import {apiHeaders, LOGIN_API} from '../../config'
 
 const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
-    const [userData, updateData] = useState({phone: '', password: ''});
-    const {phone, password} = userData;
+    const [userData, updateData] = useState({email: '', password: ''});
+    const {email, password} = userData;
     const [isSubmitting, toggleSubmitting] = useState(false);
     const { transparentBorder, boxShadow, AppMainColor, buttonTextColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings
     const navigation = useNavigation();
 
     const handleSubmit = () => {
+        toggleSubmitting(true)
         let validity = validateSignIn()
         if (validity != true) return;
-        emailSignInStart({phone, password})
+        const options = {
+            headers: apiHeaders("")
+        }
+        axios.post(LOGIN_API, {
+            email: email, 
+            password: password,
+        }, options)
+        .then((response) => {
+            console.log(response.data)
+            const responseData = response.data
+            const body = responseData.body 
+            const code = responseData.code 
+            const message = responseData.message 
+ 
+            if (code != 200) {
+                if (message == "unverified user") {
+                    emailSignInStart({body, code, message})
+                    toOTP(navigation)
+                    toggleSubmitting(false)
+                    return 
+                }
+                alert(responseData.message)
+                toggleSubmitting(false)
+                return 
+            } else {
+                emailSignInStart({body, code, message})
+                toHome(navigation)
+                toggleSubmitting(false)
+                return 
+            }
+            
+        }, (error) => {
+            console.log(error)
+        })
+        // emailSignInStart({phone, password})
         // toHome(navigation)
     };
 
@@ -32,23 +69,24 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
     };
 
     const validateSignIn = () => {
-        if (phone === "" || password === "") {
+        if (email === "" || password === "") {
             alert("Kindly Fill All details")
+            toggleSubmitting(false)
             return false 
         }
         return true
     }
 
-    useEffect(() => {
-        toggleSubmitting(isSubmittingForm);
-    }, [isSubmittingForm])
+    // useEffect(() => {
+    //     toggleSubmitting(isSubmittingForm);
+    // }, [isSubmittingForm])
   
     return (
         <SigninContainer>
             <CustomInput 
-                onChangeText={text => handleChange({ phone: text })}
-                value={phone}
-                placeholder={'Phone Number'}
+                onChangeText={text => handleChange({ email: text })}
+                value={email}
+                placeholder={'Email'}
                 bgcolor={defaultInputBgColor}
                 space={'5px'} 
                 placeholderTextColor={defaultInputPlaceholderColor} 

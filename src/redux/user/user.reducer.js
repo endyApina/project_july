@@ -19,19 +19,19 @@ const userReducer = (state = INITIAL_STATE, action) => {
     case UserActionTypes.SIGN_IN_SUCCESS:
         return {
             ...state,
-            appUserData: action.payload,
+            // appUserData: action.payload,
+            currentUser: action.payload,
             isSubmittingLogin: false,
             isSubmittingRegister: false, 
-            userLoggedIn: true, 
+            // userLoggedIn: true, 
             error: null
         };
     case UserActionTypes.SIGN_UP_SUCCESS: 
         return {
             ...state, 
             currentUser: action.payload,
-            signUpData: action.data,
             isSubmittingRegister: false, 
-            signUpSuccess: true, 
+            // signUpSuccess: true, 
             error: null
         }
     case UserActionTypes.CONNECTING_TO_SERVER: 
@@ -88,7 +88,8 @@ const userReducer = (state = INITIAL_STATE, action) => {
     case UserActionTypes.TOGGLE_OTP_STATUS: 
         return {
             ...state, 
-            otpVerificationStatus: action.payload
+            otpVerificationStatus: action.payload,
+            currentUser: action.userData,
         }
     case UserActionTypes.UPDATE_SIGNUP_DATA: 
         return {

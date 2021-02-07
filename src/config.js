@@ -45,14 +45,28 @@ export const appModes = {
  
 };
 
-const API_BASE = 'http://167.99.236.194/api/v1/'
+export const user_role_code="2222"
+export const user_role="customer"
+export const vendor_role_code="3333"
+export const vendor_role="vendor"
+
+export const apiHeaders = (token) => {
+	return {
+		"Authorization": token, 
+		"app_source": user_role
+	}
+}
+
+// const API_BASE = 'http://167.99.236.194/api/v1/'
+const API_BASE = 'http://localhost:8002/'
+// const API_BASE = 'http://9454a32dcd81.ngrok.io/'
 
 export const API_STRING = 'http://milky-way-api.us-east-1.elasticbeanstalk.com/api/v1/'
-export const REG_API = API_BASE + 'auth/signup'
-export const LOGIN_API = API_BASE + 'auth/signin'
+export const REG_API = API_BASE + 'auth/registration'
+export const LOGIN_API = API_BASE + 'auth/login'
 export const FORGOT_PASSWORD_API = API_BASE + 'auth/reset-password'
 export const RESEND_OTP = API_BASE + 'otp/resend'
-export const VEIRFY_OTP = API_BASE + 'otp/verify'
+export const VEIRFY_OTP = API_BASE + 'otp/verification/'
 export const GET_ALL_GAS_STATION = API_BASE + 'station/'
 export const GET_STATION_BY_ID = API_BASE + 'station/'
 export const OTP_PREFIX = 'Bearer '

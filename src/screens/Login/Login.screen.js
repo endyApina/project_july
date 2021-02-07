@@ -22,12 +22,12 @@ const LoginScreen = ({ navigation, appSettings, userLoggedIn, verifiedUser }) =>
     }
     
     useEffect(() => {
-        if(userLoggedIn) toHome(navigation)
+        // if(userLoggedIn) toHome(navigation)
     }, [userLoggedIn])
 
     useEffect(() => {
         if(verifiedUser == 2) {
-            toOTP(navigation)
+            // toOTP(navigation)
         }
     }, [verifiedUser])
 

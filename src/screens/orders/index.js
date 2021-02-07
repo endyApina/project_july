@@ -6,6 +6,7 @@ import OrderHistoryScreen from './order-detail';
 const OrderHistory = () => {
   return (
     <OrderHistoryScreen />
+    // <OrderDetailsScreen />
   )
 }
 

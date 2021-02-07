@@ -8,6 +8,8 @@ import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { connect } from 'react-redux';
 import { signUpStart } from '../../redux/user/user.action';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios'; 
+import {apiHeaders, REG_API, user_role_code} from '../../config';
 import {selectIsSubmittingRegister, selectSignUpStatus} from '../../redux/user/user.selector';
 // import CustomSelectInput from '../forms/custom-select-input/custom-select';
 
@@ -22,7 +24,7 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart, signUpSuccessStatus
     const { fullName, email, password, phone } = userData;
     const { transparentBorder,  AppMainColor, AppMainColorShadow, inputSpace, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
     const [isSubmitting, toggleSubmitting] = useState(false);
-    // const [successSignUp, toggleSignUpSuccess] = useState(false);
+    const [successSignUp, toggleSignUpSuccess] = useState(false);
 
     const updateType = (type) => {
         updateData({
@@ -31,15 +33,46 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart, signUpSuccessStatus
         })
     }
 
-    useEffect(() => {
-        toggleSubmitting(isSubmittingForm);
-    }, [isSubmittingForm])
+    // useEffect(() => {
+    //     toggleSubmitting(isSubmittingForm);
+    // }, [isSubmittingForm])
 
     const handleSubmit = async () => {
+        toggleSubmitting(true)
         if (isSubmitting) return;
         var submittedData = validateSignUp()
         if (submittedData != true) return
-        signUpStart({email, password, fullName, phone})
+
+        const data = {
+            "email": email, 
+            "full_name": fullName, 
+            "phone_number": phone, 
+            "password": password, 
+            "user_type": user_role_code,
+        }
+
+        const options = {
+            headers: apiHeaders("")
+        }
+
+        axios.post(REG_API, data, options)
+        .then((response) => {
+            console.log(response.data)
+            const responseBody = response.data
+            const body = responseBody.body 
+            const message = responseBody.message
+            const code = responseBody.code 
+
+            if (body != "" || message != "" || code != "") {
+                signUpStart({body, message, code})
+            } else {
+                console.log("error")
+            }
+        }, (error) => {
+            console.log(error)
+        })
+        toggleSubmitting(false)
+        // signUpStart({email, password, fullName, phone})
     }
 
     const navigateToIntroSliders = () => {

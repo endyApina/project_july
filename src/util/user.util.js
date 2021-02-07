@@ -30,12 +30,16 @@ export function* CALL_POST_API(postData, LOGIN_API) {
         }, 
         body: JSON.stringify(postData)
     })
-    .then((response) => response.json())
+    .then((response) => {
+        response.json()
+    })
     .then(data => {
+        console.log(data)
         responseBody = data
         return data
     }).catch(error => {
-        responseBody = error
+        console.log(error)
+        throw error
     })
 
     return responseBody

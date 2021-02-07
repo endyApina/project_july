@@ -50,9 +50,10 @@ export const toggleForgettingPassword = status => ({
 	payload: status
 });
 
-export const toggleOTPStatus = status => ({
+export const toggleOTPStatus = (status, userData) => ({
 	type: UserActionTypes.TOGGLE_OTP_STATUS, 
-	payload: status
+	payload: status, 
+	userData: userData
 })
 
 export const toggleUserLoggedIn = status => ({

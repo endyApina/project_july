@@ -7,90 +7,18 @@ import { emailSignUp, CALL_POST_API } from '../../util/user.util';
 import { REG_API, LOGIN_API, FORGOT_PASSWORD_API, RESEND_OTP, VEIRFY_OTP } from '../../config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export function* signUp({payload: {email, password, fullName, phone}}) {
-    let tempName = fullName.split(" ")
-    let firstName = tempName[0]
-    if (firstName == "") {
-        alert("Please enter Full Name")
-        return
-    }
-    let lastName = tempName[1]
-    if (tempName[2]) {
-        lastName = lastName + " " + tempName[2]
+export function* registration({payload: {body, code, message}}) {
+    if (code != 200) {
+        alert(message)
+        return 
     }
 
-    if (!lastName) {
-        lastName = " "
-    }
-    const data = {
-        email: email, 
-        password: password, 
-        userType: "3000", 
-        firstName: firstName, 
-        lastName: lastName, 
-        phoneNumber: phone
-    }
-
-    const signUpSuccessData = {
-        id: 0, 
-        otpToken: "", 
-        phoneNumber: "", 
-        tokenId: "", 
-        uuid: ""
-    }
     try {
-        yield put(toggleSubmittingRegister(true))
-        var user;
-
-        yield emailSignUp(data, REG_API).next().value.then(resp => {
-            console.log(resp)
-            const responseBody = resp.data
-            if (responseBody) {
-                if (Array.isArray(responseBody)) {
-                    responseBody.forEach(responseData => {
-                        // console.log(responseData)
-                        const responseMessage = responseData.msg
-                        if (responseMessage) {
-                            if (responseMessage == "Account already exist") {
-                                alert("Account already exist. \n Kindly sign in with Phone number")
-                                return
-                            }
-                        }
-                    });
-                } else {
-                    if (responseBody.errors) {
-                        const errors = responseBody.errors 
-                        console.log(errors)
-                    }
-                }
-
-                signUpSuccessData.id = responseBody.id 
-                signUpSuccessData.otpToken = responseBody.otpToken 
-                signUpSuccessData.phoneNumber = responseBody.phoneNumber
-                signUpSuccessData.tokenId = responseBody.tokenId
-                signUpSuccessData.uuid = responseBody.uuid 
-
-            }
-
-            console.log(signUpSuccessData)
-            // let responseBody = resp.data
-            // console.log(responseBody)
-            // if (responseBody.errors != null) {
-            //     console
-            // }
-            // if (resp.statusCode === 201) {
-            //     const uuid = resp.data.uuid 
-            //     user = uuid;
-            // }
-        })
-        yield put(toggleSubmittingRegister(false))
-        // console.log("Calling sign up succes")
-        yield put(signUpSuccess(data, signUpSuccessData));
+        yield put(signUpSuccess(body))
     } catch(error) {
         console.log(error)
-        // yield signUpFailure(error)
     }
-}
+} 
 
 export function* signInAfterSignUp({payload: user}) {
     try {
@@ -111,7 +39,7 @@ export function* onSignUpSuccess() {
 export function* onSignUpStart() {
     yield takeLatest(
         UserActionTypes.SIGN_UP_START,
-        signUp
+        registration
     )
 }
 
@@ -124,9 +52,22 @@ const storeLogin = async (data) => {
     }
 }
 
+export function* signUserIn({payload: {body, code, message}}) {
+    console.log(body)
+    console.log(code)
+    console.log(message)
+
+    try {
+        storeLogin(body)
+        yield put(signInSuccess(body))
+    } catch(error) {
+        console.log(error)
+    }
+}
+
 export function* signInWithEmail({payload: {phone, password } }) {
     const data = {
-        phoneNumber: phone, 
+        email: phone, 
         password: password
     }
 
@@ -256,24 +197,8 @@ export function* forgetPasswordStart({payload: email}) {
 
 export function* sendOTPToken({payload: verificationData}) {
     console.log("send OTP")
-    var verificationStatus = false;
-    try {
-        yield CALL_POST_API(verificationData, VEIRFY_OTP).next().value.then(resp => {
-            console.log(resp)
-            if (resp.message) {
-                if (resp.message == "Account activated successfully") {
-                    verificationStatus = true 
-                }
-            }
-        }).then(error => {
-            console.log(error)
-        })
-    } catch (error) {
-        //do something 
-    }
-    if (verificationStatus) {
-        yield put(toggleOTPStatus(true))
-    }
+    // var verificationStatus = false;
+    yield put(toggleOTPStatus(true, verificationData))
 }
 
 export function* verifyOTP({payload: phoneNumber}) {
@@ -302,7 +227,7 @@ export function* verifyOTP({payload: phoneNumber}) {
 export function* onEmailSignInStart() {
     yield takeLatest(
         UserActionTypes.SIGN_IN_START, 
-        signInWithEmail
+        signUserIn
     )
 }
 

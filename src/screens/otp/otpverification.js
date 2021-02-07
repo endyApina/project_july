@@ -19,9 +19,11 @@ import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { createStructuredSelector } from 'reselect';
+import axios from 'axios';
 import { selectCurrentUser, selectSignUpData, selectOTPStatus } from '../../redux/user/user.selector';
 
 import { otpVerificationStart, startForgetPassword, startOTPVerification } from '../../redux/user/user.action';
+import { apiHeaders, RESEND_OTP, VEIRFY_OTP } from '../../config';
 
 const RESEND_OTP_TIME_LIMIT = 2; 
 const AUTO_SUBMIT_OTP_TIME_LIMIT = 4; 
@@ -38,6 +40,8 @@ const OtpVerification = ({otpVerificationStart, verificationStatus, signUpData, 
     const [submittingOtp, setSubmittingOtp] = useState(false); 
     const [errorMessage, setErrorMessage] = useState('');
     const [userPhoneNumber, setPhoneNumber] = useState('');
+    const [userEmail, updateEmail] = useState('');
+    const [userToken, updateToken] = useState('');
 
     // in secs, if value is greater than 0 then button will be disabled
     const [resendButtonDisabledTime, setResendButtonDisabledTime] = useState(
@@ -67,7 +71,15 @@ const OtpVerification = ({otpVerificationStart, verificationStatus, signUpData, 
     });
 
     useEffect(() => {
-      setPhoneNumber(signUpData.phoneNumber)
+      // console.log(signUpData)
+      const tokenString = signUpData.token_string
+      const userData = signUpData.user_data 
+      const userRole = signUpData.user_role
+
+      setPhoneNumber(userData.phone_number)
+      updateEmail(userData.email)
+      updateToken(tokenString)
+      // setPhoneNumber(signUpData.phoneNumber)
     })
 
     const navigateToLogin = () => {
@@ -78,7 +90,7 @@ const OtpVerification = ({otpVerificationStart, verificationStatus, signUpData, 
     }
 
     useEffect(() => {
-      if (verificationStatus) navigateToLogin()
+      if (verificationStatus) navigateToIntro()
     }, [verificationStatus])
 
     useEffect(() => {
@@ -143,16 +155,23 @@ const OtpVerification = ({otpVerificationStart, verificationStatus, signUpData, 
         startResendOtpTimer();
     
         // resend OTP Api call
-        console.log("About to get current user")
-        console.log(signUpData)
-        console.log(signUpData.phoneNumber)
+        console.log(userPhoneNumber)
+        console.log(userEmail)
+
+        const options = {
+          headers: apiHeaders(userToken)
+        }
+
+        axios.get(RESEND_OTP, options)
+        .then((response) => {
+          console.log(response)
+        })
 
         // const user = AsyncStorage.getItem("login_data")
         // const localStorageData = JSON.parse(user)
         // console.log(localStorageData)
         // otpVerificationStart(signUpData.phoneNumber)
         // todo
-        console.log('todo: Resend OTP');
       };
     
       const onSubmitButtonPress = () => {
@@ -167,14 +186,29 @@ const OtpVerification = ({otpVerificationStart, verificationStatus, signUpData, 
           });
         }
         console.log(verificationCode)
-        var data = {
-          phoneNumber: userPhoneNumber, 
-          token: verificationCode, 
-          actionType: "activate_account"
+        const aipHeaderOptions = {
+          headers: apiHeaders(userToken)
         }
-        console.log(data)
+
+        axios.get(VEIRFY_OTP + verificationCode, aipHeaderOptions)
+        .then((response) => {
+          console.log(response)
+          const responseBody = response.data
+          const apiBody = responseBody.body 
+          const apiCode = responseBody.code 
+          const apiMessage = responseBody.message 
+
+          if (apiCode != 200) {
+            alert(apiMessage)
+          }
+          sendOTPToken(apiBody)
+        })
+        // var data = {
+        //   phoneNumber: userPhoneNumber, 
+        //   token: verificationCode, 
+        //   actionType: "activate_account"
+        // }
         // navigateToIntro();
-        sendOTPToken(data)
       };
 
     const navigateToIntro = () => {

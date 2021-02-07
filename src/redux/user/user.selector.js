@@ -9,7 +9,7 @@ export const selectCurrentUser = createSelector(
 
 export const selectAppUserData = createSelector(
 	[selectUser], 
-	user => user.appUserData
+	user => user.currentUser
 )
 
 export const selectOTPStatus = createSelector(
@@ -19,7 +19,7 @@ export const selectOTPStatus = createSelector(
 
 export const selectSignUpData = createSelector(
 	[selectUser], 
-	user => user.signUpData
+	user => user.currentUser
 )
 
 export const selectConnectionStatus = createSelector(
