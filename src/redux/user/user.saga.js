@@ -15,6 +15,7 @@ export function* registration({payload: {body, code, message}}) {
 
     try {
         yield put(signUpSuccess(body))
+        storeLogin(body)
     } catch(error) {
         console.log(error)
     }

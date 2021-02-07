@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useEffect, useState} from 'react'; 
 import { ListItem, Avatar } from 'react-native-elements';
 import { connect } from 'react-redux'; 
@@ -17,14 +18,26 @@ const AvatarElement = () => {
 }
 
 const ProfileHead = ({appSettings, appUserData}) => {
-
   const [userData, updateUserData] = useState('')
+  const [fullName, updateName] = useState('')
+  const getAppData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user_data')
+      const respData = JSON.parse(jsonValue)
+      if (respData != null) {
+        updateUserData(respData)
+        updateName(respData.user_data.full_name)
+      }
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch(e) {
+      // error reading value
+    }
+  }
+  // getAppData()
 
   useEffect(() => {
-    if (appUserData) updateUserData(appUserData)
-  }, [appUserData])
-
-  // console.log(userData)
+    getAppData()
+  }, [])
 
   const {AppMainColor} = appSettings;
   return (
@@ -55,7 +68,7 @@ const ProfileHead = ({appSettings, appUserData}) => {
               color: 'white',
             }}
           > 
-            {"Endy Apinageri"}
+            {fullName}
           </ListItem.Subtitle>
         </ListItem.Content>
         <ListItem.Chevron />
