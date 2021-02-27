@@ -155,8 +155,6 @@ const OtpVerification = ({otpVerificationStart, verificationStatus, signUpData, 
         startResendOtpTimer();
     
         // resend OTP Api call
-        console.log(userPhoneNumber)
-        console.log(userEmail)
 
         const options = {
           headers: apiHeaders(userToken)
@@ -166,12 +164,6 @@ const OtpVerification = ({otpVerificationStart, verificationStatus, signUpData, 
         .then((response) => {
           console.log(response)
         })
-
-        // const user = AsyncStorage.getItem("login_data")
-        // const localStorageData = JSON.parse(user)
-        // console.log(localStorageData)
-        // otpVerificationStart(signUpData.phoneNumber)
-        // todo
       };
     
       const onSubmitButtonPress = () => {
@@ -185,7 +177,6 @@ const OtpVerification = ({otpVerificationStart, verificationStatus, signUpData, 
             verificationCode = verificationCode + data
           });
         }
-        console.log(verificationCode)
         const aipHeaderOptions = {
           headers: apiHeaders(userToken)
         }
@@ -203,12 +194,6 @@ const OtpVerification = ({otpVerificationStart, verificationStatus, signUpData, 
           }
           sendOTPToken(apiBody)
         })
-        // var data = {
-        //   phoneNumber: userPhoneNumber, 
-        //   token: verificationCode, 
-        //   actionType: "activate_account"
-        // }
-        // navigateToIntro();
       };
 
     const navigateToIntro = () => {

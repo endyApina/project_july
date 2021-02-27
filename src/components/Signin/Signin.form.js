@@ -32,7 +32,7 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
             password: password,
         }, options)
         .then((response) => {
-            console.log(response.data)
+            // console.log(response.data)
             const responseData = response.data
             const body = responseData.body 
             const code = responseData.code 

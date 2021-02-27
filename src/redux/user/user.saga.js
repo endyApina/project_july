@@ -47,128 +47,18 @@ export function* onSignUpStart() {
 const storeLogin = async (data) => {
     try {
         const jsonData = JSON.stringify(data)
-      await AsyncStorage.setItem('user_data', jsonData)
+        await AsyncStorage.setItem('user_data', jsonData)
     } catch (e) {
       // saving error
     }
 }
 
 export function* signUserIn({payload: {body, code, message}}) {
-    console.log(body)
-    console.log(code)
-    console.log(message)
-
     try {
         storeLogin(body)
         yield put(signInSuccess(body))
     } catch(error) {
         console.log(error)
-    }
-}
-
-export function* signInWithEmail({payload: {phone, password } }) {
-    const data = {
-        email: phone, 
-        password: password
-    }
-
-    const signUpSuccessData = {
-        id: 0, 
-        otpToken: "", 
-        phoneNumber: phone, 
-        tokenId: "", 
-        uuid: ""
-    }
-
-    const loginSuccessData = {
-        accessToken: "", 
-        userDetails: {
-            activated: 0, 
-            activationCode: null, 
-            createdAt: "", 
-            email: "", 
-            id: 0, 
-            phoneNumber: "", 
-            profile: {
-                createdAt: "", 
-                firstName: "",
-                id: 0, 
-                lastName: "", 
-                updatedAt: "",
-                userId: 0
-            }, 
-            updatedAt: "", 
-            userType: "", 
-            uuid: "",
-        }
-    }
-
-    try {
-        yield put(toggleSubmittingLogin(true))
-        var response; 
-
-        yield CALL_POST_API(data, LOGIN_API).next().value.then(resp => {
-            response = resp
-        })
-
-        if (response.message) {
-            if (response.message == "Your account have not been verified") {
-                signUpSuccessData.otpToken = response.token 
-                yield put(updateSignUpData(signUpSuccessData))
-                yield put(toggleVerifiedUser(2))
-            }
-        }
-
-        if (response.data) {
-            var responseData = response.data
-            if (Array.isArray(responseData)) {
-                responseData.forEach(data => {
-                    if (data.msg == "These credentials do not match our records") {
-                        alert(data.msg + "\n Kindly check your password")
-                    }
-                });
-            }
-
-            if (responseData.accessToken) {
-                loginSuccessData.accessToken = responseData.accessToken
-                loginSuccessData.userDetails.activated = responseData.userDetails.activated
-                loginSuccessData.userDetails.activationCode = responseData.userDetails.activationCode
-                loginSuccessData.userDetails.createdAt = responseData.userDetails.createdAt
-                loginSuccessData.userDetails.email = responseData.userDetails.email 
-                loginSuccessData.userDetails.id = responseData.userDetails.id 
-                loginSuccessData.userDetails.phoneNumber = responseData.userDetails.phoneNumber
-                loginSuccessData.userDetails.profile.createdAt = responseData.userDetails.profile.createdAt
-                loginSuccessData.userDetails.profile.firstName = responseData.userDetails.profile.firstName
-                loginSuccessData.userDetails.profile.id = responseData.userDetails.profile.id
-                loginSuccessData.userDetails.profile.lastName = responseData.userDetails.profile.lastName
-                loginSuccessData.userDetails.profile.updatedAt = responseData.userDetails.profile.updatedAt 
-                loginSuccessData.userDetails.profile.userId = responseData.userDetails.profile.userId
-                loginSuccessData.userDetails.updatedAt = responseData.userDetails.updatedAt
-                loginSuccessData.userDetails.userType = responseData.userDetails.userType 
-                loginSuccessData.userDetails.uuid = responseData.userDetails.uuid 
-
-                storeLogin(loginSuccessData)
-
-                yield put(signInSuccess(responseData))
-            }
-        }
-
-        if (response.data == "Unverified account") {
-            alert(response.data + "\n Kindly check email for verification code")
-        } 
-        // const responseBody = response.message 
-        // if (responseBody == "These credentials do not match our records.") {
-        //     alert("Invalid Login Details. Forgot Password? ")
-        //     yield put(toggleSubmittingLogin(false))
-        //     return 
-        // }
-        // yield put(toggleSubmittingLogin(false))
-        // yield put(toggleUserLoggedIn(true))
-        // console.log(loginSuccessData)
-        yield put(toggleSubmittingLogin(false))
-        // yield put(toggleUserLoggedIn(true))
-    } catch(error) {
-        yield put(signInFailure(error));
     }
 }
 

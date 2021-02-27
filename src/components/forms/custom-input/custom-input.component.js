@@ -9,7 +9,7 @@ const editIconSize = 24;
 
 import { InputViewContainer, TextInputContainer, IonIconsContainer, IconButtonContainer } from './custom-input.styles';
 
-const CustomInput = ({ handleChange, left, rightIcon, rightIconName, forPassword, leftIcon, ...otherProps }) => {
+const CustomInput = ({ handleChange, left, rightIcon, rightIconName, forPassword, multiline, numberOfLines, leftIcon, ...otherProps }) => {
 	const [input, toggleInput] = useState({ secure: true, icon: mdEyeOff });
 	const { secure, icon } = input;
 	const { underline } = otherProps;
@@ -26,7 +26,13 @@ const CustomInput = ({ handleChange, left, rightIcon, rightIconName, forPassword
 				color={underline}
 				left={left}
 			/>
-			<TextInputContainer maxLength={50} secureTextEntry={forPassword ? secure: false} onChange={handleChange} {...otherProps} />
+			<TextInputContainer 
+				maxLength={50} 
+				multiline={multiline}
+				numberOfLines={numberOfLines ? numberOfLines : 1}
+				secureTextEntry={forPassword ? secure: false} 
+				onChange={handleChange} {...otherProps} 
+			/>
 
 			{
 				forPassword ?

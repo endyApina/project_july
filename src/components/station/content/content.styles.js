@@ -106,3 +106,5 @@ export const QuantityView = styled.View``
 
 export const IncreamentText = styled.Text`
 fontSize: 18px;`;
+
+export const DeliveryInstructionContainer = styled.View``

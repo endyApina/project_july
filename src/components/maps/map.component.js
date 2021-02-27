@@ -11,11 +11,12 @@ import BottomHeader from './bottom-sheet-header/bottom-sheet.component';
 import BottomSheet from 'react-native-bottomsheet-reanimated';
 import {startAPICall} from './util';
 import { selectAppUserData } from '../../redux/user/user.selector';
-import {GET_ALL_GAS_STATION} from '../../config';
+import {apiHeaders, getUserData, GET_ALL_GAS_STATION} from '../../config';
 import { useNavigation } from '@react-navigation/native';
 import Geocoder from 'react-native-geocoding';
 import { MAP_API_KEY, UserGeoDataAsyncData } from '../../config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 Geocoder.init(MAP_API_KEY)
 
 navigator.geolocation = require('@react-native-community/geolocation');
@@ -67,7 +68,8 @@ const Map = ({appSettings, appUserData}) => {
         shopLAT: "", 
         shopStreetName: "", 
         shopLGA: "", 
-        shopStateName: ""
+        shopStateName: "", 
+        shopStationID: ""
     })
 
     const findPosition = payload => navigator.geolocation.getCurrentPosition(position => {
@@ -110,10 +112,22 @@ const Map = ({appSettings, appUserData}) => {
     const sheetRef = React.useRef(null);
 	const originalSnapPoint = [250];
     const [snapPoints, setSnapPoints] = useState(originalSnapPoint);
-    const [coords, updateCoords] = useState([]);
+    const initialCoord = [
+        {
+            "lat": 0,
+            "lng": 0, 
+            "email": "", 
+            "name": ""
+        }
+    ];
+    const [coords, updateCoords] = useState(initialCoord);
 
     useEffect(() => {
-        updateToken(appUserData.accessToken)
+        // updateToken(appUserData.accessToken)
+        getUserData().then((res) => {
+            // console.log(res)
+            updateToken(res.token_string)
+        })
     }, [])
 
 	useEffect(() => {
@@ -121,8 +135,31 @@ const Map = ({appSettings, appUserData}) => {
     }, []);
 
     useEffect(() => {
-        var coordinates = startAPICall(GET_ALL_GAS_STATION)
-        updateCoords(coordinates)
+        const options = {
+            headers: apiHeaders(userToken)
+        }
+
+        axios.get(GET_ALL_GAS_STATION, options) 
+        .then((response) => {
+            const stationArray = response.data.body
+            var newStationArray = []
+            if (Array.isArray(stationArray)) {
+                // updateCoords(stationArray)
+                stationArray.forEach(station => {
+                    // console.log(station)
+                    const arrayData = {
+                        lng: parseFloat(station.lng),
+                        lat: parseFloat(station.lat), 
+                        name: station.station_name, 
+                        stationID: station.id
+                    }
+                    newStationArray.push(arrayData)
+                });
+            }
+            updateCoords(newStationArray)
+        })
+        // var coordinates = startAPICall(GET_ALL_GAS_STATION)
+        // updateCoords(coordinates)
     }, []);
 
     const bottomSheetStyles = StyleSheet.create({
@@ -136,12 +173,12 @@ const Map = ({appSettings, appUserData}) => {
             return {
                 ...prevState, 
                 shopLAT: stationData.lat, 
-                shopLNG: stationData.lng
+                shopLNG: stationData.lng, 
+                shopStationID: stationData.stationID,
             }
         })
         Geocoder.from(stationData.lat, stationData.lng)
         .then(json => {
-            // console.log(json);
             var addressComponent = json.results[0].address_components;
             const street = addressComponent[0].short_name + " " + addressComponent[1].long_name + " " + addressComponent[2].long_name
             const lga = addressComponent[4].long_name
@@ -160,6 +197,7 @@ const Map = ({appSettings, appUserData}) => {
         if (appCoordinatesData.shopStreetName == "") {
             return
         }
+        // console.log(appCoordinatesData)
         storeGeoCode(appCoordinatesData)
         navigation.navigate('Create Order')
     }
@@ -176,7 +214,7 @@ const Map = ({appSettings, appUserData}) => {
                         region={region}
                     >
                         {
-                            customCoordinates.map((item, i) => (
+                            coords.map((item, i) => (
                                 <Marker
                                     key={i}
                                     coordinate={{latitude: item.lat, longitude: item.lng}}

@@ -2,18 +2,18 @@ import React, {useState, useEffect} from 'react';
 import { createStructuredSelector } from 'reselect';
 import { selectAppSettings } from '../../../redux/settings/settings.selector';
 import { connect } from 'react-redux';
-import { StyleSheet, Button, AlertIOS } from 'react-native';
 import ButtonText from '../../forms/button-text/button-text.component';
-import { View, Text } from 'react-native'; 
+import { View, Text, TextInput } from 'react-native'; 
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { Divider } from 'react-native-paper';
-import { ContentContainer, AddressText, AdditionText, SubtrationText, SubtrationButton, IncreamentText, QuantityView, AdditionButton, AboutText, TimeText, DaysText, RatingIconContainer, RatingText, RatingContainer, KGContainer, KGText, PricingText, IncreamentSection, LineContainer, LocationContatainer } from './content.styles';
+import { ContentContainer, AddressText, AdditionText, SubtrationText, SubtrationButton, IncreamentText, QuantityView, AdditionButton, AboutText, TimeText, DaysText, RatingIconContainer, RatingText, RatingContainer, KGContainer, KGText, PricingText, IncreamentSection, LineContainer, LocationContatainer, DeliveryInstructionContainer } from './content.styles';
 import CustomButton from '../../forms/custom-button/custom-button.component';
 import { useNavigation } from '@react-navigation/native';
 import { toOrderScreen } from '../../../session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GET_STATION_BY_ID, OTP_PREFIX, UserAsyncData, StationAsyncData, UserGeoDataAsyncData, CREATE_ORDER_API } from '../../../config';
+import { GET_STATION_BY_ID, OTP_PREFIX, UserAsyncData, StationAsyncData, UserGeoDataAsyncData, CREATE_ORDER_API, apiHeaders } from '../../../config';
 import {toOrders} from '../../../session';
+import axios from 'axios';
 
 const Location = ({title, location}) => {
   return (
@@ -114,7 +114,9 @@ const StationContent = ({appSettings}) => {
       shopLAT: "",
       shopStreetName: "", 
       shopLGA: "", 
-      shopStateName: ""
+      shopStateName: "", 
+      deliveryInstructions: "", 
+      shopStationID: "",
   })
   const [submissionLoader, toggleLoader] = useState(false);
   const [disableButton, toggleDisableButton] = useState(false);
@@ -135,12 +137,30 @@ const StationContent = ({appSettings}) => {
 		}
   }
 
+  const getStationGeoData = (shopStationID) => {
+    const options = {
+      headers: apiHeaders(userToken)
+    }
+
+    axios.get(GET_STATION_BY_ID+shopStationID, options)
+    .then((response) => {
+      console.log(response.data)
+      const responsebody = response.data
+      if (responsebody.code == 200) {
+        setAmount(responsebody.body.amount)
+        setUnit("KG")
+      }
+    })
+
+    
+  }
+
   const getUserGeoData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem(UserGeoDataAsyncData)
       if (jsonValue != null) {
-        console.log(JSON.parse(jsonValue))
         var addressComponent = JSON.parse(jsonValue)
+        // console.log(addressComponent)
         updateCoordinatesData(prevState => {
           return {
             ...prevState,
@@ -153,11 +173,12 @@ const StationContent = ({appSettings}) => {
             shopLAT: addressComponent.shopLAT, 
             shopStreetName: addressComponent.shopStreetName, 
             shopLGA: addressComponent.shopLGA, 
-            shopStateName: addressComponent.shopStateName
+            shopStateName: addressComponent.shopStateName, 
+            shopStationID: addressComponent.shopStationID
           }
         })
-        console.log(addressComponent)
         updateGeocode(addressComponent)
+        getStationGeoData(addressComponent.shopStationID)
       }
     } catch(e) {
 
@@ -173,8 +194,6 @@ const StationContent = ({appSettings}) => {
 		}
 	}
 
-  const stationID = 1
-
 	useEffect(() => {
 		getUserData()
 	}, [])
@@ -188,7 +207,7 @@ const StationContent = ({appSettings}) => {
     if (userToken == "") {
       return 
     }
-    fetch(GET_STATION_BY_ID+stationID, {
+    fetch(GET_STATION_BY_ID+appCoordinatesData.shopStationID, {
       method: 'GET', 
       headers: {
         'source': 'mobile', 
@@ -200,6 +219,7 @@ const StationContent = ({appSettings}) => {
     })
     .then(results => results.json())
     .then(jsonValue => {
+      console.log(jsonValue)
       if (jsonValue != null && jsonValue.status != "error") {
         setAmount(jsonValue.amount)
         updateStation(jsonValue)
@@ -250,6 +270,40 @@ const StationContent = ({appSettings}) => {
     )
   }
 
+  const handleChangeText = (text) => {
+    updateCoordinatesData({
+      ...appCoordinatesData, 
+      deliveryInstructions: text
+    })
+  }
+
+  const OrderInstruction = () => {
+    return (
+      <DeliveryInstructionContainer> 
+        <LineContainer> 
+          <PricingText> 
+            {"Delivery Instructions"}
+          </PricingText>
+        </LineContainer>
+        <TextInput 
+          multiline={true}
+          numberOfLines={4}
+          autoFocus
+          autoCorrect
+          style={{
+            height: 70, 
+            marginTop: 0,
+            marginBottom: 30,
+            borderColor: 'gray', 
+            borderWidth: 1,
+          }}
+          onChangeText={text => handleChangeText(text)}
+          value={appCoordinatesData.deliveryInstructions}
+        />
+      </DeliveryInstructionContainer>
+    )
+  }
+
   const onSubmit = async () => {
     toggleDisableButton(true)
     toggleLoader(true)
@@ -272,7 +326,6 @@ const StationContent = ({appSettings}) => {
       return
     }
 
-    console.log(orderData)
     const apiToken = OTP_PREFIX + userToken
     const response = await fetch(CREATE_ORDER_API, {
       method: 'POST', 
@@ -285,8 +338,6 @@ const StationContent = ({appSettings}) => {
     });
 
     const jsonValue = await response.json(); 
-    console.log(jsonValue)
-    console.log(jsonValue.data)
     setTimeout(() => {
       toggleDisableButton(false)
       toggleLoader(false)
@@ -302,13 +353,15 @@ const StationContent = ({appSettings}) => {
       <Location title={"Station: "} location={appCoordinatesData.shopStreetName} />
       <Divider />
       <Pricing weight={stationAmount} unit={stationUnit} />
-      <Divider />
-      <Ratings />
+      {/* <Divider /> */}
+      {/* <Ratings /> */}
       <Divider />
       <WorkHours hours={"hours"} />
       <Divider />
-      {/* <Description /> */}
       <QuantitySection />
+      <Divider />
+      <OrderInstruction />
+      <Divider />
       <CustomButton 
         onPress={onSubmit} 
         loading={submissionLoader}
