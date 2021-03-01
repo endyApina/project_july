@@ -72,7 +72,8 @@ export const VEIRFY_OTP = API_BASE + 'otp/verification/'
 export const GET_ALL_GAS_STATION = API_BASE + 'vendor/station/all'
 export const GET_STATION_BY_ID = API_BASE + 'vendor/station/'
 export const OTP_PREFIX = 'Bearer '
-export const CREATE_ORDER_API = API_BASE + 'order/create'
+export const ORDER_GAS_API = API_BASE + 'user/ordergas/'
+export const CANCEL_GAS_API = API_BASE + 'user/ordergas/cancel'
 
 export const MAP_API_KEY = "AIzaSyC3KU80ldwIeGJaEORVcsjo41f82x5jVMI"
 

@@ -9,10 +9,8 @@ import { Divider } from 'react-native-paper';
 import { ContentContainer, AddressText, AdditionText, SubtrationText, SubtrationButton, IncreamentText, QuantityView, AdditionButton, AboutText, TimeText, DaysText, RatingIconContainer, RatingText, RatingContainer, KGContainer, KGText, PricingText, IncreamentSection, LineContainer, LocationContatainer, DeliveryInstructionContainer } from './content.styles';
 import CustomButton from '../../forms/custom-button/custom-button.component';
 import { useNavigation } from '@react-navigation/native';
-import { toOrderScreen } from '../../../session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GET_STATION_BY_ID, OTP_PREFIX, UserAsyncData, StationAsyncData, UserGeoDataAsyncData, CREATE_ORDER_API, apiHeaders } from '../../../config';
-import {toOrders} from '../../../session';
+import { GET_STATION_BY_ID, UserAsyncData, StationAsyncData, UserGeoDataAsyncData, ORDER_GAS_API, apiHeaders, CANCEL_GAS_API } from '../../../config';
 import axios from 'axios';
 
 const Location = ({title, location}) => {
@@ -93,13 +91,15 @@ const Description = () => {
   )
 }
 
+let resendOtpTimerInterval; 
+const RESEND_OTP_TIME_LIMIT = 6; 
 
 const StationContent = ({appSettings}) => {
   const [dataUnit, setDataUnit] = useState("")
 	const [userToken, setToken] = useState('');
 	const [stationData, updateStation] = useState(null); 
-  const [stationAmount, setAmount] = useState('');
-  const [stationUnit, setUnit] = useState('');
+  const [stationAmount, setAmount] = useState("");
+  const [stationUnit, setUnit] = useState("");
   const [stationProperties, updateProperties] = useState({});
   const navigation = useNavigation();
   const [address, updateAddress] = useState(""); 
@@ -109,6 +109,8 @@ const StationContent = ({appSettings}) => {
       userLGA: "", 
       userLAT: "", 
       userLNG: "", 
+      userEmail: "",
+      userID: "",
       userStateName: "", 
       shopLNG: "", 
       shopLAT: "",
@@ -117,9 +119,15 @@ const StationContent = ({appSettings}) => {
       shopStateName: "", 
       deliveryInstructions: "", 
       shopStationID: "",
+      vendorEmail: "", 
+      vendorID: ""
   })
   const [submissionLoader, toggleLoader] = useState(false);
   const [disableButton, toggleDisableButton] = useState(false);
+  const [resendButtonDisabledTime, setResendButtonDisabledTime] = useState(
+    RESEND_OTP_TIME_LIMIT,
+  );
+  const [submittingOrder, toggleSubmittingOrder] = useState(false);
 
 	const getUserData = async () => {
 		try {
@@ -127,9 +135,19 @@ const StationContent = ({appSettings}) => {
       // console.log(jsonValue)
 			if (jsonValue != null ) {
 				const parsedValue = JSON.parse(jsonValue)
-				const token = parsedValue.accessToken
+				const token = parsedValue.token_string
 				setToken(token)
-				// console.log(userToken)
+        const userID = parsedValue.user_data.id 
+        // console.log(userID)
+        const userEmail = parsedValue.user_data.email 
+        // console.log(userEmail)
+        updateCoordinatesData(prevState => {
+          return {
+            ...prevState, 
+            userEmail: userEmail, 
+            userID: userID, 
+          }
+        })
 			}
 			// return jsonValue != null ? JSON.parse(jsonValue) : null;
 		} catch(e) {
@@ -144,15 +162,22 @@ const StationContent = ({appSettings}) => {
 
     axios.get(GET_STATION_BY_ID+shopStationID, options)
     .then((response) => {
-      console.log(response.data)
+      // console.log(response.data)
       const responsebody = response.data
       if (responsebody.code == 200) {
         setAmount(responsebody.body.amount)
         setUnit("KG")
+        updateCoordinatesData(prevState => {
+          return {
+            ...prevState, 
+            vendorEmail: responsebody.body.email, 
+            vendorID: responsebody.body.id
+          }
+        })
       }
+    }, (err) => {
+      console.log(err)
     })
-
-    
   }
 
   const getUserGeoData = async () => {
@@ -160,7 +185,6 @@ const StationContent = ({appSettings}) => {
       const jsonValue = await AsyncStorage.getItem(UserGeoDataAsyncData)
       if (jsonValue != null) {
         var addressComponent = JSON.parse(jsonValue)
-        // console.log(addressComponent)
         updateCoordinatesData(prevState => {
           return {
             ...prevState,
@@ -197,40 +221,6 @@ const StationContent = ({appSettings}) => {
 	useEffect(() => {
 		getUserData()
 	}, [])
-
-
-	useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
-
-    const apiToken = OTP_PREFIX + userToken
-    if (userToken == "") {
-      return 
-    }
-    fetch(GET_STATION_BY_ID+appCoordinatesData.shopStationID, {
-      method: 'GET', 
-      headers: {
-        'source': 'mobile', 
-				'Content-Type': 'application/json', 
-				'Authorization': apiToken, 
-      }
-    }, {
-      signal: signal
-    })
-    .then(results => results.json())
-    .then(jsonValue => {
-      console.log(jsonValue)
-      if (jsonValue != null && jsonValue.status != "error") {
-        setAmount(jsonValue.amount)
-        updateStation(jsonValue)
-        setUnit(jsonValue.measureUnit)
-      }
-    })
-
-    return function cleanUp() {
-      abortController.abort()
-    }
-  }, [userToken])
   
   useEffect(() => {
     getUserGeoData()
@@ -304,19 +294,34 @@ const StationContent = ({appSettings}) => {
     )
   }
 
+  const startResendOtpTimer = () => {
+    if (resendOtpTimerInterval) {
+      clearInterval(resendOtpTimerInterval);
+    }
+    resendOtpTimerInterval = setInterval(() => {
+      // console.log(resendButtonDisabledTime)
+      if (resendButtonDisabledTime <= 0) {
+        clearInterval(resendOtpTimerInterval);
+      } else {
+        setResendButtonDisabledTime(resendButtonDisabledTime - 1);
+      }
+    }, 1000);
+  };
+
+  
   const onSubmit = async () => {
     toggleDisableButton(true)
     toggleLoader(true)
     const orderData = {
-      stationId: stationID, 
-      quantity: clicks, 
-      shipAddress: {
-        street: appCoordinatesData.shopLGA,
-        lga:  appCoordinatesData.userLGA, 
-        state: appCoordinatesData.userStateName, 
-        lat: appCoordinatesData.userLAT, 
-        lng: appCoordinatesData.userLNG
-      }
+      address: appCoordinatesData.userStreetName, 
+      delivery_instructions: appCoordinatesData.deliveryInstructions, 
+      user_lat: String(appCoordinatesData.userLAT), 
+      user_lng: String(appCoordinatesData.userLNG), 
+      order_quantity: String(clicks), 
+      user_email: appCoordinatesData.userEmail, 
+      user_id: appCoordinatesData.userID, 
+      vendor_email: appCoordinatesData.vendorEmail, 
+      vendor_id: appCoordinatesData.vendorID
     }
 
     if (clicks == 0) {
@@ -326,23 +331,50 @@ const StationContent = ({appSettings}) => {
       return
     }
 
-    const apiToken = OTP_PREFIX + userToken
-    const response = await fetch(CREATE_ORDER_API, {
-      method: 'POST', 
-      headers: {
-        'source': 'mobile', 
-				'Content-Type': 'application/json', 
-				'Authorization': apiToken, 
-      }, 
-      body: JSON.stringify(orderData)
-    });
-
-    const jsonValue = await response.json(); 
+    // console.log(userToken)
+    const options = {
+      headers: apiHeaders(userToken)
+    }
+    axios.post(ORDER_GAS_API, orderData, options)
+    .then((response) => {
+      console.log(response.data)
+    }, (error) => {
+      console.log(error)
+    })
+    
     setTimeout(() => {
-      toggleDisableButton(false)
-      toggleLoader(false)
-      toOrders(navigation)
+      toggleSubmittingOrder(true)
     }, 2000);
+    
+  }
+
+  const onCancel = async() => {
+    toggleSubmittingOrder(false)
+    //canceled
+    const orderData = {
+      address: appCoordinatesData.userStreetName, 
+      delivery_instructions: appCoordinatesData.deliveryInstructions, 
+      user_lat: String(appCoordinatesData.userLAT), 
+      user_lng: String(appCoordinatesData.userLNG), 
+      order_quantity: String(clicks), 
+      user_email: appCoordinatesData.userEmail, 
+      user_id: appCoordinatesData.userID, 
+      vendor_email: appCoordinatesData.vendorEmail, 
+      vendor_id: appCoordinatesData.vendorID
+    }
+
+    console.log(orderData)
+    const options = {
+      headers: apiHeaders(userToken)
+    }
+    axios.post(CANCEL_GAS_API, orderData, options)
+    .then((response) => {
+      console.log(response.data)
+    }, (error) => {
+      console.log(error)
+    })
+    toggleDisableButton(false)
+    toggleLoader(false)
   }
 
   return (
@@ -362,20 +394,37 @@ const StationContent = ({appSettings}) => {
       <Divider />
       <OrderInstruction />
       <Divider />
-      <CustomButton 
-        onPress={onSubmit} 
-        loading={submissionLoader}
-        space={'20px'} 
-        uppercase={'true'} 
-        width={'330px'} 
-        color={buttonTextColor} 
-        bgcolor={defaultButtonBackgroundColor} 
-        box-shadow={boxShadow}
-        radius={'10px'}
-        disabled={disableButton}
-      >
-        <ButtonText weight={'bold'}>{'Place Order'}</ButtonText>
-      </CustomButton>      
+      {
+        !submittingOrder ? 
+        <CustomButton 
+          onPress={onSubmit} 
+          loading={submissionLoader}
+          space={'20px'} 
+          uppercase={'true'} 
+          width={'330px'} 
+          color={buttonTextColor} 
+          bgcolor={defaultButtonBackgroundColor} 
+          box-shadow={boxShadow}
+          radius={'10px'}
+          disabled={disableButton}
+        >
+          <ButtonText weight={'bold'}>{'Place Order'}</ButtonText>
+        </CustomButton>  
+        : 
+        <CustomButton 
+          onPress={onCancel} 
+          loading={true}
+          space={'20px'} 
+          uppercase={'true'} 
+          width={'330px'} 
+          color={buttonTextColor} 
+          bgcolor={defaultButtonBackgroundColor} 
+          box-shadow={boxShadow}
+          radius={'10px'}
+        >
+          <ButtonText weight={'bold'}>{'Cancel Order'}</ButtonText>
+        </CustomButton>  
+      }
     </ContentContainer>
   </>
   )
