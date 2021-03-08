@@ -11,8 +11,8 @@ const list = [
     icon: 'av-timer'
   }, 
   {
-    title: 'Orders', 
-    icon: 'settings'
+    title: 'Order History', 
+    icon: 'history'
   }, 
   {
     title: 'Payments', 
@@ -20,7 +20,7 @@ const list = [
   }, 
   {
     title: 'History', 
-    icon: 'history'
+    icon: 'settings'
   }, 
   {
     title: 'Support', 
@@ -50,7 +50,7 @@ const SettingsList = () => {
       toNotification(navigation)
     }
 
-    if (title === "Orders") {
+    if (title === "Order History") {
       toOrders(navigation)
     }
   
@@ -72,6 +72,7 @@ const SettingsList = () => {
             containerStyle={{
               backgroundColor: 'transparent',
             }}
+            underlayColor="transparent"
           >
             <Icon name={item.icon}/>
             <ListItem.Content>

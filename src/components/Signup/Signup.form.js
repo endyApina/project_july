@@ -44,7 +44,7 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart, signUpSuccessStatus
         if (submittedData != true) return
 
         const data = {
-            "email": email, 
+            "email": email.toLowerCase(), 
             "full_name": fullName, 
             "phone_number": phone, 
             "password": password, 

@@ -1,0 +1,290 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.endyapina.project_july"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="28" />
+10
+11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+11-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:3:3-75
+11-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:3:20-73
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:2:3-64
+12-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:2:20-62
+13    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
+13-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:4:3-72
+13-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:4:20-70
+14    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
+14-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:5:3-77
+14-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:5:20-75
+15    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+15-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:6:3-72
+15-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:6:20-70
+16    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+16-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:7:3-71
+16-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:7:20-69
+17    <uses-permission android:name="android.permission.VIBRATE" />
+17-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:8:3-63
+17-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:8:20-61
+18    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+18-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:9:3-77
+18-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:9:20-75
+19    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+19-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:10:3-78
+19-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:10:20-76
+20    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+20-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:11:3-76
+20-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:11:20-74
+21    <uses-permission android:name="android.permission.CAMERA" />
+21-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:12:3-62
+21-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:12:20-60
+22    <uses-permission android:name="android.permission.READ_CONTACTS" />
+22-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:13:3-69
+22-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:13:20-67
+23    <uses-permission android:name="android.permission.READ_CALENDAR" />
+23-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:14:3-69
+23-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:14:20-67
+24    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+24-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:15:3-70
+24-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:15:20-68
+25    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+25-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:16:3-77
+25-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:16:20-75
+26    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+26-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:17:3-68
+26-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:17:20-66
+27    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+27-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:18:3-78
+27-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:18:20-76
+28    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+28-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:19:3-70
+28-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:19:20-68
+29    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+29-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:20:3-76
+29-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:20:20-74
+30    <uses-permission android:name="android.permission.WAKE_LOCK" />
+30-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:21:3-65
+30-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:21:20-63
+31    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+31-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:22:3-79
+31-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:22:20-77
+32    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+32-->[com.facebook.flipper:flipper:0.33.1] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/b53152bac434b15793eef979b261202a/jetified-flipper-0.33.1/AndroidManifest.xml:16:5-76
+32-->[com.facebook.flipper:flipper:0.33.1] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/b53152bac434b15793eef979b261202a/jetified-flipper-0.33.1/AndroidManifest.xml:16:22-73
+33    <uses-permission android:name="android.permission.STORAGE" />
+33-->[:expo-file-system] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:15:5-66
+33-->[:expo-file-system] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:15:22-63
+34    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+34-->[:expo-location] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:5-77
+34-->[:expo-location] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:22-74
+35
+36    <uses-feature
+36-->[com.google.android.gms:play-services-maps:17.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/3ca81724f46a1af5d268488a528eb8e5/play-services-maps-17.0.0/AndroidManifest.xml:26:5-28:35
+37        android:glEsVersion="0x00020000"
+37-->[com.google.android.gms:play-services-maps:17.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/3ca81724f46a1af5d268488a528eb8e5/play-services-maps-17.0.0/AndroidManifest.xml:27:9-41
+38        android:required="true" />
+38-->[com.google.android.gms:play-services-maps:17.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/3ca81724f46a1af5d268488a528eb8e5/play-services-maps-17.0.0/AndroidManifest.xml:28:9-32
+39
+40    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+40-->[io.nlopez.smartlocation:library:3.2.11] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/bc01a692153dc476bdcaccaad28e8e37/jetified-library-3.2.11/AndroidManifest.xml:15:5-98
+40-->[io.nlopez.smartlocation:library:3.2.11] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/bc01a692153dc476bdcaccaad28e8e37/jetified-library-3.2.11/AndroidManifest.xml:15:22-95
+41    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+41-->[io.nlopez.smartlocation:library:3.2.11] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/bc01a692153dc476bdcaccaad28e8e37/jetified-library-3.2.11/AndroidManifest.xml:16:5-94
+41-->[io.nlopez.smartlocation:library:3.2.11] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/bc01a692153dc476bdcaccaad28e8e37/jetified-library-3.2.11/AndroidManifest.xml:16:22-91
+42
+43    <application
+43-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:23:3-37:17
+44        android:name="com.endyapina.project_july.MainApplication"
+44-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:23:16-47
+45        android:allowBackup="false"
+45-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:23:162-189
+46        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+46-->[androidx.core:core:1.1.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/639e914bfc1efa21e36199d3ff2c5eef/core-1.1.0/AndroidManifest.xml:24:18-86
+47        android:debuggable="true"
+48        android:icon="@mipmap/ic_launcher"
+48-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:23:81-115
+49        android:label="@string/app_name"
+49-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:23:48-80
+50        android:roundIcon="@mipmap/ic_launcher_round"
+50-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:23:116-161
+51        android:theme="@style/AppTheme"
+51-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:23:190-221
+52        android:usesCleartextTraffic="true" >
+52-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/debug/AndroidManifest.xml:6:18-53
+53        <meta-data
+53-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:24:5-126
+54            android:name="expo.modules.updates.EXPO_UPDATE_URL"
+54-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:24:16-67
+55            android:value="https://exp.host/@endyapina/project_july" />
+55-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:24:68-124
+56        <meta-data
+56-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:25:5-93
+57            android:name="expo.modules.updates.EXPO_SDK_VERSION"
+57-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:25:16-68
+58            android:value="38.0.0" />
+58-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:25:69-91
+59        <meta-data
+59-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:26:5-82
+60            android:name="expo.modules.updates.ENABLED"
+60-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:26:16-59
+61            android:value="true" />
+61-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:26:60-80
+62        <meta-data
+62-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:27:5-119
+63            android:name="com.google.android.geo.API_KEY"
+63-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:27:16-61
+64            android:value="AIzaSyA1n8uqS1Fn9PV2G-tmOjpRcjKcY7_QXk0" />
+64-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:27:62-117
+65        <meta-data
+65-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:28:5-105
+66            android:name="expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH"
+66-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:28:16-80
+67            android:value="ALWAYS" />
+67-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:28:81-103
+68        <meta-data
+68-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:29:5-99
+69            android:name="expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS"
+69-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:29:16-79
+70            android:value="0" />
+70-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:29:80-97
+71
+72        <activity
+72-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:30:5-35:16
+73            android:name="com.endyapina.project_july.MainActivity"
+73-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:30:15-43
+74            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+74-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:30:77-154
+75            android:label="@string/app_name"
+75-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:30:44-76
+76            android:launchMode="singleTask"
+76-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:30:155-186
+77            android:screenOrientation="portrait"
+77-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:30:276-312
+78            android:theme="@style/Theme.App.SplashScreen"
+78-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:30:230-275
+79            android:windowSoftInputMode="adjustResize" >
+79-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:30:187-229
+80            <intent-filter>
+80-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:31:7-34:23
+81                <action android:name="android.intent.action.MAIN" />
+81-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:32:9-60
+81-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:32:17-58
+82
+83                <category android:name="android.intent.category.LAUNCHER" />
+83-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:33:9-68
+83-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:33:19-66
+84            </intent-filter>
+85        </activity>
+86        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+86-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:36:5-81
+86-->/Users/endyapina/Projects/reactnative/project_july/android/app/src/main/AndroidManifest.xml:36:15-79
+87
+88        <meta-data
+88-->[:unimodules-react-native-adapter] /Users/endyapina/Projects/reactnative/project_july/node_modules/@unimodules/react-native-adapter/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:12:9-14:91
+89            android:name="org.unimodules.core.AppLoader#react-native-headless"
+89-->[:unimodules-react-native-adapter] /Users/endyapina/Projects/reactnative/project_july/node_modules/@unimodules/react-native-adapter/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:13-79
+90            android:value="org.unimodules.adapters.react.apploader.RNHeadlessAppLoader" />
+90-->[:unimodules-react-native-adapter] /Users/endyapina/Projects/reactnative/project_july/node_modules/@unimodules/react-native-adapter/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:14:13-88
+91
+92        <provider
+92-->[:expo-file-system] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:18:9-27:20
+93            android:name="expo.modules.filesystem.FileSystemFileProvider"
+93-->[:expo-file-system] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:19:13-74
+94            android:authorities="com.endyapina.project_july.FileSystemFileProvider"
+94-->[:expo-file-system] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:20:13-74
+95            android:exported="false"
+95-->[:expo-file-system] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:21:13-37
+96            android:grantUriPermissions="true" >
+96-->[:expo-file-system] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:22:13-47
+97            <meta-data
+97-->[:expo-file-system] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:24:13-26:70
+98                android:name="android.support.FILE_PROVIDER_PATHS"
+98-->[:expo-file-system] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:25:17-67
+99                android:resource="@xml/file_system_provider_paths" />
+99-->[:expo-file-system] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:26:17-67
+100        </provider>
+101
+102        <service
+102-->[:expo-location] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:16:9-18:40
+103            android:name="expo.modules.location.services.LocationTaskService"
+103-->[:expo-location] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:17:13-78
+104            android:exported="false" /> <!-- Needs to be explicitly declared on P+ -->
+104-->[:expo-location] /Users/endyapina/Projects/reactnative/project_july/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:18:13-37
+105        <uses-library
+105-->[com.google.android.gms:play-services-maps:17.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/3ca81724f46a1af5d268488a528eb8e5/play-services-maps-17.0.0/AndroidManifest.xml:33:9-35:40
+106            android:name="org.apache.http.legacy"
+106-->[com.google.android.gms:play-services-maps:17.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/3ca81724f46a1af5d268488a528eb8e5/play-services-maps-17.0.0/AndroidManifest.xml:34:13-50
+107            android:required="false" />
+107-->[com.google.android.gms:play-services-maps:17.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/3ca81724f46a1af5d268488a528eb8e5/play-services-maps-17.0.0/AndroidManifest.xml:35:13-37
+108
+109        <activity
+109-->[com.google.android.gms:play-services-auth:19.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/34a1dde92c9e0842a0f104e1114883f4/play-services-auth-19.0.0/AndroidManifest.xml:23:9-27:75
+110            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+110-->[com.google.android.gms:play-services-auth:19.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/34a1dde92c9e0842a0f104e1114883f4/play-services-auth-19.0.0/AndroidManifest.xml:24:13-93
+111            android:excludeFromRecents="true"
+111-->[com.google.android.gms:play-services-auth:19.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/34a1dde92c9e0842a0f104e1114883f4/play-services-auth-19.0.0/AndroidManifest.xml:25:13-46
+112            android:exported="false"
+112-->[com.google.android.gms:play-services-auth:19.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/34a1dde92c9e0842a0f104e1114883f4/play-services-auth-19.0.0/AndroidManifest.xml:26:13-37
+113            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+113-->[com.google.android.gms:play-services-auth:19.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/34a1dde92c9e0842a0f104e1114883f4/play-services-auth-19.0.0/AndroidManifest.xml:27:13-72
+114        <!--
+115            Service handling Google Sign-In user revocation. For apps that do not integrate with
+116            Google Sign-In, this service will never be started.
+117        -->
+118        <service
+118-->[com.google.android.gms:play-services-auth:19.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/34a1dde92c9e0842a0f104e1114883f4/play-services-auth-19.0.0/AndroidManifest.xml:33:9-37:51
+119            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+119-->[com.google.android.gms:play-services-auth:19.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/34a1dde92c9e0842a0f104e1114883f4/play-services-auth-19.0.0/AndroidManifest.xml:34:13-89
+120            android:exported="true"
+120-->[com.google.android.gms:play-services-auth:19.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/34a1dde92c9e0842a0f104e1114883f4/play-services-auth-19.0.0/AndroidManifest.xml:35:13-36
+121            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+121-->[com.google.android.gms:play-services-auth:19.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/34a1dde92c9e0842a0f104e1114883f4/play-services-auth-19.0.0/AndroidManifest.xml:36:13-107
+122            android:visibleToInstantApps="true" />
+122-->[com.google.android.gms:play-services-auth:19.0.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/34a1dde92c9e0842a0f104e1114883f4/play-services-auth-19.0.0/AndroidManifest.xml:37:13-48
+123
+124        <activity
+124-->[com.google.android.gms:play-services-base:17.1.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/0b6249500b8009a9eb57f214c32dfafc/play-services-base-17.1.0/AndroidManifest.xml:23:9-26:75
+125            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+125-->[com.google.android.gms:play-services-base:17.1.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/0b6249500b8009a9eb57f214c32dfafc/play-services-base-17.1.0/AndroidManifest.xml:24:13-79
+126            android:exported="false"
+126-->[com.google.android.gms:play-services-base:17.1.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/0b6249500b8009a9eb57f214c32dfafc/play-services-base-17.1.0/AndroidManifest.xml:25:13-37
+127            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+127-->[com.google.android.gms:play-services-base:17.1.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/0b6249500b8009a9eb57f214c32dfafc/play-services-base-17.1.0/AndroidManifest.xml:26:13-72
+128
+129        <meta-data
+129-->[com.google.android.gms:play-services-basement:17.1.1] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/3e5a6f10192a156023f418cc930d1a88/jetified-play-services-basement-17.1.1/AndroidManifest.xml:23:9-25:69
+130            android:name="com.google.android.gms.version"
+130-->[com.google.android.gms:play-services-basement:17.1.1] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/3e5a6f10192a156023f418cc930d1a88/jetified-play-services-basement-17.1.1/AndroidManifest.xml:24:13-58
+131            android:value="@integer/google_play_services_version" />
+131-->[com.google.android.gms:play-services-basement:17.1.1] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/3e5a6f10192a156023f418cc930d1a88/jetified-play-services-basement-17.1.1/AndroidManifest.xml:25:13-66
+132
+133        <service
+133-->[androidx.room:room-runtime:2.1.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/5f7132f69994fe4e2c8f322e81b3f8c9/room-runtime-2.1.0/AndroidManifest.xml:25:9-27:40
+134            android:name="androidx.room.MultiInstanceInvalidationService"
+134-->[androidx.room:room-runtime:2.1.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/5f7132f69994fe4e2c8f322e81b3f8c9/room-runtime-2.1.0/AndroidManifest.xml:26:13-74
+135            android:exported="false" />
+135-->[androidx.room:room-runtime:2.1.0] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/5f7132f69994fe4e2c8f322e81b3f8c9/room-runtime-2.1.0/AndroidManifest.xml:27:13-37
+136        <service
+136-->[io.nlopez.smartlocation:library:3.2.11] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/bc01a692153dc476bdcaccaad28e8e37/jetified-library-3.2.11/AndroidManifest.xml:19:9-21:40
+137            android:name="io.nlopez.smartlocation.activity.providers.ActivityGooglePlayServicesProvider$ActivityRecognitionService"
+137-->[io.nlopez.smartlocation:library:3.2.11] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/bc01a692153dc476bdcaccaad28e8e37/jetified-library-3.2.11/AndroidManifest.xml:20:13-132
+138            android:exported="false" />
+138-->[io.nlopez.smartlocation:library:3.2.11] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/bc01a692153dc476bdcaccaad28e8e37/jetified-library-3.2.11/AndroidManifest.xml:21:13-37
+139        <service
+139-->[io.nlopez.smartlocation:library:3.2.11] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/bc01a692153dc476bdcaccaad28e8e37/jetified-library-3.2.11/AndroidManifest.xml:22:9-24:40
+140            android:name="io.nlopez.smartlocation.geofencing.providers.GeofencingGooglePlayServicesProvider$GeofencingService"
+140-->[io.nlopez.smartlocation:library:3.2.11] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/bc01a692153dc476bdcaccaad28e8e37/jetified-library-3.2.11/AndroidManifest.xml:23:13-127
+141            android:exported="false" />
+141-->[io.nlopez.smartlocation:library:3.2.11] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/bc01a692153dc476bdcaccaad28e8e37/jetified-library-3.2.11/AndroidManifest.xml:24:13-37
+142        <service
+142-->[io.nlopez.smartlocation:library:3.2.11] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/bc01a692153dc476bdcaccaad28e8e37/jetified-library-3.2.11/AndroidManifest.xml:25:9-27:40
+143            android:name="io.nlopez.smartlocation.geocoding.providers.AndroidGeocodingProvider$AndroidGeocodingService"
+143-->[io.nlopez.smartlocation:library:3.2.11] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/bc01a692153dc476bdcaccaad28e8e37/jetified-library-3.2.11/AndroidManifest.xml:26:13-120
+144            android:exported="false" />
+144-->[io.nlopez.smartlocation:library:3.2.11] /Users/endyapina/.gradle/caches/transforms-2/files-2.1/bc01a692153dc476bdcaccaad28e8e37/jetified-library-3.2.11/AndroidManifest.xml:27:13-37
+145    </application>
+146
+147</manifest>

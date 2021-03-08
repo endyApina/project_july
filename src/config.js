@@ -60,8 +60,8 @@ export const apiHeaders = (token) => {
 }
 
 // const API_BASE = 'http://167.99.236.194/api/v1/'
-const API_BASE = 'http://localhost:8002/'
-// const API_BASE = 'http://9454a32dcd81.ngrok.io/'
+// const API_BASE = 'http://localhost:8002/'
+const API_BASE = 'https://appserver.my-gpi.com:8002/'
 
 export const API_STRING = 'http://milky-way-api.us-east-1.elasticbeanstalk.com/api/v1/'
 export const REG_API = API_BASE + 'auth/registration'
@@ -74,6 +74,7 @@ export const GET_STATION_BY_ID = API_BASE + 'vendor/station/'
 export const OTP_PREFIX = 'Bearer '
 export const ORDER_GAS_API = API_BASE + 'user/ordergas/'
 export const CANCEL_GAS_API = API_BASE + 'user/ordergas/cancel'
+export const GAS_ORDER_HISTORY_API = API_BASE + 'gasorders/'
 
 export const MAP_API_KEY = "AIzaSyC3KU80ldwIeGJaEORVcsjo41f82x5jVMI"
 

@@ -27,8 +27,9 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
         const options = {
             headers: apiHeaders("")
         }
+        console.log(LOGIN_API)
         axios.post(LOGIN_API, {
-            email: email, 
+            email: email.toLowerCase(), 
             password: password,
         }, options)
         .then((response) => {
@@ -57,6 +58,9 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
             
         }, (error) => {
             console.log(error)
+            alert("check your internet connection")
+            toggleSubmitting(false)
+            
         })
         // emailSignInStart({phone, password})
         // toHome(navigation)

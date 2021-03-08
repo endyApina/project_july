@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GET_STATION_BY_ID, UserAsyncData, StationAsyncData, UserGeoDataAsyncData, ORDER_GAS_API, apiHeaders, CANCEL_GAS_API } from '../../../config';
 import axios from 'axios';
+import LottieView from 'lottie-react-native';
 
 const Location = ({title, location}) => {
   return (
@@ -128,6 +129,7 @@ const StationContent = ({appSettings}) => {
     RESEND_OTP_TIME_LIMIT,
   );
   const [submittingOrder, toggleSubmittingOrder] = useState(false);
+  const [orderSuccess, toggleOrderSuccess] = useState(false);
 
 	const getUserData = async () => {
 		try {
@@ -380,51 +382,66 @@ const StationContent = ({appSettings}) => {
   return (
     <>
     <ContentContainer> 
-      <Location title={"My Location: "} location={appCoordinatesData.userStreetName} />
-      <Divider />
-      <Location title={"Station: "} location={appCoordinatesData.shopStreetName} />
-      <Divider />
-      <Pricing weight={stationAmount} unit={stationUnit} />
-      {/* <Divider /> */}
-      {/* <Ratings /> */}
-      <Divider />
-      <WorkHours hours={"hours"} />
-      <Divider />
-      <QuantitySection />
-      <Divider />
-      <OrderInstruction />
-      <Divider />
       {
-        !submittingOrder ? 
-        <CustomButton 
-          onPress={onSubmit} 
-          loading={submissionLoader}
-          space={'20px'} 
-          uppercase={'true'} 
-          width={'330px'} 
-          color={buttonTextColor} 
-          bgcolor={defaultButtonBackgroundColor} 
-          box-shadow={boxShadow}
-          radius={'10px'}
-          disabled={disableButton}
-        >
-          <ButtonText weight={'bold'}>{'Place Order'}</ButtonText>
-        </CustomButton>  
-        : 
-        <CustomButton 
-          onPress={onCancel} 
-          loading={true}
-          space={'20px'} 
-          uppercase={'true'} 
-          width={'330px'} 
-          color={buttonTextColor} 
-          bgcolor={defaultButtonBackgroundColor} 
-          box-shadow={boxShadow}
-          radius={'10px'}
-        >
-          <ButtonText weight={'bold'}>{'Cancel Order'}</ButtonText>
-        </CustomButton>  
+        !orderSuccess ? 
+        <>
+          <Location title={"My Location: "} location={appCoordinatesData.userStreetName} />
+          <Divider />
+          <Location title={"Station: "} location={appCoordinatesData.shopStreetName} />
+          <Divider />
+          <Pricing weight={stationAmount} unit={stationUnit} />
+          {/* <Divider /> */}
+          {/* <Ratings /> */}
+          <Divider />
+          <WorkHours hours={"hours"} />
+          <Divider />
+          <QuantitySection />
+          <Divider />
+          <OrderInstruction />
+          <Divider />
+          {
+            !submittingOrder ? 
+            <CustomButton 
+              onPress={onSubmit} 
+              loading={submissionLoader}
+              space={'20px'} 
+              uppercase={'true'} 
+              width={'330px'} 
+              color={buttonTextColor} 
+              bgcolor={defaultButtonBackgroundColor} 
+              box-shadow={boxShadow}
+              radius={'10px'}
+              disabled={disableButton}
+            >
+              <ButtonText weight={'bold'}>{'Place Order'}</ButtonText>
+            </CustomButton>  
+            : 
+            <CustomButton 
+              onPress={onCancel} 
+              loading={true}
+              space={'20px'} 
+              uppercase={'true'} 
+              width={'330px'} 
+              color={buttonTextColor} 
+              bgcolor={defaultButtonBackgroundColor} 
+              box-shadow={boxShadow}
+              radius={'10px'}
+            >
+              <ButtonText weight={'bold'}>{'Cancel Order'}</ButtonText>
+            </CustomButton>  
+          }
+        </>
+        :
+        <LottieView 
+          source={require('../../../../assets/lottie/17828-success.json')}
+          autoPlay
+          loop={false}
+          style={{
+            marginTop: 50,
+          }}
+        /> 
       }
+      
     </ContentContainer>
   </>
   )
