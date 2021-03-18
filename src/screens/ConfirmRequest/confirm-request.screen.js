@@ -1,5 +1,5 @@
-import React from 'react'; 
-import { View, Switch } from 'react-native'; 
+import React, {useState, useEffect} from 'react'; 
+import { View, StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native'; 
 import { connect } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { Divider } from 'react-native-paper';
@@ -10,81 +10,92 @@ import { Fontisto } from '@expo/vector-icons';
 import CustomButton from '../../components/forms/custom-button/custom-button.component';
 import ButtonText from '../../components/forms/button-text/button-text.component';
 import { toSuccess } from '../../session';
+import { getUserData, getOrderDetail, apiHeaders, COMPLETE_GAS_ORDER } from '../../config';
+import Swipeable from 'react-native-swipeable';
+import axios from 'axios';
 
-const VendorRow = () => {
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 20
+  },
+  listItem: {
+    height: 75,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  leftSwipeItem: {
+    flex: 1,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    paddingRight: 20
+  },
+  rightSwipeItem: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingLeft: 20
+  },
+
+});
+
+const VendorRow = ({customerName}) => {
   return (
     <ViewContainer>
       <SmallHeaderText>
-        {"Vendor"}
+        {"Customer Name"}
       </SmallHeaderText>
       <NormalText>
-        {"Forte Gas Station"}
+        {customerName}
       </NormalText>
     </ViewContainer>
   )
 }
 
-const AddressRow = () => {
+const AddressRow = ({street}) => {
   return (
     <ViewContainer> 
       <SmallHeaderText>
         {"Address:"}
       </SmallHeaderText>
       <NormalText>
-        {"12 Silver Street, Shomolu, Lagos."}
+        {street}
       </NormalText>
     </ViewContainer>
   )
 }
 
-const WeightRow = () => {
+const OrderInstructions = ({instruction}) => {
+  return (
+    <ViewContainer> 
+      <SmallHeaderText> 
+        {"Order Instructions"}
+      </SmallHeaderText>
+      <NormalText> 
+        {instruction}
+      </NormalText>
+    </ViewContainer>
+  )
+}
+
+
+const WeightRow = ({quantity}) => {
   return (
     <ViewContainerRow>
       <NormalText> 
-        {"Weight (Kg): "}
+        {"Quantity: "}
       </NormalText>
       <BoldWeightText> 
-        {"12.5kg"}
+        {quantity}
       </BoldWeightText>
     </ViewContainerRow>
   )
 }
 
-const PriceRow = () => {
+const PriceRow = ({price}) => {
   return (
     <ViewContainerRow> 
-      <NormalText>{"Price"}</NormalText>
-      <BoldNormalText>{"N 4,750"}</BoldNormalText>
-    </ViewContainerRow>
-  )
-}
-
-const CardRow = () => {
-  return (
-    <ViewContainerRow> 
-      <CardText> 
-        {'\u2B24'}
-        {'\u2B24'}
-        {'\u2B24'}
-        {'\u2B24'}
-      </CardText>
-      <NormalText>
-        {" - 4467"}
-      </NormalText>
-      <VISAContainer>
-        <Fontisto name="visa" size={35} color="#0016db" />
-      </VISAContainer>
-    </ViewContainerRow>
-  )
-}
-
-const PickupRow = () => {
-  return (
-    <ViewContainerRow> 
-      <NormalText>{"Pickup"}</NormalText>
-      <VISAContainer>
-        <Switch style={{marginLeft: 40}} />
-      </VISAContainer>
+      <NormalText>{"Cost:"}</NormalText>
+      <BoldNormalText>{price}</BoldNormalText>
     </ViewContainerRow>
   )
 }
@@ -93,41 +104,145 @@ const ConfirmRequestScreen = ({appSettings}) => {
   const { transparentBorder, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
   const navigation = useNavigation();
 
+  const [orderData, updateData] = useState({
+    customerName: "", 
+    street: "",
+    quantity: "",
+    price: "",
+    instruction: ""
+  })
+
+  const [appState, updateState] = useState({
+    leftActionActivated: false, 
+    toggle: false, 
+    currentlyOpenSwipeable: null, 
+  });
+  const [tokenString, setToken] = useState("");
+  const [orderPostData, updateOrderPostData] = useState(null);
+  const [accepted, toggleAcceptedStatus] = useState({
+    status: false, 
+    message: "", 
+    color: "#dbdbdb",
+  })
+
+  useEffect(() => {
+    getUserData().then((res) => {
+      setToken(res.token_string)
+    })
+  }, [])
+
   const handleConfirmRequest = () => {
-    toSuccess(navigation)
+    updateState({...appState, toggle: !appState.toggle})
+    console.log("completed")
+
+    const options = {
+      headers: apiHeaders(tokenString)
+    }
+
+    if (orderPostData == null) {
+      return 
+    }
+
+    axios.post(COMPLETE_GAS_ORDER, orderPostData, options)
+    .then((res) => {
+      const responseData = res.data
+      console.log(responseData)
+      if (responseData.code == 200) {
+        toggleAcceptedStatus({
+          status: true
+        })
+        toggleAcceptedStatus({
+          status: true, 
+          color: "#639167", 
+          message: responseData.body.order_status.toUpperCase()
+        })
+      }
+    }, (error) => {
+      console.log(error)
+    })
   }
 
+  useEffect(() => {
+    getOrderDetail().then((res) => {
+      console.log("confirm")
+      console.log(res)
+      const order = res.order 
+      if (order.order_status == "accepted") {
+        toggleAcceptedStatus({
+          status: true, 
+          color: "#639167", 
+          message: order.order_status.toUpperCase()
+        })
+      } 
+      updateOrderPostData(res.order)
+      updateData({
+        ...orderData, 
+        customerName: res.user.full_name, 
+        street: res.order.address,
+        quantity: res.order.order_quantity,
+        instruction: res.order.delivery_instructions,
+        price: res.vendor.amount,
+      })
+    }, (err) => {
+      console.log(err)
+    })
+  }, [])
+
   return (
-    <View>
-      <Avatar source={require('../../../assets/gas-station.png')} />
-      <VendorRow />
-      <Divider />
-      <AddressRow />
-      <Divider />
-      <WeightRow />
-      <Divider />
-      <PriceRow />
-      <Divider />
-      <CardRow />
-      <Divider />
-      <PickupRow />
-      <Divider />
-      <CustomButtonController> 
-        <CustomButton 
-          onPress={handleConfirmRequest} 
-          loading={false}
-          space={'20px'} 
-          uppercase={'true'} 
-          width={'330px'} 
-          color={buttonTextColor} 
-          bgcolor={defaultButtonBackgroundColor} 
-          box-shadow={boxShadow}
-          radius={'10px'}
-        >
-          <ButtonText weight={'bold'}>{'Confirm'}</ButtonText>
-        </CustomButton> 
-      </CustomButtonController>
-    </View>
+    <SafeAreaView> 
+      <ScrollView> 
+        <View>
+        <Avatar source={require('../../../assets/gas-station.png')} />
+          <VendorRow
+            customerName={orderData.customerName}
+          />
+          <Divider />
+          <AddressRow 
+            street={orderData.street}
+          />
+          <Divider />
+          <WeightRow
+            quantity={orderData.quantity}
+          />
+          <Divider />
+          <PriceRow 
+            price={orderData.price}
+          />
+          <Divider />
+          <OrderInstructions 
+            instruction={orderData.instruction}
+          />
+          <Divider />
+          <Divider />
+          {
+            accepted.status ? 
+            <Swipeable
+              leftActionActivationDistance={200}
+              leftContent={(
+                <View style={[styles.leftSwipeItem, {backgroundColor: appState.leftActionActivated ? 'lightgoldenrodyellow' : 'steelblue'}]}>
+                  {appState.leftActionActivated ?
+                    <Text>release!</Text> :
+                    <Text>keep pulling!</Text>}
+                </View>
+              )}
+              onLeftActionActivate={() => updateState({...appState, leftActionActivated: true})}
+              onLeftActionDeactivate={() => updateState({...appState, leftActionActivated: false})}
+              onLeftActionComplete={() => handleConfirmRequest()}
+            >
+              <View style={[styles.listItem, {backgroundColor: appState.toggle ? 'thistle' : 'darkseagreen'}]}>
+                <Text>{"SWIPE TO CONFIRM DELIVERY >>> "}</Text>
+              </View>
+            </Swipeable>
+          : 
+            <View style={[styles.listItem, {backgroundColor: accepted.color}]}> 
+              <Text> 
+                {accepted.message}
+              </Text>
+            </View>
+          }
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 

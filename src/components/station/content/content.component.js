@@ -95,6 +95,33 @@ const Description = () => {
 let resendOtpTimerInterval; 
 const RESEND_OTP_TIME_LIMIT = 6; 
 
+const OrderInstruction = ({ text, changeText}) => {
+  return (
+    <DeliveryInstructionContainer> 
+      <LineContainer> 
+        <PricingText> 
+          {"Delivery Instructions"}
+        </PricingText>
+      </LineContainer>
+      <TextInput 
+        multiline={true}
+        numberOfLines={4}
+        // autoFocus
+        autoCorrect
+        style={{
+          height: 70, 
+          marginTop: 0,
+          marginBottom: 30,
+          borderColor: 'gray', 
+          borderWidth: 1,
+        }}
+        onChangeText={changeText}
+        value={text}
+      />
+    </DeliveryInstructionContainer>
+  )
+}
+
 const StationContent = ({appSettings}) => {
   const [dataUnit, setDataUnit] = useState("")
 	const [userToken, setToken] = useState('');
@@ -229,7 +256,7 @@ const StationContent = ({appSettings}) => {
   }, [])
 
 
-  const { transparentBorder, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
+  const { boxShadow, buttonTextColor, defaultButtonBackgroundColor, AppMainColor} = appSettings;
 
   const [clicks, setClicks] = useState(0)
   
@@ -269,32 +296,7 @@ const StationContent = ({appSettings}) => {
     })
   }
 
-  const OrderInstruction = () => {
-    return (
-      <DeliveryInstructionContainer> 
-        <LineContainer> 
-          <PricingText> 
-            {"Delivery Instructions"}
-          </PricingText>
-        </LineContainer>
-        <TextInput 
-          multiline={true}
-          numberOfLines={4}
-          autoFocus
-          autoCorrect
-          style={{
-            height: 70, 
-            marginTop: 0,
-            marginBottom: 30,
-            borderColor: 'gray', 
-            borderWidth: 1,
-          }}
-          onChangeText={text => handleChangeText(text)}
-          value={appCoordinatesData.deliveryInstructions}
-        />
-      </DeliveryInstructionContainer>
-    )
-  }
+  
 
   const startResendOtpTimer = () => {
     if (resendOtpTimerInterval) {
@@ -340,13 +342,16 @@ const StationContent = ({appSettings}) => {
     axios.post(ORDER_GAS_API, orderData, options)
     .then((response) => {
       console.log(response.data)
+      setTimeout(() => {
+        toggleSubmittingOrder(false)
+        toggleDisableButton(false)
+        toggleLoader(false)
+      }, 2000);
+      toggleSubmittingOrder(true)
     }, (error) => {
       console.log(error)
+      alert('check internet connection')
     })
-    
-    setTimeout(() => {
-      toggleSubmittingOrder(true)
-    }, 2000);
     
   }
 
@@ -397,7 +402,10 @@ const StationContent = ({appSettings}) => {
           <Divider />
           <QuantitySection />
           <Divider />
-          <OrderInstruction />
+          <OrderInstruction
+            text={appCoordinatesData.deliveryInstructions}
+            changeText={text => handleChangeText(text)}
+          />
           <Divider />
           {
             !submittingOrder ? 
@@ -423,7 +431,7 @@ const StationContent = ({appSettings}) => {
               uppercase={'true'} 
               width={'330px'} 
               color={buttonTextColor} 
-              bgcolor={defaultButtonBackgroundColor} 
+              bgcolor={AppMainColor} 
               box-shadow={boxShadow}
               radius={'10px'}
             >

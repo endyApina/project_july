@@ -54,7 +54,7 @@ const SettingsList = () => {
       toOrders(navigation)
     }
   
-    alert(val.title)
+    // alert(val.title)
   }
 
   const handleSignOut = () => {
@@ -72,7 +72,7 @@ const SettingsList = () => {
             containerStyle={{
               backgroundColor: 'transparent',
             }}
-            underlayColor="transparent"
+            underlayColor="#c4c4c4"
           >
             <Icon name={item.icon}/>
             <ListItem.Content>
@@ -95,6 +95,7 @@ const SettingsList = () => {
           marginTop: 60,
           backgroundColor: 'transparent',
         }}
+        underlayColor="#c4c4c4"
       >
         <Icon name={'history'} />
         <ListItem.Content>
@@ -110,6 +111,7 @@ const SettingsList = () => {
         containerStyle={{
           backgroundColor: 'transparent',
         }}
+        underlayColor="#c4c4c4"
         onPress={handleSignOut}
       >
         <SimpleLineIcons name="logout" size={24} color="red" />

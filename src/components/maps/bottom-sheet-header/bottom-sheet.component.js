@@ -19,7 +19,7 @@ const BottomHeader = () => {
         <View>
            
             <Text style={bottomHeaderStyles.headerText}>
-                {"Nearby"}
+                {"History"}
             </Text>
         </View>
     )

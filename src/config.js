@@ -75,6 +75,7 @@ export const OTP_PREFIX = 'Bearer '
 export const ORDER_GAS_API = API_BASE + 'user/ordergas/'
 export const CANCEL_GAS_API = API_BASE + 'user/ordergas/cancel'
 export const GAS_ORDER_HISTORY_API = API_BASE + 'gasorders/'
+export const COMPLETE_GAS_ORDER = API_BASE + 'user/ordergas/complete'
 
 export const MAP_API_KEY = "AIzaSyC3KU80ldwIeGJaEORVcsjo41f82x5jVMI"
 
@@ -85,6 +86,15 @@ export const UserGeoDataAsyncData = 'my_geo_data'
 export const getUserData = async () => {
 	try {
 		const jsonValue = await AsyncStorage.getItem('user_data')
+		return jsonValue != null ? JSON.parse(jsonValue) : null;
+	} catch(e) {
+		// error reading value
+	}
+}
+
+export const getOrderDetail = async () => {
+	try {
+		const jsonValue = await AsyncStorage.getItem('order_details')
 		return jsonValue != null ? JSON.parse(jsonValue) : null;
 	} catch(e) {
 		// error reading value

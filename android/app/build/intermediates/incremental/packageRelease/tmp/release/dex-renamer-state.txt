@@ -1,0 +1,7 @@
+#Thu Mar 18 22:59:58 WAT 2021
+base.0=/Users/endyapina/Projects/reactnative/project_july/android/app/build/intermediates/dex/release/mergeDexRelease/out/classes.dex
+path.1=classes2.dex
+renamed.1=classes2.dex
+path.0=classes.dex
+renamed.0=classes.dex
+base.1=/Users/endyapina/Projects/reactnative/project_july/android/app/build/intermediates/dex/release/mergeDexRelease/out/classes2.dex

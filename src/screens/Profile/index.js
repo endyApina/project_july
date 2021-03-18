@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { ScrollView } from "react-native";
 import { connect } from "react-redux";
 import { selectAppSettings } from "../../redux/settings/settings.selector";
 import { createStructuredSelector } from "reselect";
@@ -9,12 +9,14 @@ import ProfileForm from './Form/form';
 
 const ProfileScreen = ({appSettings}) => {
   return(
-    <ProfileViewContainer> 
-      <SettingsHeadContainer> 
-        <ProfileSettingsHead />
-        <ProfileForm />
-      </SettingsHeadContainer>
-    </ProfileViewContainer>
+    <ScrollView> 
+      <ProfileViewContainer> 
+        <SettingsHeadContainer> 
+          <ProfileSettingsHead />
+          <ProfileForm />
+        </SettingsHeadContainer>
+      </ProfileViewContainer>
+    </ScrollView>
   )
 }
 

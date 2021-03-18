@@ -43,7 +43,7 @@ const VendorList = ({appSettings}) => {
 
     const pressedList = () => {
         // alert("Pressed")
-        toStationDetails(navigation)
+        // toStationDetails(navigation)
     }
 
     const renderLeftElement = (avatar) => (

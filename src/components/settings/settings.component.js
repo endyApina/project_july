@@ -6,6 +6,7 @@ import { createStructuredSelector } from 'reselect';
 import {ProfileHeaderContainer, SettingsViewContainer, SettingsContainer} from './settings.styles';
 import ProfileHead from './profileHead/profile-head.component';
 import SettingsList from './settings-list/list.component';
+import { ScrollView } from 'react-native';
 
 const Settings = ({appSettings}) => {
   return (

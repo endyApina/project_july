@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'; 
-import { View, Text } from 'react-native';
+import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { createStructuredSelector } from 'reselect';
@@ -45,10 +45,12 @@ const SettingsScreen = ({appSettings}) => {
   }, [])
 
   return (
-    <SettingsContainer> 
-      <HelloComponent name={name}/>
-      <Settings />
-    </SettingsContainer>
+    <ScrollView> 
+      <SettingsContainer> 
+        <HelloComponent name={name}/>
+        <Settings />
+      </SettingsContainer>
+    </ScrollView>
   )
 }
 
