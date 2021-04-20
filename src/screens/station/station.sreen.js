@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Text } from 'react-native-elements';
-import { View, StatusBar, SafeAreaView, ScrollView } from 'react-native';
-import { StationContainer } from './station.styles';
+import { View, Image, SafeAreaView, ScrollView } from 'react-native';
+import { ImageContainer, StationContainer } from './station.styles';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
@@ -14,7 +14,16 @@ const StationScreen = ({appSettings}) => {
     <SafeAreaView>
       <ScrollView> 
         <StationContainer bgcolor={backgroundColor}>
-          <ImageHeader />
+          {/* <ImageHeader /> */}
+          <ImageContainer> 
+            <Image 
+              source={require("../../../assets/gas-station.png")}
+              style={{
+                height: 200, 
+                width: 200
+              }}
+            />
+          </ImageContainer>
           <StationContent />
         </StationContainer>
       </ScrollView>

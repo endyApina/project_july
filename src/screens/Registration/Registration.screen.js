@@ -30,7 +30,7 @@ const RegistrationScreen = ({appSettings, currentUser}) => {
     return (
         <ScrollView>
             <RegsitrationContainer bgcolor={backgroundColor}>
-                <Avatar source={require('../../../assets/logo.png')} />
+                <Avatar source={require('../../../assets/gastogologo.png')} />
                 <SignUp />
                 <CustomTextContainer 
                     txtcolor={LoginCustomTextColor} 

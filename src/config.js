@@ -60,8 +60,8 @@ export const apiHeaders = (token) => {
 }
 
 // const API_BASE = 'http://167.99.236.194/api/v1/'
-// const API_BASE = 'http://localhost:8002/'
-const API_BASE = 'https://appserver.my-gpi.com:8002/'
+const API_BASE = 'http://localhost:8002/'
+// const API_BASE = 'https://appserver.my-gpi.com:8002/'
 
 export const API_STRING = 'http://milky-way-api.us-east-1.elasticbeanstalk.com/api/v1/'
 export const REG_API = API_BASE + 'auth/registration'
@@ -82,6 +82,7 @@ export const MAP_API_KEY = "AIzaSyC3KU80ldwIeGJaEORVcsjo41f82x5jVMI"
 export const StationAsyncData = 'station_data'
 export const UserAsyncData = 'user_data'
 export const UserGeoDataAsyncData = 'my_geo_data'
+export const GasOrderData = 'gas_order_data'
 
 export const getUserData = async () => {
 	try {

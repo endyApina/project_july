@@ -76,6 +76,8 @@ const Map = ({appSettings, appUserData}) => {
         var lat = parseFloat(position.coords.latitude); 
         var long = parseFloat(position.coords.longitude); 
 
+        console.log(lat, long)
+
         Geocoder.from(position.coords.latitude, position.coords.longitude)
         .then(json => {
             // console.log(json);
@@ -157,6 +159,8 @@ const Map = ({appSettings, appUserData}) => {
                 });
             }
             updateCoords(newStationArray)
+        }).then((res) => {
+            console.log(res)
         })
         // var coordinates = startAPICall(GET_ALL_GAS_STATION)
         // updateCoords(coordinates)

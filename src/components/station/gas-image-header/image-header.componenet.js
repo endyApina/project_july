@@ -14,7 +14,7 @@ const ImageHeader = ({appSettings}) => {
       > 
         <View> 
           <Image 
-            source={require("../../../../assets/station.jpg")}
+            source={require("../../../../assets/gas-station.png")}
             style={{
               height: 250, 
               width: 400

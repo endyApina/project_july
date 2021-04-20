@@ -1,58 +1,92 @@
 import React, { useState, useEffect } from 'react';
-import { StatusBar, Text } from 'react-native';
-import { LoginContainer, SignInContainer, Avatar } from './Login.styles';
+import { ActivityIndicator } from 'react-native';
+import { LoginContainer, SignInContainer, Avatar, GettingStartedContainer, GettingStartedText } from './Login.styles';
 import SignIn from '../../components/Signin/Signin.form';
 import CustomTextContainer from '../../components/forms/custom-text/custom-text.container';
 
 import { createStructuredSelector } from 'reselect';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
-import { selectUserLoggedIn, selectCurrentUser, selectVerifiedUser } from '../../redux/user/user.selector';
+import {selectCurrentUser, selectVerifiedUser } from '../../redux/user/user.selector';
 import { connect } from 'react-redux';
-import { toHome, toOTP } from '../../session';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { toHome } from '../../session';
+import { getUserData } from '../../config';
+import { useNavigation } from '@react-navigation/native';
 
-const LoginScreen = ({ navigation, appSettings, userLoggedIn, verifiedUser }) => {
+const LoginScreen = ({ appSettings, verifiedUser }) => {
     const {backgroundColor, LoginCustomTextColor } = appSettings;
     const [isLoggedIn, toggleUserLoggedIn] = useState(false); 
     const [user, updateUser] = useState('');
+		const [startup, toggleStartup] = useState(true)
+    const navigation = useNavigation();
 
     if (isLoggedIn) {
-        alert()
-        navigateToLanding()
+        toHome(navigation)
     }
     
     useEffect(() => {
-        // if(userLoggedIn) toHome(navigation)
-    }, [userLoggedIn])
+      getUserData().then((res) => {
+				if (res.token_string != "" || res.user_role.id != 0) {
+					toggleUserLoggedIn(true)
+					toggleStartup(false)
+				} else {
+					toggleStartup(false) 
+				}
+			}).catch((err) => {
+				toggleStartup(false) 
+				console.log(err)
+			})
+    }, [])
 
     useEffect(() => {
         if(verifiedUser == 2) {
-            // toOTP(navigation)
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'otp' }]
+            })
         }
     }, [verifiedUser])
 
+		const GettingStarted = () => {
+			return (
+				<GettingStartedContainer> 
+					<ActivityIndicator 
+						size="large"
+						color="#bababa"
+					/>
+					<GettingStartedText> 
+						{"Getting Started"}
+					</GettingStartedText>
+				</GettingStartedContainer>
+			)
+		}
+
     return (
-        <LoginContainer bgcolor={backgroundColor}>
-            <StatusBar backgroundColor={'red'} barStyle={'light-content'} />
-            <Avatar source={require('../../../assets/logo.png')} />
-            <SignInContainer>
-                <SignIn />
-            </SignInContainer>
-            <CustomTextContainer 
-                txtcolor={LoginCustomTextColor}
-                fontweight={'bolder'} 
-                onPress={() => navigation.push('ForgotPassword')}
-            >
-                Forgot Password?
-            </CustomTextContainer>
-			<CustomTextContainer txtcolor={LoginCustomTextColor} onPress={() => navigation.push('Registration')}>New user? Create account</CustomTextContainer>
-        </LoginContainer>
+        <>
+					{
+						!startup ? 
+						<LoginContainer bgcolor={backgroundColor}>
+								<Avatar source={require('../../../assets/gastogologo.png')} />
+								<SignInContainer>
+										<SignIn />
+								</SignInContainer>
+								<CustomTextContainer 
+										txtcolor={LoginCustomTextColor}
+										fontweight={'bolder'} 
+										onPress={() => navigation.push('ForgotPassword')}
+								>
+										Forgot Password?
+								</CustomTextContainer>
+								<CustomTextContainer txtcolor={LoginCustomTextColor} onPress={() => navigation.push('Registration')}>New user? Create account</CustomTextContainer>
+						</LoginContainer>
+						:
+						<GettingStarted />
+					}
+				</>
     );
 };
 
 const mapStateToProps = createStructuredSelector ({
     appSettings: selectAppSettings,
-    userLoggedIn: selectUserLoggedIn, 
     currentUser: selectCurrentUser, 
     verifiedUser: selectVerifiedUser, 
 });

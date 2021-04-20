@@ -34,8 +34,21 @@ const MainNavigation = () => {
       }}
       initialRouteName="Login"
     >
-      <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
-      <Stack.Screen name="Registration" component={RegistrationScreen} options={{ title: 'Sign Up' }} />
+      <Stack.Screen name="Login" 
+        component={LoginScreen} 
+        options={{ 
+          title: 'Login' , 
+          headerShown: false
+        }} 
+      />
+      <Stack.Screen 
+        name="Registration" 
+        component={RegistrationScreen} 
+        options={{ 
+          title: 'Sign Up', 
+          headerShown: false
+        }} 
+      />
       <Stack.Screen 
         name="Landing" 
         component={Landing} 

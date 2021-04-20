@@ -6,6 +6,8 @@ import { createStructuredSelector } from 'reselect';
 import { selectAppSettings } from '../../../redux/settings/settings.selector';
 import { selectAppUserData } from '../../../redux/user/user.selector';
 import { ProfileHeadContainer } from './profile-head.styles';
+import { useNavigation } from '@react-navigation/native';
+import { toGasOrderType } from '../../../session';
 
 const AvatarElement = () => {
   return (
@@ -18,6 +20,7 @@ const AvatarElement = () => {
 }
 
 const ProfileHead = ({appSettings, appUserData}) => {
+  const navigation = useNavigation(); 
   const [userData, updateUserData] = useState('')
   const [fullName, updateName] = useState('')
   const getAppData = async () => {
@@ -50,6 +53,10 @@ const ProfileHead = ({appSettings, appUserData}) => {
           borderTopRightRadius: 15,
           height: 90,
         }}
+        underlayColor="#c4c4c4"
+        onPress={() => {
+          toGasOrderType(navigation)
+        }}
       > 
         <AvatarElement />
         <ListItem.Content> 
@@ -57,19 +64,19 @@ const ProfileHead = ({appSettings, appUserData}) => {
             right
             style={{
               color: 'white',
-              fontSize: 11,
+              fontSize: 18,
               paddingBottom: 5,
             }}
           > 
-            {"View profile"}
+            {"Order Gas Now!"}
           </ListItem.Title>
-          <ListItem.Subtitle
+          {/* <ListItem.Subtitle
             style={{
               color: 'white',
             }}
           > 
             {fullName}
-          </ListItem.Subtitle>
+          </ListItem.Subtitle> */}
         </ListItem.Content>
         <ListItem.Chevron />
       </ListItem>

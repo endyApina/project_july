@@ -1382,6 +1382,7 @@ drawable abc_vector_test
 drawable amu_bubble_mask
 drawable amu_bubble_shadow
 drawable assets_gasstation
+drawable assets_gastogologo
 drawable assets_logo
 drawable assets_manglass
 drawable assets_mapicon

@@ -32,7 +32,7 @@ const Tab = createBottomTabNavigator();
 const Landing = ({}) => {
     return (
         <Tab.Navigator
-            initialRouteName="Maps"
+            initialRouteName="Home"
         >
             <Tab.Screen 
                 name="Home"

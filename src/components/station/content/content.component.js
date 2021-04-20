@@ -10,7 +10,7 @@ import { ContentContainer, AddressText, AdditionText, SubtrationText, Subtration
 import CustomButton from '../../forms/custom-button/custom-button.component';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GET_STATION_BY_ID, UserAsyncData, StationAsyncData, UserGeoDataAsyncData, ORDER_GAS_API, apiHeaders, CANCEL_GAS_API } from '../../../config';
+import { GET_STATION_BY_ID, UserAsyncData, StationAsyncData, UserGeoDataAsyncData, ORDER_GAS_API, apiHeaders, CANCEL_GAS_API, GasOrderData } from '../../../config';
 import axios from 'axios';
 import LottieView from 'lottie-react-native';
 
@@ -82,6 +82,36 @@ const WorkHours = ({hours}) => {
   )
 }
 
+const Weight = ({weight}) => {
+  return (
+    <RatingContainer> 
+      <RatingText> 
+        {"Weight"}
+      </RatingText>
+      <RatingIconContainer> 
+        <TimeText> 
+          {weight}
+        </TimeText>
+      </RatingIconContainer>
+    </RatingContainer>
+  )
+}
+
+const Price = ({price}) => {
+  return (
+    <RatingContainer> 
+      <RatingText> 
+        {"Price"}
+      </RatingText>
+      <RatingIconContainer> 
+        <TimeText> 
+          {price}
+        </TimeText>
+      </RatingIconContainer>
+    </RatingContainer>
+  )
+}
+
 const Description = () => {
   return (
     <RatingContainer>
@@ -132,23 +162,9 @@ const StationContent = ({appSettings}) => {
   const navigation = useNavigation();
   const [address, updateAddress] = useState(""); 
   const [geocodingData, updateGeocode] = useState({});
-  const [appCoordinatesData, updateCoordinatesData] = useState({
-      userStreetName: "", 
-      userLGA: "", 
-      userLAT: "", 
-      userLNG: "", 
-      userEmail: "",
-      userID: "",
-      userStateName: "", 
-      shopLNG: "", 
-      shopLAT: "",
-      shopStreetName: "", 
-      shopLGA: "", 
-      shopStateName: "", 
-      deliveryInstructions: "", 
-      shopStationID: "",
-      vendorEmail: "", 
-      vendorID: ""
+  const [gasOrder, updateOrder] = useState({
+    orderSize: "", 
+    orderAmount: "", 
   })
   const [submissionLoader, toggleLoader] = useState(false);
   const [disableButton, toggleDisableButton] = useState(false);
@@ -184,75 +200,30 @@ const StationContent = ({appSettings}) => {
 		}
   }
 
-  const getStationGeoData = (shopStationID) => {
-    const options = {
-      headers: apiHeaders(userToken)
-    }
-
-    axios.get(GET_STATION_BY_ID+shopStationID, options)
-    .then((response) => {
-      // console.log(response.data)
-      const responsebody = response.data
-      if (responsebody.code == 200) {
-        setAmount(responsebody.body.amount)
-        setUnit("KG")
-        updateCoordinatesData(prevState => {
-          return {
-            ...prevState, 
-            vendorEmail: responsebody.body.email, 
-            vendorID: responsebody.body.id
-          }
-        })
-      }
-    }, (err) => {
-      console.log(err)
-    })
-  }
-
-  const getUserGeoData = async () => {
+  const getOrderDetails = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem(UserGeoDataAsyncData)
+      const jsonValue = await AsyncStorage.getItem(GasOrderData)
       if (jsonValue != null) {
-        var addressComponent = JSON.parse(jsonValue)
-        updateCoordinatesData(prevState => {
-          return {
-            ...prevState,
-            userStateName: addressComponent.userStateName, 
-            userLGA: addressComponent.userLGA, 
-            userLAT: addressComponent.userLAT, 
-            userLNG: addressComponent.userLNG, 
-            userStreetName: addressComponent.userStreetName, 
-            shopLNG: addressComponent.shopLNG, 
-            shopLAT: addressComponent.shopLAT, 
-            shopStreetName: addressComponent.shopStreetName, 
-            shopLGA: addressComponent.shopLGA, 
-            shopStateName: addressComponent.shopStateName, 
-            shopStationID: addressComponent.shopStationID
-          }
+        var orderData = JSON.parse(jsonValue)
+        console.log(orderData)
+        updateOrder({
+          orderSize: orderData.orderSize, 
+          orderAmount: orderData.orderAmount
         })
-        updateGeocode(addressComponent)
-        getStationGeoData(addressComponent.shopStationID)
+
+        console.log(gasOrder)
       }
     } catch(e) {
 
     }
   }
-  
-  const storeStationDetails = async (stationInfo) => {
-		try {
-			const jsonData = JSON.stringify(stationInfo) 
-			await AsyncStorage.setItem(StationAsyncData, jsonData) 
-		} catch (e) {
-			// err
-		}
-	}
 
 	useEffect(() => {
 		getUserData()
 	}, [])
   
   useEffect(() => {
-    getUserGeoData()
+    getOrderDetails()
   }, [])
 
 
@@ -295,37 +266,12 @@ const StationContent = ({appSettings}) => {
       deliveryInstructions: text
     })
   }
-
-  
-
-  const startResendOtpTimer = () => {
-    if (resendOtpTimerInterval) {
-      clearInterval(resendOtpTimerInterval);
-    }
-    resendOtpTimerInterval = setInterval(() => {
-      // console.log(resendButtonDisabledTime)
-      if (resendButtonDisabledTime <= 0) {
-        clearInterval(resendOtpTimerInterval);
-      } else {
-        setResendButtonDisabledTime(resendButtonDisabledTime - 1);
-      }
-    }, 1000);
-  };
-
   
   const onSubmit = async () => {
     toggleDisableButton(true)
     toggleLoader(true)
     const orderData = {
-      address: appCoordinatesData.userStreetName, 
-      delivery_instructions: appCoordinatesData.deliveryInstructions, 
-      user_lat: String(appCoordinatesData.userLAT), 
-      user_lng: String(appCoordinatesData.userLNG), 
-      order_quantity: String(clicks), 
-      user_email: appCoordinatesData.userEmail, 
-      user_id: appCoordinatesData.userID, 
-      vendor_email: appCoordinatesData.vendorEmail, 
-      vendor_id: appCoordinatesData.vendorID
+      
     }
 
     if (clicks == 0) {
@@ -390,20 +336,15 @@ const StationContent = ({appSettings}) => {
       {
         !orderSuccess ? 
         <>
-          <Location title={"My Location: "} location={appCoordinatesData.userStreetName} />
+          <Weight weight={gasOrder.orderSize} />
           <Divider />
-          <Location title={"Station: "} location={appCoordinatesData.shopStreetName} />
-          <Divider />
-          <Pricing weight={stationAmount} unit={stationUnit} />
-          {/* <Divider /> */}
-          {/* <Ratings /> */}
-          <Divider />
+          <Price price={gasOrder.orderAmount} />
           <WorkHours hours={"hours"} />
           <Divider />
           <QuantitySection />
           <Divider />
           <OrderInstruction
-            text={appCoordinatesData.deliveryInstructions}
+            // text={appCoordinatesData.deliveryInstructions}
             changeText={text => handleChangeText(text)}
           />
           <Divider />

@@ -33,6 +33,14 @@ export const toAddCard = (navigation) => {
 	navigation.navigate('Add Card')
 };
 
+export const toGasOrderType = (navigation) => {
+	navigation.navigate('GasOrderType')
+};
+
+export const toCreateOrder = (navigation) => {
+	navigation.navigate('Create Order');
+};
+
 export const toOTP = (navigation) => {
 	navigation.reset({
 		index: 0,
@@ -53,5 +61,4 @@ export const toLogin = (navigation) => {
 		index: 0,
 		routes: [{ name: 'Login' }]
 	})
-	// navigation.navigate('Login')
 }

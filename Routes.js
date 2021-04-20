@@ -4,22 +4,35 @@ import React, {} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
+
+import LoginScreen from './src/screens/Login/Login.screen';
+import RegistrationScreen from './src/screens/Registration/Registration.screen';
+import ForgotPasswordScreen from './src/screens/ForgotPassword/forgot.screen';
+import Landing from './src/screens/Landing/index';
+import OtpVerification from './src/screens/otp/otpverification';
+import AppSlider from './src/screens/AppIntroSlider/index'; 
+import StationScreen from './src/screens/station/station.sreen';
+import ConfirmRequestScreen from './src/screens/ConfirmRequest/confirm-request.screen';
+import Success from './src/screens/SuccessScreen/success.component';
+import OrderScreen from './src/components/station/station-order/order.component';
+import BecomeVendorScreen from './src/screens/vendor/BecomeVendor/vendor.screen';
+import PaymentScreen from './src/screens/Payments/payment.screen';
+import AddCardScreen from './src/screens/Payments/AddCard/addcard.screen';
+import NotificationScreen from './src/screens/Notifications/notifications.screen'; 
+import OrderHistory from './src/screens/orders';
+import GasOrderType from './src/screens/gastype';
+
+
 import { DefaultTheme, Provider as PaperProvider  } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
-import { View, SafeAreaView, Text, Alert } from 'react-native';
-import { UserProfileContainer, UserProfileTextContainer, ButtonContainer } from './Route.styles'; 
 import { selectConnectionStatus } from './src/redux/user/user.selector';
-import AppSlider from './src/screens/AppIntroSlider/index';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { selectAppSettings} from './src/redux/settings/settings.selector';
-import { checkUserSession } from './src/redux/user/user.action';
 import Loader from './src/components/utility/loader/loader.component';
-import SvgXmlContainer from './src/util/svg-xml/scg-xml.component';
-import MainNavigation from './src/navigation/Landing/landing.navigation';
-import { userSvg } from './assets/svg/svg';
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator()
 
 const Routes = ({appSettings, isConnecting}) => {
 	const { subColor, defaultColor, transparentColor, sliderOneBackgroundColor } = appSettings;
@@ -42,54 +55,67 @@ const Routes = ({appSettings, isConnecting}) => {
 						isConnecting ? (<Loader />) : null
 					}
 					<NavigationContainer>
-						<Drawer.Navigator
-							drawerContent={props => (
-								<View style={{flex: 1}}>
-									<SafeAreaView forceInset={{top: 'always', horizontal: 'never'}}>
-										<UserProfileContainer>
-										<SvgXmlContainer space={'5px'} width={'100px'} height={'100px'} bg={'transparent'} 	xml={userSvg} />
-											<UserProfileTextContainer>
-												{"Endy Apinageri"}
-											</UserProfileTextContainer>
-											<DrawerItemList {...props} />
-											<ButtonContainer onPress={()=>
-												Alert.alert(
-													'Log out',
-													'Do you want to logout?',
-													[
-														{ text: 'Cancel', onPress: () => {return null;} },
-														{ text: 'Confirm', onPress: () => signOutStart() },
-													],
-													{ cancelable: false }
-												)  
-											}>
-												<Ionicons name={'md-log-out'} color={'purple'}  size={30} />
-												<Text style={{ textAlign: 'center', marginTop: 5, marginLeft: 30, color: 'purple' }}>Logout</Text>
-											</ButtonContainer>
-										</UserProfileContainer>
-									</SafeAreaView>
-								</View>
-							)}
-							drawerContentOptions = {
-								{
-									activeTintColor: 'blue', 
-									inactiveTintColor: 'green'
-								}
-							}
-							screenOptions={{swipeEnabled: true}}
-							initialRouteName="Landing"
-							openByDefault={false}
+						<Stack.Navigator
+							screenOptions={{
+								headerStyle: {
+									backgroundColor: 'white',
+								},
+								headerTintColor: '#4a4c4f',
+								headerTitleStyle: {
+									fontWeight: 'bold',
+									color: 'transparent',
+								},
+							}}
+							initialRouteName="Login"
 						>
-							<Drawer.Screen 
-								name="Landing"
-								component={MainNavigation}
-								options={
-									{
-										drawerIcon: () => (<Ionicons name={'md-home'} size={30} color={'purple'} />)
-									}
-								}
+							<Stack.Screen name="Login" 
+								component={LoginScreen} 
+								options={{ 
+									title: 'Login' , 
+									headerShown: false
+								}} 
 							/>
-						</Drawer.Navigator>
+							<Stack.Screen 
+								name="Registration" 
+								component={RegistrationScreen} 
+								options={{ 
+									title: 'Sign Up', 
+									headerShown: false
+								}} 
+							/>
+							<Stack.Screen 
+								name="Landing" 
+								component={Landing} 
+								options={{
+									title: '', 
+									headerShown: false,
+									headerStyle: {
+										backgroundColor: '#dbdbdb',
+									}
+								}} 
+							/>
+							<Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{title: 'Forgot Password'}} />
+							<Stack.Screen name="Create Order" component={StationScreen} options={{title: 'Station'}} />
+							<Stack.Screen name="Confirm Request" component={ConfirmRequestScreen} options={{title: 'Confirm Request'}} />
+							<Stack.Screen name="Place_Order" component={OrderScreen} options={{title: 'Place Order'}} />
+							<Stack.Screen name="Success" component={Success} options={{title: 'Success'}} />
+							<Stack.Screen name="Payments" component={PaymentScreen} options={{title: 'Payments'}} />
+							<Stack.Screen name="Add Card" component={AddCardScreen} options={{title: 'Add Card'}} />
+							<Stack.Screen name="Become a Vendor" component={BecomeVendorScreen} options={{title: 'Become A Vendor'}} />
+							<Stack.Screen name="Notifications" component={NotificationScreen} options={{title: 'Notification'}} />
+							<Stack.Screen name="Orders" component={OrderHistory} options={{title: 'Orders'}} />
+							<Stack.Screen name="GasOrderType" component={GasOrderType} options={{title: "Back"}} />
+							<Stack.Screen 
+									name="AppSlider" 
+									component={AppSlider} 
+									options={{
+											headerStyle: {
+													backgroundColor: '#0853f0',
+											},
+									}}
+							/>
+							<Stack.Screen name="otp" component={OtpVerification} />
+						</Stack.Navigator>
 					</NavigationContainer>
         </PaperProvider>
     )
