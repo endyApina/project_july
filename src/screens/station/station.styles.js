@@ -3,7 +3,6 @@ import { Dimensions } from 'react-native';
 
 export const StationContainer = styled.View`
     background-color: ${({ bgcolor })=> bgcolor};
-    height: ${Dimensions.get("window").height}px;
     padding: 20px;
 `;
 

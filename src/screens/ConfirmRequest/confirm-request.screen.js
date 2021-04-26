@@ -42,7 +42,7 @@ const VendorRow = ({customerName}) => {
   return (
     <ViewContainer>
       <SmallHeaderText>
-        {"Customer Name"}
+        {"Gas Weight"}
       </SmallHeaderText>
       <NormalText>
         {customerName}
@@ -109,7 +109,9 @@ const ConfirmRequestScreen = ({appSettings}) => {
     street: "",
     quantity: "",
     price: "",
-    instruction: ""
+    instruction: "", 
+    orderStatus: "",
+    gasWeight: "",
   })
 
   const [appState, updateState] = useState({
@@ -164,8 +166,6 @@ const ConfirmRequestScreen = ({appSettings}) => {
 
   useEffect(() => {
     getOrderDetail().then((res) => {
-      console.log("confirm")
-      console.log(res)
       const order = res.order 
       if (order.order_status == "accepted") {
         toggleAcceptedStatus({
@@ -181,7 +181,9 @@ const ConfirmRequestScreen = ({appSettings}) => {
         street: res.order.address,
         quantity: res.order.order_quantity,
         instruction: res.order.delivery_instructions,
-        price: res.vendor.amount,
+        price: res.order.order_amount,
+        orderStatus: res.order.order_status,
+        gasWeight: res.order.order_size
       })
     }, (err) => {
       console.log(err)
@@ -194,7 +196,7 @@ const ConfirmRequestScreen = ({appSettings}) => {
         <View>
         <Avatar source={require('../../../assets/gas-station.png')} />
           <VendorRow
-            customerName={orderData.customerName}
+            customerName={orderData.gasWeight + "KG"}
           />
           <Divider />
           <AddressRow 
@@ -206,7 +208,7 @@ const ConfirmRequestScreen = ({appSettings}) => {
           />
           <Divider />
           <PriceRow 
-            price={orderData.price}
+            price={"N"+ orderData.price}
           />
           <Divider />
           <OrderInstructions 
@@ -225,18 +227,18 @@ const ConfirmRequestScreen = ({appSettings}) => {
                     <Text>keep pulling!</Text>}
                 </View>
               )}
-              onLeftActionActivate={() => updateState({...appState, leftActionActivated: true})}
-              onLeftActionDeactivate={() => updateState({...appState, leftActionActivated: false})}
-              onLeftActionComplete={() => handleConfirmRequest()}
+              // onLeftActionActivate={() => updateState({...appState, leftActionActivated: true})}
+              // onLeftActionDeactivate={() => updateState({...appState, leftActionActivated: false})}
+              // onLeftActionComplete={() => handleConfirmRequest()}
             >
               <View style={[styles.listItem, {backgroundColor: appState.toggle ? 'thistle' : 'darkseagreen'}]}>
-                <Text>{"SWIPE TO CONFIRM DELIVERY >>> "}</Text>
+                <Text>{"Your Order has been confirmed."}</Text>
               </View>
             </Swipeable>
           : 
             <View style={[styles.listItem, {backgroundColor: accepted.color}]}> 
               <Text> 
-                {accepted.message}
+                {"YOUR ORDER IS " + orderData.orderStatus.toUpperCase()}
               </Text>
             </View>
           }

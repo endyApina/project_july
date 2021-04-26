@@ -101,3 +101,11 @@ export const getOrderDetail = async () => {
 		// error reading value
 	}
 }
+
+export const userLogOut = async () => {
+	try {
+		await AsyncStorage.setItem(UserAsyncData, "")
+	} catch(e) {
+		//handle error
+	}
+}

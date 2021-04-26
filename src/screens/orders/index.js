@@ -30,6 +30,13 @@ const OrderHistory = () => {
     toConfirmRequest(navigation)
   }
 
+  const handleDate = (date) => {
+    const fields = date.split('T')
+    const time = fields[1].split('.')
+    const newDate = fields[0] + " " + time[0]
+    return newDate
+  }
+
   useEffect(() => {
     getUserData().then((res) => {
       updateToken(res.token_string)
@@ -37,23 +44,25 @@ const OrderHistory = () => {
   }, [])
 
   useEffect(() => {
+    console.log(tokenString)
     const options = {
       headers: apiHeaders(tokenString)
     }
 
     axios.get(GAS_ORDER_HISTORY_API, options)
     .then((response) => {
-      console.log(response.data)
       const responseData = response.data
       const responseBody = responseData.body 
       if (Array.isArray(responseBody)) {
         responseBody.forEach(element => {
+          console.log("element")
           console.log(element)
         });
       }
       updateOrderArray(responseData.body)
       toggleLoader(false)
     }, (error) => {
+      console.log("error")
       console.log(error)
     })
   }, [tokenString])
@@ -69,9 +78,9 @@ const OrderHistory = () => {
               orderArray.map((item, i) => (
                 <NotificationCard 
                   key={i}
-                  name={item.vendor.station_name}
+                  name={item.order.order_size + "KG Gas Order"}
                   description={item.order.order_status.toUpperCase()}
-                  date={item.vendor.address}
+                  date={handleDate(item.order.created_at)}
                   onPress={() => handlePress(item)}
                 />
               ))
@@ -87,7 +96,7 @@ const OrderHistory = () => {
           </>
           : 
           <View
-          style={[styles.container, styles.horizontal]}
+            style={[styles.container, styles.horizontal]}
           > 
             <ActivityIndicator 
               size="large"

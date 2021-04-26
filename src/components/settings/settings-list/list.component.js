@@ -4,6 +4,7 @@ import { ListItem, Icon } from 'react-native-elements';
 import {toBecomeVendor, toOrders, toNotification, toPayments, toLogin} from '../../../session';
 import { useNavigation } from '@react-navigation/native';
 import { SimpleLineIcons } from '@expo/vector-icons';
+import { userLogOut } from '../../../config';
 
 const list = [
   {
@@ -11,7 +12,7 @@ const list = [
     icon: 'av-timer'
   }, 
   {
-    title: 'Order History', 
+    title: 'My Orders', 
     icon: 'history'
   }, 
   {
@@ -50,7 +51,7 @@ const SettingsList = () => {
       toNotification(navigation)
     }
 
-    if (title === "Order History") {
+    if (title === "My Orders") {
       toOrders(navigation)
     }
   
@@ -58,6 +59,7 @@ const SettingsList = () => {
   }
 
   const handleSignOut = () => {
+    userLogOut()
     toLogin(navigation)
   }
 

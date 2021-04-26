@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Dimensions } from 'react-native' 
+import { Dimensions } from 'react-native';
 
 export const GasTypeContainer = styled.View`
   marginLeft: 3%;

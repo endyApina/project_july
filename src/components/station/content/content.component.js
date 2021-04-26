@@ -6,13 +6,14 @@ import ButtonText from '../../forms/button-text/button-text.component';
 import { View, Text, TextInput } from 'react-native'; 
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { Divider } from 'react-native-paper';
-import { ContentContainer, AddressText, AdditionText, SubtrationText, SubtrationButton, IncreamentText, QuantityView, AdditionButton, AboutText, TimeText, DaysText, RatingIconContainer, RatingText, RatingContainer, KGContainer, KGText, PricingText, IncreamentSection, LineContainer, LocationContatainer, DeliveryInstructionContainer } from './content.styles';
+import { ContentContainer, AddressText, AdditionText, SubtrationText, SubtrationButton, IncreamentText, QuantityView, AdditionButton, AboutText, TimeText, DaysText, RatingIconContainer, RatingText, RatingContainer, KGContainer, KGText, PricingText, IncreamentSection, LineContainer, LocationContatainer, DeliveryInstructionContainer, PickerContainer } from './content.styles';
 import CustomButton from '../../forms/custom-button/custom-button.component';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GET_STATION_BY_ID, UserAsyncData, StationAsyncData, UserGeoDataAsyncData, ORDER_GAS_API, apiHeaders, CANCEL_GAS_API, GasOrderData } from '../../../config';
 import axios from 'axios';
-import LottieView from 'lottie-react-native';
+import { Picker } from "@react-native-picker/picker";
+import { toConfirmRequest } from '../../../session';
 
 const Location = ({title, location}) => {
   return (
@@ -130,20 +131,53 @@ const OrderInstruction = ({ text, changeText}) => {
     <DeliveryInstructionContainer> 
       <LineContainer> 
         <PricingText> 
-          {"Delivery Instructions"}
+          {"Add Delivery Instructions"}
         </PricingText>
       </LineContainer>
       <TextInput 
         multiline={true}
-        numberOfLines={4}
+        numberOfLines={3}
         // autoFocus
         autoCorrect
         style={{
-          height: 70, 
+          height: 50, 
           marginTop: 0,
           marginBottom: 30,
           borderColor: 'gray', 
           borderWidth: 1,
+          borderRadius: 10,
+          borderTopWidth: 0,
+          borderLeftWidth: 0, 
+          borderRightWidth: 0,
+        }}
+        onChangeText={changeText}
+        value={text}
+      />
+    </DeliveryInstructionContainer>
+  )
+}
+
+const AddressSection = ({ text, changeText}) => {
+  return (
+    <DeliveryInstructionContainer> 
+      <LineContainer> 
+        <PricingText> 
+          {"Enter Address: "}
+        </PricingText>
+      </LineContainer>
+      <TextInput 
+        multiline={true}
+        numberOfLines={3}
+        // autoFocus
+        autoCorrect
+        style={{
+          height: 30, 
+          borderColor: 'gray', 
+          borderWidth: 1,
+          borderRadius: 10,
+          borderTopWidth: 0,
+          borderLeftWidth: 0, 
+          borderRightWidth: 0,
         }}
         onChangeText={changeText}
         value={text}
@@ -153,26 +187,24 @@ const OrderInstruction = ({ text, changeText}) => {
 }
 
 const StationContent = ({appSettings}) => {
-  const [dataUnit, setDataUnit] = useState("")
 	const [userToken, setToken] = useState('');
-	const [stationData, updateStation] = useState(null); 
-  const [stationAmount, setAmount] = useState("");
-  const [stationUnit, setUnit] = useState("");
-  const [stationProperties, updateProperties] = useState({});
-  const navigation = useNavigation();
-  const [address, updateAddress] = useState(""); 
-  const [geocodingData, updateGeocode] = useState({});
   const [gasOrder, updateOrder] = useState({
+    userID: "",
+    userFullName: "", 
+    userEmail: "", 
+    userAddress: "",
     orderSize: "", 
     orderAmount: "", 
+    deliveryInstruction: "",
   })
+  const [userEmail, setEmail] = useState(""); 
+  const [userID, setUserID] = useState(""); 
+  const [userFullName, setFullName] = useState("");
+  const navigation = useNavigation();
   const [submissionLoader, toggleLoader] = useState(false);
   const [disableButton, toggleDisableButton] = useState(false);
-  const [resendButtonDisabledTime, setResendButtonDisabledTime] = useState(
-    RESEND_OTP_TIME_LIMIT,
-  );
   const [submittingOrder, toggleSubmittingOrder] = useState(false);
-  const [orderSuccess, toggleOrderSuccess] = useState(false);
+  const [selectedDeliveryType, setSelectedDeliveryType] = useState();
 
 	const getUserData = async () => {
 		try {
@@ -183,17 +215,19 @@ const StationContent = ({appSettings}) => {
 				const token = parsedValue.token_string
 				setToken(token)
         const userID = parsedValue.user_data.id 
-        // console.log(userID)
-        const userEmail = parsedValue.user_data.email 
-        // console.log(userEmail)
-        updateCoordinatesData(prevState => {
-          return {
-            ...prevState, 
-            userEmail: userEmail, 
-            userID: userID, 
-          }
-        })
+        const userEmail = parsedValue.user_data.email
+        const userFullName = parsedValue.user_data.full_name 
+
+        console.log(userFullName)
+        setEmail(userEmail)
+        setUserID(userID)
+        setFullName(userFullName)
 			}
+      // setTimeout(() => {
+      //   console.log("USer: " + userEmail)
+      //   console.log("USer: " + userID)
+      //   console.log("USer: " + userFullName)
+      // }, 2000);
 			// return jsonValue != null ? JSON.parse(jsonValue) : null;
 		} catch(e) {
 			console.log(e)
@@ -207,11 +241,10 @@ const StationContent = ({appSettings}) => {
         var orderData = JSON.parse(jsonValue)
         console.log(orderData)
         updateOrder({
+          ...gasOrder,
           orderSize: orderData.orderSize, 
           orderAmount: orderData.orderAmount
         })
-
-        console.log(gasOrder)
       }
     } catch(e) {
 
@@ -259,35 +292,103 @@ const StationContent = ({appSettings}) => {
       </IncreamentSection>
     )
   }
+  const PickerSection = ({}) => {
+    return (
+      <PickerContainer> 
+        <LineContainer> 
+          <PricingText> 
+            {"Select Delivery Type:"}
+          </PricingText>
+        </LineContainer>
+        <Picker
+          selectedValue={selectedDeliveryType}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedDeliveryType(itemValue)
+          }
+        >
+          <Picker.Item label="Express" value="express" />
+          <Picker.Item label="Regular" value="regular" />
+          <Picker.Item label="Next Day" value="nextday" />
+        </Picker>
+      </PickerContainer>
+    )
+  }
 
   const handleChangeText = (text) => {
-    updateCoordinatesData({
-      ...appCoordinatesData, 
-      deliveryInstructions: text
+    updateOrder({
+      ...gasOrder,
+      deliveryInstruction: text
     })
+  }
+
+  const handleChangeAddress = (text) => {
+    updateOrder({
+      ...gasOrder,
+      userAddress: text
+    })
+  }
+
+  const storeOrder = async(orderDetails) => {
+    try {
+      const jsonValue = JSON.stringify(orderDetails)
+      // console.log(jsonValue)
+      await AsyncStorage.setItem("order_details", jsonValue)
+    } catch (e) {
+      //saving error
+    }
+  }
+
+  const handleSubmitSuccess = (data) => {
+    console.log(data) 
+    if (data.code == 200) {
+      const body = data.body 
+      storeOrder(body)
+
+      toConfirmRequest(navigation)
+    }
+
+    if (data.code != 200) {
+      alert(data.message + ". Go to your orders section")
+      return 
+    }
   }
   
   const onSubmit = async () => {
     toggleDisableButton(true)
     toggleLoader(true)
+    console.log(gasOrder)
     const orderData = {
-      
+      address: gasOrder.userAddress, 
+      delivery_instructions: gasOrder.deliveryInstruction, 
+      delivery_type: selectedDeliveryType,
+      order_quantity: String(clicks), 
+      user_email: userEmail, 
+      user_id: parseInt(userID), 
+      order_size: gasOrder.orderSize, 
+      order_amount: gasOrder.orderAmount
+    }
+
+    if (gasOrder.userAddress == "") {
+      alert("Please Enter Delivery Address")
+      toggleDisableButton(false)
+      toggleLoader(false)
+      return 
     }
 
     if (clicks == 0) {
-      alert("Please input quantity")
+      alert("Please specify quantity")
       toggleDisableButton(false)
       toggleLoader(false)
       return
     }
 
-    // console.log(userToken)
+    console.log(userToken)
     const options = {
       headers: apiHeaders(userToken)
     }
     axios.post(ORDER_GAS_API, orderData, options)
     .then((response) => {
-      console.log(response.data)
+      handleSubmitSuccess(response.data)
       setTimeout(() => {
         toggleSubmittingOrder(false)
         toggleDisableButton(false)
@@ -298,6 +399,9 @@ const StationContent = ({appSettings}) => {
       console.log(error)
       alert('check internet connection')
     })
+
+    toggleDisableButton(false)
+    toggleLoader(false)
     
   }
 
@@ -305,15 +409,14 @@ const StationContent = ({appSettings}) => {
     toggleSubmittingOrder(false)
     //canceled
     const orderData = {
-      address: appCoordinatesData.userStreetName, 
-      delivery_instructions: appCoordinatesData.deliveryInstructions, 
-      user_lat: String(appCoordinatesData.userLAT), 
-      user_lng: String(appCoordinatesData.userLNG), 
+      address: gasOrder.userAddress, 
+      delivery_instructions: gasOrder.deliveryInstruction, 
+      delivery_type: selectedDeliveryType,
       order_quantity: String(clicks), 
-      user_email: appCoordinatesData.userEmail, 
-      user_id: appCoordinatesData.userID, 
-      vendor_email: appCoordinatesData.vendorEmail, 
-      vendor_id: appCoordinatesData.vendorID
+      user_email: userEmail, 
+      user_id: parseInt(userID), 
+      order_size: gasOrder.orderSize, 
+      order_amount: gasOrder.orderAmount
     }
 
     console.log(orderData)
@@ -334,20 +437,19 @@ const StationContent = ({appSettings}) => {
     <>
     <ContentContainer> 
       {
-        !orderSuccess ? 
         <>
-          <Weight weight={gasOrder.orderSize} />
+          <Weight weight={gasOrder.orderSize + "Kg"} />
           <Divider />
-          <Price price={gasOrder.orderAmount} />
+          <Price price={"N" + gasOrder.orderAmount} />
+          <AddressSection changeText={text => handleChangeAddress(text)} />
           <WorkHours hours={"hours"} />
           <Divider />
           <QuantitySection />
           <Divider />
           <OrderInstruction
-            // text={appCoordinatesData.deliveryInstructions}
             changeText={text => handleChangeText(text)}
           />
-          <Divider />
+          <PickerSection />
           {
             !submittingOrder ? 
             <CustomButton 
@@ -380,15 +482,6 @@ const StationContent = ({appSettings}) => {
             </CustomButton>  
           }
         </>
-        :
-        <LottieView 
-          source={require('../../../../assets/lottie/17828-success.json')}
-          autoPlay
-          loop={false}
-          style={{
-            marginTop: 50,
-          }}
-        /> 
       }
       
     </ContentContainer>

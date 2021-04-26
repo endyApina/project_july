@@ -51,6 +51,7 @@ const NotificationCard = ({item, name, description, date, onPress, ...otherProps
 
 NotificationCard.propTypes = {
   onPress: PropTypes.func,
+  date: PropTypes.func
 }
 
 export default React.memo(NotificationCard)

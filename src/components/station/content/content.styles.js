@@ -108,3 +108,7 @@ export const IncreamentText = styled.Text`
 fontSize: 18px;`;
 
 export const DeliveryInstructionContainer = styled.View``
+
+export const PickerContainer = styled.View`
+ background-color: #ebebeb;
+`;

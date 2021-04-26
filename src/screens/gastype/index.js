@@ -45,72 +45,76 @@ const GasOrderType = ({}) => {
   }, [])
 
 
-  const storeGasOrder = async() => {
+  const storeGasOrder = async(data) => {
     try {
-      const jsonData = JSON.stringify(gasOrder)
+      const jsonData = JSON.stringify(data);
+      // setTimeout(() => {
+        console.log(jsonData)
+      // }, 2000);
       await AsyncStorage.setItem(GasOrderData, jsonData)
     } catch (e) {
-
+      //catch error
     }
   }
 
-  const navigateToOder = () => {
-    storeGasOrder()
+  const navigateToOder = (order) => {
+    storeGasOrder(order)
+
     toCreateOrder(navigation)
   }
 
   const firstChoice = () => {
-    updateOrder({
+    const order = {
       orderSize: gasOrderType.firstOrderSize, 
       orderAmount: gasOrderType.firstOrderPrice
-    })
+    }
 
-    navigateToOder()
+    navigateToOder(order)
   }
 
   const secondChoice = () => {
-    updateOrder({
+    const order = {
       orderSize: gasOrderType.secondOrderSize, 
       orderAmount: gasOrderType.secondOrderPrice
-    })
+    }
 
-    navigateToOder()
+    navigateToOder(order)
   }
 
   const thirdChoice = () => {
-    updateOrder({
+    const order = {
       orderSize: gasOrderType.thirdOrderSize, 
       orderAmount: gasOrderType.thirdOrderPrice
-    })
+    }
 
-    navigateToOder()
+    navigateToOder(order)
   }
 
   const fourthChoice = () => {
-    updateOrder({
+    const order = {
       orderSize: gasOrderType.fourthOrderSize, 
       orderAmount: gasOrderType.fourthOrderPrice
-    })
+    }
 
-    navigateToOder()
+    navigateToOder(order)
   }
 
   const fifthChoice = () => {
-    updateOrder({
+    const order = {
       orderSize: gasOrderType.fifthOrderSize, 
       orderAmount: gasOrderType.fifthOrderPrice
-    })
+    }
 
-    navigateToOder()
+    navigateToOder(order)
   }
 
   const sixthChoice = () => {
-    updateOrder({
+    const order = {
       orderSize: gasOrderType.sixthOrderSize, 
       orderAmount: gasOrderType.sixthOrderPrice
-    })
+    }
 
-    navigateToOder()
+    navigateToOder(order)
   }
 
   return (
