@@ -7,6 +7,7 @@ import SettingsScreen from '../Settings/settings.screen';
 import { Avatar, Badge } from 'react-native-elements';
 // import { Badge, Avatar } from 'react-native-paper';
 import ProfileScreen from '../Profile/';
+import Dashboard from '../Dashboard';
 
 function UserProfileBottomIcon() {
   return (
@@ -18,11 +19,6 @@ function UserProfileBottomIcon() {
         }}
         size="small"
       />
-
-      {/* <Badge
-        status="success"
-        containerStyle={{position: 'absolute', top: -4, right: -4}}
-      /> */}
     </View>
   )
 }
@@ -35,35 +31,36 @@ const Landing = ({}) => {
             initialRouteName="Home"
         >
             <Tab.Screen 
-                name="Home"
+                name="Tools"
                 component={SettingsScreen}
                 options={{
-                    tabBarLabel: 'Home', 
+                    tabBarLabel: 'Tools', 
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="home" color={color} size={26} />
+                      <Feather name="map-pin" size={26} color={color} />
                     ),
                 }}
             />
             <Tab.Screen
-              name="Maps"
-              component={Maps}
+              name="Home"
+              component={Dashboard}
               options={{
-                tabBarLabel: 'Maps',
+                tabBarLabel: 'Home',
                 tabBarIcon: ({ color }) => (
-                  <Feather name="map-pin" size={26} color={color} />
+                  <MaterialCommunityIcons name="home" color={color} size={26} />
                 ),
               }}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
               name="Profile"
               component={ProfileScreen}
               options={{
                 tabBarLabel: 'Profile',
                 tabBarIcon: ({ color }) => (
-                  <UserProfileBottomIcon />
+                  // <UserProfileBottomIcon />
+                  <Feather name="user" size={26} color={color} />
                 ),
               }}
-            />
+            /> */}
         </Tab.Navigator>
     )
 }

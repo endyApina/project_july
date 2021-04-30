@@ -5,12 +5,11 @@ import { useNavigation } from '@react-navigation/native';
 import { Divider } from 'react-native-paper';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { createStructuredSelector } from 'reselect';
-import { Avatar, CustomButtonController, BoldWeightText, ViewContainer, VISAContainer, CardText, ViewContainerRow, BoldNormalText, SmallHeaderText, NormalText } from './confirm-request.styles';
-import { Fontisto } from '@expo/vector-icons';
+import { Avatar, BoldWeightText, ViewContainer, ViewContainerRow, CancelButtonController, BoldNormalText, SmallHeaderText, NormalText, CustomButtonController } from './confirm-request.styles';
 import CustomButton from '../../components/forms/custom-button/custom-button.component';
 import ButtonText from '../../components/forms/button-text/button-text.component';
-import { toSuccess } from '../../session';
 import { getUserData, getOrderDetail, apiHeaders, COMPLETE_GAS_ORDER } from '../../config';
+import {toHome} from '../../session';
 import Swipeable from 'react-native-swipeable';
 import axios from 'axios';
 
@@ -101,7 +100,7 @@ const PriceRow = ({price}) => {
 }
 
 const ConfirmRequestScreen = ({appSettings}) => {
-  const { transparentBorder, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
+  const { AppMainColor, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
   const navigation = useNavigation();
 
   const [orderData, updateData] = useState({
@@ -132,6 +131,10 @@ const ConfirmRequestScreen = ({appSettings}) => {
       setToken(res.token_string)
     })
   }, [])
+
+  const backToHome = () => {
+    toHome(navigation)
+  }
 
   const handleConfirmRequest = () => {
     updateState({...appState, toggle: !appState.toggle})
@@ -236,12 +239,46 @@ const ConfirmRequestScreen = ({appSettings}) => {
               </View>
             </Swipeable>
           : 
-            <View style={[styles.listItem, {backgroundColor: accepted.color}]}> 
-              <Text> 
-                {"YOUR ORDER IS " + orderData.orderStatus.toUpperCase()}
-              </Text>
-            </View>
+            <> 
+              <View style={[styles.listItem, {backgroundColor: accepted.color}]}> 
+                <Text> 
+                  {"YOUR ORDER IS " + orderData.orderStatus.toUpperCase()}
+                </Text>
+              </View>
+              <CancelButtonController>
+                <CustomButton 
+                  // onPress={backToHome} 
+                  // loading={submissionLoader}
+                  space={'10px'} 
+                  uppercase={'true'} 
+                  width={'230px'} 
+                  color={buttonTextColor} 
+                  bgcolor={AppMainColor} 
+                  box-shadow={boxShadow}
+                  radius={'10px'}
+                  // disabled={disableButton}
+                >
+                  <ButtonText weight={'bold'}>{'Cancel Order'}</ButtonText>
+                </CustomButton> 
+              </CancelButtonController>
+            </>
           }
+          <CustomButtonController>
+            <CustomButton 
+              onPress={backToHome} 
+              // loading={submissionLoader}
+              space={'20px'} 
+              uppercase={'true'} 
+              width={'330px'} 
+              color={buttonTextColor} 
+              bgcolor={'#5c5c5c'} 
+              box-shadow={boxShadow}
+              radius={'10px'}
+              // disabled={disableButton}
+            >
+              <ButtonText weight={'bold'}>{'Back To Home'}</ButtonText>
+            </CustomButton> 
+          </CustomButtonController>
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -218,7 +218,6 @@ const StationContent = ({appSettings}) => {
         const userEmail = parsedValue.user_data.email
         const userFullName = parsedValue.user_data.full_name 
 
-        console.log(userFullName)
         setEmail(userEmail)
         setUserID(userID)
         setFullName(userFullName)
@@ -239,7 +238,6 @@ const StationContent = ({appSettings}) => {
       const jsonValue = await AsyncStorage.getItem(GasOrderData)
       if (jsonValue != null) {
         var orderData = JSON.parse(jsonValue)
-        console.log(orderData)
         updateOrder({
           ...gasOrder,
           orderSize: orderData.orderSize, 
@@ -356,13 +354,13 @@ const StationContent = ({appSettings}) => {
   const onSubmit = async () => {
     toggleDisableButton(true)
     toggleLoader(true)
-    console.log(gasOrder)
     const orderData = {
       address: gasOrder.userAddress, 
       delivery_instructions: gasOrder.deliveryInstruction, 
       delivery_type: selectedDeliveryType,
       order_quantity: String(clicks), 
       user_email: userEmail, 
+      user_full_name: userFullName,
       user_id: parseInt(userID), 
       order_size: gasOrder.orderSize, 
       order_amount: gasOrder.orderAmount
@@ -382,7 +380,7 @@ const StationContent = ({appSettings}) => {
       return
     }
 
-    console.log(userToken)
+    console.log(orderData)
     const options = {
       headers: apiHeaders(userToken)
     }

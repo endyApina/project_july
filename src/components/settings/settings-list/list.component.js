@@ -7,22 +7,26 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 import { userLogOut } from '../../../config';
 
 const list = [
-  {
-    title: 'Notifications', 
-    icon: 'av-timer'
-  }, 
+  // {
+  //   title: 'Notifications', 
+  //   icon: 'av-timer'
+  // }, 
   {
     title: 'My Orders', 
     icon: 'history'
   }, 
   {
-    title: 'Payments', 
-    icon: 'credit-card'
-  }, 
-  {
-    title: 'History', 
-    icon: 'settings'
-  }, 
+    title: 'Bulk Order', 
+    icon: 'group'
+  },
+  // {
+  //   title: 'Payments', 
+  //   icon: 'credit-card'
+  // }, 
+  // {
+  //   title: 'History', 
+  //   icon: 'settings'
+  // }, 
   {
     title: 'Support', 
     icon: 'chat'
@@ -94,7 +98,7 @@ const SettingsList = () => {
       <ListItem
         bottomDivider
         containerStyle={{
-          marginTop: 60,
+          // marginTop: 60,
           backgroundColor: 'transparent',
         }}
         underlayColor="#c4c4c4"
@@ -102,7 +106,7 @@ const SettingsList = () => {
         <Icon name={'history'} />
         <ListItem.Content>
           <ListItem.Title>
-            {"Become a Vendor"}
+            {"Join Gas to go club"}
           </ListItem.Title>
         </ListItem.Content>
         <ListItem.Chevron color='black' />

@@ -56,3 +56,7 @@ export const VISAContainer = styled.View`
 export const CustomButtonController = styled.View`
   marginLeft: 21px;
 `;
+
+export const CancelButtonController = styled.View`
+  marginLeft: 19%;
+`;

@@ -55,7 +55,6 @@ const OrderHistory = () => {
       const responseBody = responseData.body 
       if (Array.isArray(responseBody)) {
         responseBody.forEach(element => {
-          console.log("element")
           console.log(element)
         });
       }
