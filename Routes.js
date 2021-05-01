@@ -21,7 +21,7 @@ import AddCardScreen from './src/screens/Payments/AddCard/addcard.screen';
 import NotificationScreen from './src/screens/Notifications/notifications.screen'; 
 import OrderHistory from './src/screens/orders';
 import GasOrderType from './src/screens/gastype';
-
+import CancelOrderScreen from './src/screens/orders/cancel-order';
 
 import { DefaultTheme, Provider as PaperProvider  } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
@@ -96,7 +96,7 @@ const Routes = ({appSettings, isConnecting}) => {
 							/>
 							<Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{title: 'Forgot Password'}} />
 							<Stack.Screen name="Create Order" component={StationScreen} options={{title: 'Station'}} />
-							<Stack.Screen name="Confirm Request" component={ConfirmRequestScreen} options={{title: 'Confirm Request'}} />
+							<Stack.Screen name="Confirm Request" component={ConfirmRequestScreen} options={{title: 'Back'}} />
 							<Stack.Screen name="Place_Order" component={OrderScreen} options={{title: 'Place Order'}} />
 							<Stack.Screen name="Success" component={Success} options={{title: 'Success'}} />
 							<Stack.Screen name="Payments" component={PaymentScreen} options={{title: 'Payments'}} />
@@ -105,6 +105,7 @@ const Routes = ({appSettings, isConnecting}) => {
 							<Stack.Screen name="Notifications" component={NotificationScreen} options={{title: 'Notification'}} />
 							<Stack.Screen name="Orders" component={OrderHistory} options={{title: 'Orders'}} />
 							<Stack.Screen name="GasOrderType" component={GasOrderType} options={{title: "Back"}} />
+							<Stack.Screen name="Cancel Order" component={CancelOrderScreen} options={{title: "Back"}} />
 							<Stack.Screen 
 									name="AppSlider" 
 									component={AppSlider} 

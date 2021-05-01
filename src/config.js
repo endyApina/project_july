@@ -76,6 +76,7 @@ export const ORDER_GAS_API = API_BASE + 'user/ordergas/'
 export const CANCEL_GAS_API = API_BASE + 'user/ordergas/cancel'
 export const GAS_ORDER_HISTORY_API = API_BASE + 'gasorders/'
 export const COMPLETE_GAS_ORDER = API_BASE + 'user/ordergas/complete'
+export const CANCEL_GAS_STATUS_API = API_BASE + 'user/ordergas/cancel/'
 
 export const MAP_API_KEY = "AIzaSyC3KU80ldwIeGJaEORVcsjo41f82x5jVMI"
 

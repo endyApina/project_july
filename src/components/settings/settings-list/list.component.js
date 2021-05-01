@@ -58,6 +58,10 @@ const SettingsList = () => {
     if (title === "My Orders") {
       toOrders(navigation)
     }
+
+    if (title === "Bulk Order") {
+      alert("Available by Demo")
+    }
   
     // alert(val.title)
   }

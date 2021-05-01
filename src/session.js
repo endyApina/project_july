@@ -9,6 +9,10 @@ export const toStationDetails = (navigation) => {
 	navigation.navigate('Create Order');
 };
 
+export const toCancelOrder = (navigation) => {
+	navigation.navigate('Cancel Order');
+};
+
 export const toConfirmRequest = (navigation) => {
 	navigation.navigate('Confirm Request');
 };

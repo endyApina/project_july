@@ -9,7 +9,7 @@ import { Avatar, BoldWeightText, ViewContainer, ViewContainerRow, CancelButtonCo
 import CustomButton from '../../components/forms/custom-button/custom-button.component';
 import ButtonText from '../../components/forms/button-text/button-text.component';
 import { getUserData, getOrderDetail, apiHeaders, COMPLETE_GAS_ORDER } from '../../config';
-import {toHome} from '../../session';
+import {toHome, toCancelOrder} from '../../session';
 import Swipeable from 'react-native-swipeable';
 import axios from 'axios';
 
@@ -132,13 +132,16 @@ const ConfirmRequestScreen = ({appSettings}) => {
     })
   }, [])
 
+  const cancelOrderNow = () => {
+    toCancelOrder(navigation)
+  }
+
   const backToHome = () => {
     toHome(navigation)
   }
 
   const handleConfirmRequest = () => {
     updateState({...appState, toggle: !appState.toggle})
-    console.log("completed")
 
     const options = {
       headers: apiHeaders(tokenString)
@@ -151,7 +154,6 @@ const ConfirmRequestScreen = ({appSettings}) => {
     axios.post(COMPLETE_GAS_ORDER, orderPostData, options)
     .then((res) => {
       const responseData = res.data
-      console.log(responseData)
       if (responseData.code == 200) {
         toggleAcceptedStatus({
           status: true
@@ -245,22 +247,27 @@ const ConfirmRequestScreen = ({appSettings}) => {
                   {"YOUR ORDER IS " + orderData.orderStatus.toUpperCase()}
                 </Text>
               </View>
-              <CancelButtonController>
-                <CustomButton 
-                  // onPress={backToHome} 
-                  // loading={submissionLoader}
-                  space={'10px'} 
-                  uppercase={'true'} 
-                  width={'230px'} 
-                  color={buttonTextColor} 
-                  bgcolor={AppMainColor} 
-                  box-shadow={boxShadow}
-                  radius={'10px'}
-                  // disabled={disableButton}
-                >
-                  <ButtonText weight={'bold'}>{'Cancel Order'}</ButtonText>
-                </CustomButton> 
-              </CancelButtonController>
+              {
+                orderData.orderStatus == "pending" ?
+                <CancelButtonController>
+                  <CustomButton 
+                    onPress={cancelOrderNow} 
+                    // loading={submissionLoader}
+                    space={'10px'} 
+                    uppercase={'true'} 
+                    width={'230px'} 
+                    color={buttonTextColor} 
+                    bgcolor={AppMainColor} 
+                    box-shadow={boxShadow}
+                    radius={'10px'}
+                    // disabled={disableButton}
+                  >
+                    <ButtonText weight={'bold'}>{'Cancel Order'}</ButtonText>
+                  </CustomButton> 
+                </CancelButtonController>
+                :
+                null 
+              }
             </>
           }
           <CustomButtonController>
