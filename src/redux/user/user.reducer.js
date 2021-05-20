@@ -12,6 +12,7 @@ const INITIAL_STATE = {
     verifiedUser: 0,
     signUpData: null,
     otpVerificationStatus: false, 
+    loadOrder: false,
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -95,6 +96,11 @@ const userReducer = (state = INITIAL_STATE, action) => {
         return {
             ...state, 
             signUpData: action.payload
+        }
+    case UserActionTypes.LOAD_USER_ORDERS: 
+        return {
+            ...state, 
+            loadOrder: action.payload
         }
     default: 
         return state; 

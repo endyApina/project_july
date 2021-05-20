@@ -56,6 +56,11 @@ export const toggleOTPStatus = (status, userData) => ({
 	userData: userData
 })
 
+export const toggleLoadOrders = status => ({
+	type: UserActionTypes.LOAD_USER_ORDERS, 
+	payload: status
+})
+
 export const toggleUserLoggedIn = status => ({
 	type: UserActionTypes.TOGGLE_USER_LOGGED_IN,
 	payload: status

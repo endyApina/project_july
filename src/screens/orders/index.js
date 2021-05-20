@@ -1,9 +1,15 @@
-import React, { useEffect, useState } from 'react'; 
-import { SafeAreaView, ScrollView, View, Text, ActivityIndicator, StyleSheet } from 'react-native'; 
+import React, { useCallback, useEffect, useState } from 'react'; 
+import { SafeAreaView, ScrollView, View, Text, ActivityIndicator, StyleSheet, RefreshControl } from 'react-native'; 
 import OrderHistoryScreen from './order-detail';
 // import OrderDetailsScreen from './empty-order';
+import { createStructuredSelector } from 'reselect';
+import { selectAppSettings } from '../../redux/settings/settings.selector';
+import { selectLoadOrder } from '../../redux/user/user.selector';
+import { toggleLoadOrders } from '../../redux/user/user.action';
+import { connect } from 'react-redux';
+
 import NotificationCard from '../../components/notification-card'
-import { apiHeaders, GAS_ORDER_HISTORY_API, getOrderDetail, getUserData } from '../../config';
+import { apiHeaders, AppWait, GAS_ORDER_HISTORY_API, getOrderDetail, getUserData } from '../../config';
 import axios from 'axios';
 import { toConfirmRequest } from '../../session';
 import { useNavigation } from '@react-navigation/native';
@@ -19,11 +25,12 @@ const storeOrder = async(orderDetails) => {
   }
 }
 
-const OrderHistory = () => {
+const OrderHistory = ({loadOrder}) => {
   const [tokenString, updateToken] = useState("")
   const [orderArray, updateOrderArray] = useState([])
   const [pageLoading, toggleLoader] = useState(true)
   const navigation = useNavigation();
+  const [refreshing, setRefreshing] = useState(false)
 
   const handlePress = (item) => {
     storeOrder(item)
@@ -43,7 +50,14 @@ const OrderHistory = () => {
     })
   }, [])
 
-  useEffect(() => {
+  const onRefresh = useCallback(() => {
+    setRefreshing(true) 
+    toggleLoader(true)
+    getOrders() 
+    AppWait(1000).then(() => setRefreshing(false))
+  })
+
+  const getOrders = () => {
     console.log(tokenString)
     const options = {
       headers: apiHeaders(tokenString)
@@ -64,11 +78,28 @@ const OrderHistory = () => {
       console.log("error")
       console.log(error)
     })
+  }
+
+  useEffect(() => {
+    if (loadOrder) {
+      getOrders()
+    }
+  }, [loadOrder])
+
+  useEffect(() => {
+    getOrders()
   }, [tokenString])
 
   return (
     <SafeAreaView> 
-      <ScrollView> 
+      <ScrollView
+        refreshControl={
+          <RefreshControl 
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      > 
         {
           !pageLoading ? 
           <>
@@ -120,4 +151,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export default React.memo(OrderHistory)
+const mapStateToProps = createStructuredSelector ({
+  loadOrder: selectLoadOrder
+})
+
+export default connect(mapStateToProps)(OrderHistory)

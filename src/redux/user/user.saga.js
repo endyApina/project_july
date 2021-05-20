@@ -1,7 +1,7 @@
 import { takeLatest, call, all, put } from 'redux-saga/effects';
 import UserActionTypes from './user.types';
 import axios from 'axios';
-import { signUpSuccess, signInFailure, toggleSubmittingLogin, toggleSubmittingRegister, signInSuccess, toggleForgettingPassword, toggleVerifiedUser, signUpStart, updateCurrentUser, updateSignUpData, toggleOTPStatus } from './user.action';
+import { signUpSuccess, toggleLoadOrders, signInFailure, toggleSubmittingLogin, toggleSubmittingRegister, signInSuccess, toggleForgettingPassword, toggleVerifiedUser, signUpStart, updateCurrentUser, updateSignUpData, toggleOTPStatus } from './user.action';
 
 import { emailSignUp, CALL_POST_API } from '../../util/user.util';
 import { REG_API, LOGIN_API, FORGOT_PASSWORD_API, RESEND_OTP, VEIRFY_OTP } from '../../config';
@@ -60,6 +60,10 @@ export function* signUserIn({payload: {body, code, message}}) {
     } catch(error) {
         console.log(error)
     }
+}
+
+export function* loadOrder() {
+    yield put(toggleLoadOrders(true))
 }
 
 export function* forgetPasswordStart({payload: email}) {
@@ -122,6 +126,13 @@ export function* onEmailSignInStart() {
     )
 }
 
+export function* onLoadOrders() {
+    yield takeLatest(
+        UserActionTypes.LOAD_USER_ORDERS, 
+        loadOrder
+    )
+}
+
 export function* onOTPVerificationStart() {
     yield takeLatest(
         UserActionTypes.OTP_VERIFICATION_START, 
@@ -144,5 +155,5 @@ export function* onSendOTP() {
 }
 
 export function* userSagas() {
-    yield all([call(onSignUpStart), call(onEmailSignInStart), call(onForgetPasswordStart), call(onOTPVerificationStart), call(onSendOTP)])
+    yield all([call(onSignUpStart), call(onLoadOrders), call(onEmailSignInStart), call(onForgetPasswordStart), call(onOTPVerificationStart), call(onSendOTP)])
 }

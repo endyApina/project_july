@@ -47,6 +47,11 @@ export const selectUserLoggedIn = createSelector(
 	user => user.userLoggedIn
 );
 
+export const selectLoadOrder = createSelector(
+	[selectUser], 
+	user => user.loadOrder
+)
+
 export const selectSignUpStatus = createSelector(
 	[selectUser], 
 	user => user.signUpSuccess

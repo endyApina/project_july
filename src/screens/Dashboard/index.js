@@ -1,26 +1,36 @@
-import React, {useState, useEffect} from 'react'; 
+import React, {useState, useEffect, useCallback} from 'react'; 
 import { connect } from 'react-redux'; 
 import { createStructuredSelector } from 'reselect';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
-import { ScrollView } from 'react-native';
+import { toggleLoadOrders } from '../../redux/user/user.action';
+import { ScrollView, RefreshControl } from 'react-native';
 import { DashboardContainer, OrderNowContainer } from './styles';
 import FullNameText from './welcometext';
 import { toGasOrderType } from '../../session';
 import OrderSection from './orders';
-import { getUserData } from '../../config';
+import { getUserData, AppWait } from '../../config';
 import { useNavigation } from '@react-navigation/native';
 import { ListItem } from "react-native-elements";
 
-const Dashboard = ({appSettings}) => {
+const Dashboard = ({appSettings, toggleLoadOrders}) => {
   const [name, setName] = useState('');
   const {AppMainColor} = appSettings;
   const navigation = useNavigation(); 
+
+  const [refreshing, setRefreshing] = useState(false)
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true) 
+    AppWait(2000).then(() => setRefreshing(false))
+    // toggleLoadOrders()
+  })
   
   useEffect(() => {
     getUserData().then((res) => {
       setName(res.user_data.full_name)
     })
   }, [])
+
   return (
     <ScrollView> 
       <DashboardContainer> 
@@ -64,4 +74,8 @@ const mapStateToProps = createStructuredSelector({
   appSettings: selectAppSettings, 
 })
 
-export default connect(mapStateToProps)(Dashboard)
+const mapDispatchToProps = dispatch => ({
+  toggleLoadOrders: () => dispatch(toggleLoadOrders())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

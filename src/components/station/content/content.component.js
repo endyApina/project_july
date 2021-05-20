@@ -171,7 +171,7 @@ const AddressSection = ({ text, changeText}) => {
         // autoFocus
         autoCorrect
         style={{
-          height: 30, 
+          height: 40, 
           borderColor: 'gray', 
           borderWidth: 1,
           borderRadius: 10,
@@ -353,6 +353,7 @@ const StationContent = ({appSettings}) => {
   
   const onSubmit = async () => {
     toggleDisableButton(true)
+    toggleSubmittingOrder(true)
     toggleLoader(true)
     const orderData = {
       address: gasOrder.userAddress, 

@@ -60,8 +60,9 @@ export const apiHeaders = (token) => {
 }
 
 // const API_BASE = 'http://167.99.236.194/api/v1/'
-const API_BASE = 'http://localhost:8002/'
-// const API_BASE = 'https://appserver.my-gpi.com:8002/'
+// const API_BASE = 'http://localhost:8002/'
+// const API_BASE = 'http://104.211.9.107:7002/'
+const API_BASE = 'https://appserver.my-gpi.com:8002/'
 
 export const API_STRING = 'http://milky-way-api.us-east-1.elasticbeanstalk.com/api/v1/'
 export const REG_API = API_BASE + 'auth/registration'
@@ -109,4 +110,8 @@ export const userLogOut = async () => {
 	} catch(e) {
 		//handle error
 	}
+}
+
+export const AppWait = (timeout) => {
+	return new Promise(resolve => setTimeout(resolve, timeout)); 
 }
