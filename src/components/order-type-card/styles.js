@@ -44,6 +44,6 @@ export const NumberContainer = styled.View`
 
 export const NumberText = styled.Text`
   fontSize: 25px;
-  color: #0013ff;
+  color: #363636;
   fontWeight: 500;
 `;

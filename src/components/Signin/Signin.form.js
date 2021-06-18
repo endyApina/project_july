@@ -38,6 +38,8 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
             const body = responseData.body 
             const code = responseData.code 
             const message = responseData.message 
+
+            console.log(body)
  
             if (code != 200) {
                 if (message == "unverified user") {
@@ -58,6 +60,20 @@ const SignIn = ({emailSignInStart, appSettings, isSubmittingForm}) => {
             
         }, (error) => {
             console.log(error)
+            if (error.response) {
+                // Request made and server responded
+                console.log("request was made")
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+              } else if (error.request) {
+                // The request was made but no response was received
+                console.log("request was made but no response")
+                console.log(error.request);
+              } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log('Error', error.message);
+              }
             alert("check your internet connection")
             toggleSubmitting(false)
             

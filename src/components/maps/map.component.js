@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import { MapContainer, MapViewContainer, MarkerTextContainer, MarkerViewContainer } from './map.styles';
 import BottomSheetComponent from './bottom-sheet/bottom-sheet.component';
 import BottomHeader from './bottom-sheet-header/bottom-sheet.component';
-import BottomSheet from 'react-native-bottomsheet-reanimated';
 import {startAPICall} from './util';
 import { selectAppUserData } from '../../redux/user/user.selector';
 import {apiHeaders, getUserData, GET_ALL_GAS_STATION} from '../../config';

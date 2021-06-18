@@ -20,13 +20,13 @@ const reason = [
     reason: "Gas delivered to the wrong address",
   },
   {
-    reason: "Wrong delivery locations",
+    reason: "Wrong delivery location",
   },
   {
     reason: "Accidental request",
   },
   {
-    reason: "Gas to go asked me to cancel",
+    reason: "Gas to go supportk asked me to cancel",
   },
 ]
 
@@ -60,7 +60,7 @@ const CancelOrderScreen = ({appSettings}) => {
       axios.post(CANCEL_GAS_STATUS_API, data, options)
       .then((res) => {
         const responseData = res.data
-        console.log(responseData)
+        // console.log(responseData)
         if (responseData.code == 200) {
           setTimeout(() => {
             toggleLoader(false)
@@ -73,6 +73,7 @@ const CancelOrderScreen = ({appSettings}) => {
         }
         
       }, (error) => {
+        console.log(error)
         toggleLoader(false)
       })
     })

@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Divider } from 'react-native-paper';
 import { selectAppSettings } from '../../redux/settings/settings.selector';
 import { createStructuredSelector } from 'reselect';
-import { Avatar, BoldWeightText, ViewContainer, ViewContainerRow, CancelButtonController, BoldNormalText, SmallHeaderText, NormalText, CustomButtonController } from './confirm-request.styles';
+import { Avatar, BoldWeightText, ViewContainer, ConfirmRequestContainer, ViewContainerRow, CancelButtonController, BoldNormalText, SmallHeaderText, NormalText, CustomButtonController } from './confirm-request.styles';
 import CustomButton from '../../components/forms/custom-button/custom-button.component';
 import ButtonText from '../../components/forms/button-text/button-text.component';
 import { getUserData, getOrderDetail, apiHeaders, COMPLETE_GAS_ORDER } from '../../config';

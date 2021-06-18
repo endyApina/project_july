@@ -10,7 +10,7 @@ export const DetailsContainer = styled.View`
   paddingRight: ${({paddingRight}) => paddingRight ? paddingRight : '1px'};
   marginLeft: ${({marginLeft}) => marginLeft ? marginLeft : '0px'};
   marginRight: ${({marginRight}) => marginRight ? marginRight : '0px'};
-  backgroundColor: ${({bgcolor}) => bgcolor ? bgcolor : '#ffffff'}
+  backgroundColor: ${({bgcolor}) => bgcolor ? bgcolor : '#ffffff'}; 
 `;
 
 export const InnerContainer = styled.View`
@@ -29,6 +29,7 @@ export const ImageContainer = styled.View`
 export const DetailsText = styled.Text`
   fontSize: 20px;
   color: #454545;
+  color: ${({txtcolor}) => txtcolor ? txtcolor : 'black'};
 `;
 
 export const NumberContainer = styled.View`
@@ -39,5 +40,6 @@ export const NumberContainer = styled.View`
 export const NumberText = styled.Text`
   fontSize: 35px;
   color: #0013ff;
+  color: ${({txtcolor}) => txtcolor ? txtcolor : 'black'};
   fontWeight: 500;
 `;

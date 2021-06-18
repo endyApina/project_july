@@ -371,6 +371,7 @@ const StationContent = ({appSettings}) => {
       alert("Please Enter Delivery Address")
       toggleDisableButton(false)
       toggleLoader(false)
+      toggleSubmittingOrder(false)
       return 
     }
 
@@ -378,6 +379,7 @@ const StationContent = ({appSettings}) => {
       alert("Please specify quantity")
       toggleDisableButton(false)
       toggleLoader(false)
+      toggleSubmittingOrder(false)
       return
     }
 
@@ -395,8 +397,11 @@ const StationContent = ({appSettings}) => {
       }, 2000);
       toggleSubmittingOrder(true)
     }, (error) => {
+      toggleSubmittingOrder(false)
+      toggleDisableButton(false)
+      toggleLoader(false)
       console.log(error)
-      alert('check internet connection')
+      alert('There has been issues with placing your order information. Kindly check your orders page, and contact support.')
     })
 
     toggleDisableButton(false)

@@ -4,7 +4,7 @@ import { NotificationCardContainer } from './styles';
 import { ListItem } from 'react-native-elements';
 import { SafeAreaView, ScrollView } from 'react-native';
 
-const NotificationCard = ({item, name, description, date, onPress, ...otherProps}) => (
+const NotificationCard = ({item, name, description, date, bgColor, onPress, ...otherProps}) => (
   <NotificationCardContainer {...otherProps}> 
     <ListItem
       containerStyle={{
@@ -13,6 +13,7 @@ const NotificationCard = ({item, name, description, date, onPress, ...otherProps
         borderTopRightRadius: 15, 
         height: 110, 
         marginTop: 10,
+        backgroundColor: bgColor,
       }}
       onPress={onPress}
       underlayColor="transparent"
@@ -23,13 +24,15 @@ const NotificationCard = ({item, name, description, date, onPress, ...otherProps
           style={{
             fontSize: 16, 
             paddingBottom: 5, 
+            color: '#ffffff',
           }}
         > 
           {name}
         </ListItem.Title>
         <ListItem.Subtitle
           style={{
-            fontSize: 11
+            fontSize: 11, 
+            color: '#ffffff',
           }}
         > 
           {description}
@@ -38,7 +41,8 @@ const NotificationCard = ({item, name, description, date, onPress, ...otherProps
           style={{
             marginTop: 10, 
             paddingTop: 10, 
-            fontSize: 11
+            fontSize: 11, 
+            color: '#ffffff',
           }}
         > 
           {date}

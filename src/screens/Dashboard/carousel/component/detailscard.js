@@ -5,7 +5,7 @@ import { selectAppSettings } from '../../../../redux/settings/settings.selector'
 import { DetailsContainer, DetailsText, NumberContainer, NumberText, ImageContainer, TextContainer, InnerContainer } from './styles';
 import { Image } from 'react-native';
 
-const DetailsCard = ({...otherProps}) => {
+const DetailsCard = ({orderNumber, status, txtcolor, ...otherProps}) => {
   return (
     <DetailsContainer {...otherProps}>
       <InnerContainer>
@@ -19,16 +19,16 @@ const DetailsCard = ({...otherProps}) => {
           />
         </ImageContainer>
         <TextContainer> 
-          <DetailsText>
-            {"Details"}
+          <DetailsText txtcolor={txtcolor}>
+            {status}
           </DetailsText>
-          <DetailsText> 
+          <DetailsText txtcolor={txtcolor}> 
             {"Orders"}
           </DetailsText>
         </TextContainer>
         <NumberContainer>
-            <NumberText> 
-              {"200"}
+            <NumberText txtcolor={txtcolor}> 
+              {orderNumber}
             </NumberText>
         </NumberContainer>
       </InnerContainer>

@@ -9,6 +9,7 @@ export const GasTypeContainer = styled.View`
 export const OrderTextContainer = styled.Text`
   marginLeft: 5%;
   fontSize: 20px;
+  marginTop: 6%;
 `;
 
 export const OrderLineContainer = styled.View`

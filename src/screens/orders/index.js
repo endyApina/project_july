@@ -13,6 +13,7 @@ import { apiHeaders, AppWait, GAS_ORDER_HISTORY_API, getOrderDetail, getUserData
 import axios from 'axios';
 import { toConfirmRequest } from '../../session';
 import { useNavigation } from '@react-navigation/native';
+import { OrderSection, OrdersContainer } from './orders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const storeOrder = async(orderDetails) => {
@@ -28,6 +29,7 @@ const storeOrder = async(orderDetails) => {
 const OrderHistory = ({loadOrder}) => {
   const [tokenString, updateToken] = useState("")
   const [orderArray, updateOrderArray] = useState([])
+  const [pendingArray, updatePendingArray] = useState([])
   const [pageLoading, toggleLoader] = useState(true)
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false)
@@ -58,24 +60,42 @@ const OrderHistory = ({loadOrder}) => {
   })
 
   const getOrders = () => {
-    console.log(tokenString)
+    // console.log(tokenString)
     const options = {
       headers: apiHeaders(tokenString)
     }
 
     axios.get(GAS_ORDER_HISTORY_API, options)
     .then((response) => {
+      var tempOrderArray = []
+      var tempPending = []
+      var tempArrayData = {
+        'order': [], 
+        'status': ""
+      }
       const responseData = response.data
       const responseBody = responseData.body 
       if (Array.isArray(responseBody)) {
-        responseBody.forEach(element => {
-          console.log(element)
+        responseBody.forEach((element, pos) => {
+          // console.log(element)
+          if (element.order.order_status == "pending") {
+            tempPending.push(element)
+            responseBody.splice(pos, 1)
+          }
         });
+
+        responseBody.forEach(element => {
+          // console.log(element)
+          tempOrderArray.push(element)
+        });
+
       }
-      updateOrderArray(responseData.body)
+
+      updatePendingArray(tempPending)
+      updateOrderArray(tempOrderArray)
       toggleLoader(false)
     }, (error) => {
-      console.log("error")
+      console.log("error retrieving gas orders")
       console.log(error)
     })
   }
@@ -102,7 +122,34 @@ const OrderHistory = ({loadOrder}) => {
       > 
         {
           !pageLoading ? 
-          <>
+          <OrdersContainer> 
+            <OrderSection>
+              PENDING ORDERS
+            </OrderSection>
+            {
+              Array.isArray(orderArray) ? 
+              pendingArray.map((item, i) => (
+                <NotificationCard 
+                  key={i}
+                  name={item.order.order_size + "KG Gas Order"}
+                  description={item.order.order_status.toUpperCase()}
+                  date={handleDate(item.order.created_at)}
+                  onPress={() => handlePress(item)}
+                  bgColor={'#ff5e00'}
+                />
+              ))
+              :
+              <View
+                style={
+                  [styles.container, styles.horizontal]
+                }
+              > 
+                <Text>{"You have no pending Orders"}</Text>
+              </View>
+            }
+            <OrderSection>
+              CANCELLED ORDERS
+            </OrderSection>
             {
               Array.isArray(orderArray) ? 
               orderArray.map((item, i) => (
@@ -112,6 +159,7 @@ const OrderHistory = ({loadOrder}) => {
                   description={item.order.order_status.toUpperCase()}
                   date={handleDate(item.order.created_at)}
                   onPress={() => handlePress(item)}
+                  bgColor={'#4130db'}
                 />
               ))
               :
@@ -123,7 +171,7 @@ const OrderHistory = ({loadOrder}) => {
                 <Text>{"You have 0 Orders"}</Text>
               </View>
             }
-          </>
+          </OrdersContainer>
           : 
           <View
             style={[styles.container, styles.horizontal]}

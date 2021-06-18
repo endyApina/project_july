@@ -11,6 +11,7 @@ import OrderSection from './orders';
 import { getUserData, AppWait } from '../../config';
 import { useNavigation } from '@react-navigation/native';
 import { ListItem } from "react-native-elements";
+import AdminSummaryScreen from './carousel';
 
 const Dashboard = ({appSettings, toggleLoadOrders}) => {
   const [name, setName] = useState('');
@@ -64,7 +65,8 @@ const Dashboard = ({appSettings, toggleLoadOrders}) => {
           <ListItem.Chevron />
         </ListItem>
         </OrderNowContainer>
-        <OrderSection />
+        {/* <OrderSection /> */}
+        <AdminSummaryScreen />
       </DashboardContainer>
     </ScrollView>
   )

@@ -3,6 +3,7 @@ import { Dimensions } from 'react-native';
 
 export const CancelScreenContainer = styled.View`
 height: ${Dimensions.get('window').height}px;
+  paddingTop: 5%;
   paddingLeft: 20px;
   paddingRight: 20px;
   backgroundColor: #ffffff;

@@ -133,7 +133,7 @@ const GasOrderType = ({}) => {
             />
             <OrderTypeCard 
               marginLeft={"0px"} 
-              bgcolor={"#2dd8ff"} 
+              bgcolor={"#f27a52"} 
               gasType={gasOrderType.secondOrderSize + "kg"} 
               cost={"N" + gasOrderType.secondOrderPrice}
               onClick={secondChoice}
@@ -142,7 +142,7 @@ const GasOrderType = ({}) => {
           <OrderLineContainer> 
             <OrderTypeCard 
               marginRight={"15px"} 
-              bgcolor={"#2dd8ff"} 
+              bgcolor={"#f27a52"} 
               gasType={gasOrderType.thirdOrderSize + "kg"} 
               cost={"N" + gasOrderType.thirdOrderPrice} 
               onClick={thirdChoice}
@@ -163,7 +163,7 @@ const GasOrderType = ({}) => {
             />
             <OrderTypeCard 
               marginLeft={"0px"} 
-              bgcolor={"#2dd8ff"} 
+              bgcolor={"#f27a52"} 
               gasType={gasOrderType.sixthOrderSize + "kg"} 
               cost={"N" + gasOrderType.sixthOrderPrice}
               onClick={sixthChoice}

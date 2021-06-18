@@ -13,7 +13,7 @@ const StationScreen = ({appSettings}) => {
   return (
     <SafeAreaView>
       <ScrollView> 
-        <StationContainer bgcolor={backgroundColor}>
+        <StationContainer bgcolor={"#f6f5ff"}>
           {/* <ImageHeader /> */}
           <ImageContainer> 
             <Image 
