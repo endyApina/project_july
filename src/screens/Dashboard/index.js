@@ -12,6 +12,7 @@ import { getUserData, AppWait } from '../../config';
 import { useNavigation } from '@react-navigation/native';
 import { ListItem } from "react-native-elements";
 import AdminSummaryScreen from './carousel';
+import {PayWithFlutterwave} from 'flutterwave-react-native'
 
 const Dashboard = ({appSettings, toggleLoadOrders}) => {
   const [name, setName] = useState('');

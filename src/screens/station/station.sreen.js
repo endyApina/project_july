@@ -13,14 +13,14 @@ const StationScreen = ({appSettings}) => {
   return (
     <SafeAreaView>
       <ScrollView> 
-        <StationContainer bgcolor={"#f6f5ff"}>
+        <StationContainer bgcolor={"#dbdbdb"}>
           {/* <ImageHeader /> */}
           <ImageContainer> 
             <Image 
               source={require("../../../assets/gas-station.png")}
               style={{
-                height: 200, 
-                width: 200
+                height: 150, 
+                width: 150
               }}
             />
           </ImageContainer>

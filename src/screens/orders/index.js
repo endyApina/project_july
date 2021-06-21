@@ -75,6 +75,7 @@ const OrderHistory = ({loadOrder}) => {
       }
       const responseData = response.data
       const responseBody = responseData.body 
+      // console.log(responseData)
       if (Array.isArray(responseBody)) {
         responseBody.forEach((element, pos) => {
           // console.log(element)
@@ -123,9 +124,6 @@ const OrderHistory = ({loadOrder}) => {
         {
           !pageLoading ? 
           <OrdersContainer> 
-            <OrderSection>
-              PENDING ORDERS
-            </OrderSection>
             {
               Array.isArray(orderArray) ? 
               pendingArray.map((item, i) => (
@@ -139,17 +137,8 @@ const OrderHistory = ({loadOrder}) => {
                 />
               ))
               :
-              <View
-                style={
-                  [styles.container, styles.horizontal]
-                }
-              > 
-                <Text>{"You have no pending Orders"}</Text>
-              </View>
+              null
             }
-            <OrderSection>
-              CANCELLED ORDERS
-            </OrderSection>
             {
               Array.isArray(orderArray) ? 
               orderArray.map((item, i) => (
@@ -163,13 +152,19 @@ const OrderHistory = ({loadOrder}) => {
                 />
               ))
               :
+              null
+            }
+            {
+              orderArray == null || orderArray.length == 0 ?
               <View
                 style={
                   [styles.container, styles.horizontal]
                 }
               > 
-                <Text>{"You have 0 Orders"}</Text>
+                <Text>{"You have no pending Orders"}</Text>
               </View>
+              :
+              null
             }
           </OrdersContainer>
           : 

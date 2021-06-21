@@ -123,7 +123,7 @@ const ConfirmRequestScreen = ({appSettings}) => {
   const [accepted, toggleAcceptedStatus] = useState({
     status: false, 
     message: "", 
-    color: "#dbdbdb",
+    color: "#50806d",
   })
 
   useEffect(() => {
@@ -243,7 +243,11 @@ const ConfirmRequestScreen = ({appSettings}) => {
           : 
             <> 
               <View style={[styles.listItem, {backgroundColor: accepted.color}]}> 
-                <Text> 
+                <Text
+                  style={{
+                    color: '#ffffff',
+                  }}
+                > 
                   {"YOUR ORDER IS " + orderData.orderStatus.toUpperCase()}
                 </Text>
               </View>

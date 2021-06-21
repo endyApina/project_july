@@ -43,6 +43,6 @@ export const CVVContainer = styled.View`
 `;
 
 export const AddCardContainer = styled.View`
-  marginTop: 200px;
-  marginLeft: 50px;
+  marginLeft: 12%;
+  marginRight: 12%;
 `;

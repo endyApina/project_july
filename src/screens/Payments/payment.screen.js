@@ -140,15 +140,15 @@ const PaymentScreen = ({appSettings}) => {
           {"Payment Methods"}
         </PaymentMethod>
         <Divider />
-        <CardSection appColor={AppMainColor} />
+        {/* <CardSection appColor={AppMainColor} /> */}
         <Divider />
-        <CashSection />
+        {/* <CashSection /> */}
         <Divider />
         <PaymentCardSection />
         <Divider />
-        <SmallestText body={"Promotions"} />
-        <Divider />
-        <PromotionSection bgcolor={AppMainColor} />
+        {/* <SmallestText body={"Promotions"} /> */}
+        {/* <Divider /> */}
+        {/* <PromotionSection bgcolor={AppMainColor} /> */}
       </ScreenContainer>
     </PaymentScreenContainer>
   )

@@ -384,25 +384,27 @@ const StationContent = ({appSettings}) => {
     }
 
     console.log(orderData)
-    const options = {
-      headers: apiHeaders(userToken)
-    }
-    axios.post(ORDER_GAS_API, orderData, options)
-    .then((response) => {
-      handleSubmitSuccess(response.data)
-      setTimeout(() => {
+    if (userToken != " ") {
+      const options = {
+        headers: apiHeaders(userToken)
+      }
+      axios.post(ORDER_GAS_API, orderData, options)
+      .then((response) => {
+        handleSubmitSuccess(response.data)
+        setTimeout(() => {
+          toggleSubmittingOrder(false)
+          toggleDisableButton(false)
+          toggleLoader(false)
+        }, 2000);
+        toggleSubmittingOrder(true)
+      }, (error) => {
         toggleSubmittingOrder(false)
         toggleDisableButton(false)
         toggleLoader(false)
-      }, 2000);
-      toggleSubmittingOrder(true)
-    }, (error) => {
-      toggleSubmittingOrder(false)
-      toggleDisableButton(false)
-      toggleLoader(false)
-      console.log(error)
-      alert('There has been issues with placing your order information. Kindly check your orders page, and contact support.')
-    })
+        console.log(error)
+        alert('There has been issues with placing your order information. Kindly check your orders page, and contact support.')
+      })
+    }
 
     toggleDisableButton(false)
     toggleLoader(false)
@@ -423,7 +425,7 @@ const StationContent = ({appSettings}) => {
       order_amount: gasOrder.orderAmount
     }
 
-    console.log(orderData)
+    // console.log(orderData)
     const options = {
       headers: apiHeaders(userToken)
     }

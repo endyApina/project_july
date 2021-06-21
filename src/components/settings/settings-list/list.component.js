@@ -19,10 +19,10 @@ const list = [
     title: 'Bulk Order', 
     icon: 'group'
   },
-  // {
-  //   title: 'Payments', 
-  //   icon: 'credit-card'
-  // }, 
+  {
+    title: 'Payments', 
+    icon: 'credit-card'
+  }, 
   // {
   //   title: 'History', 
   //   icon: 'settings'
@@ -60,7 +60,7 @@ const SettingsList = () => {
     }
 
     if (title === "Bulk Order") {
-      alert("Available by Demo")
+      alert("Contact support via email: info@gas2go.com or Tel: +234872311349")
     }
   
     // alert(val.title)

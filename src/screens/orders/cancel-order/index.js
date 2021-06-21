@@ -1,5 +1,5 @@
-import React, {useState} from 'react'; 
-import { SafeAreaView, View, ScrollView, StyleSheet, TextInput, ActivityIndicator } from 'react-native';
+import React, {useEffect, useState} from 'react'; 
+import { SafeAreaView, View, ScrollView, StyleSheet, TextInput, ActivityIndicator, RefreshControlBase } from 'react-native';
 import { connect } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { ListItem, Icon } from 'react-native-elements';
@@ -8,7 +8,7 @@ import { CancelScreenContainer, OtherInputContainer, ReasonText, OthersContainer
 import { createStructuredSelector } from 'reselect';
 import { toHome } from '../../../session';
 import axios from 'axios';
-import { getOrderDetail, apiHeaders, CANCEL_GAS_STATUS_API } from '../../../config';
+import { getOrderDetail, apiHeaders, CANCEL_GAS_STATUS_API, getUserData } from '../../../config';
 import ButtonText from '../../../components/forms/button-text/button-text.component'; 
 import CustomButton from '../../../components/forms/custom-button/custom-button.component';
 
@@ -26,7 +26,7 @@ const reason = [
     reason: "Accidental request",
   },
   {
-    reason: "Gas to go supportk asked me to cancel",
+    reason: "Gas to go support asked me to cancel",
   },
 ]
 
@@ -41,6 +41,12 @@ const CancelOrderScreen = ({appSettings}) => {
     updateMessage(text)
   }
 
+  useEffect(() => {
+    getUserData().then((res) => {
+      setToken(res.token_string)
+    })
+  }, [])
+
   const handleSelection = (item) => {
     console.log(item)
     toggleLoader(true)
@@ -53,30 +59,40 @@ const CancelOrderScreen = ({appSettings}) => {
         message: item.reason
       }
 
-      const options = {
-        headers: apiHeaders(tokenString)
-      }
+      console.log(data)
+      console.log(CANCEL_GAS_STATUS_API)
 
-      axios.post(CANCEL_GAS_STATUS_API, data, options)
-      .then((res) => {
-        const responseData = res.data
-        // console.log(responseData)
-        if (responseData.code == 200) {
-          setTimeout(() => {
-            toggleLoader(false)
-            toHome(navigation)
-          }, 2000);
-        } else {
-          toggleLoader(false)
-          console.log(responseData.message)
-          alert("unable to cancel order")
+      if (tokenString != "") {
+        const options = {
+          headers: apiHeaders(tokenString)
         }
-        
-      }, (error) => {
-        console.log(error)
+  
+        axios.post(CANCEL_GAS_STATUS_API, data, options)
+        .then((res) => {
+          const responseData = res.data
+          // console.log(responseData)
+          if (responseData.code == 200) {
+            setTimeout(() => {
+              toggleLoader(false)
+              toHome(navigation)
+            }, 2000);
+          } else {
+            toggleLoader(false)
+            console.log(responseData.message)
+            alert("unable to cancel order")
+          }
+          
+        }, (error) => {
+          console.log(error)
+          toggleLoader(false)
+        })
+      } else {
         toggleLoader(false)
-      })
+        console.log("empty token string")
+      }
     })
+
+    toggleLoader(false)
   }
 
 
@@ -127,7 +143,7 @@ const CancelOrderScreen = ({appSettings}) => {
            ))
          }
          <OthersContainer> 
-            <ReasonText> 
+            {/* <ReasonText> 
               {"Others"}
             </ReasonText>
             <OtherInputContainer> 
@@ -164,7 +180,7 @@ const CancelOrderScreen = ({appSettings}) => {
               >
                 <ButtonText weight={'bold'}>{'Submit Reason'}</ButtonText>
               </CustomButton>  
-            </OtherInputContainer>
+            </OtherInputContainer> */}
          </OthersContainer>
         </CancelScreenContainer>
       </ScrollView>

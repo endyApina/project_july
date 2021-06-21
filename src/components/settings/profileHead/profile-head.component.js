@@ -9,12 +9,18 @@ import { ProfileHeadContainer } from './profile-head.styles';
 import { useNavigation } from '@react-navigation/native';
 import { toGasOrderType } from '../../../session';
 
-const AvatarElement = () => {
+const AvatarElement = ({name}) => {
   return (
     <Avatar
-      source={{uri: 'https://randomuser.me/api/portraits/men/42.jpg'}}
+      title={name}
       size='medium'
       rounded
+      containerStyle={{
+        backgroundColor: '#ffffff', 
+      }}
+      titleStyle={{
+        color: '#000000'
+      }}
     />
   )
 }
@@ -23,6 +29,17 @@ const ProfileHead = ({appSettings, appUserData}) => {
   const navigation = useNavigation(); 
   const [userData, updateUserData] = useState('')
   const [fullName, updateName] = useState('')
+  const [initials, setInitials] = useState('')
+
+  const splittedName = fullName.split(" ")
+  const firstIn = splittedName[0]
+  const secondIn = splittedName[1]
+  // const secondIn = splittedName[1].charAt(0)
+  var inin; 
+  if (firstIn && secondIn) {
+    inin = firstIn.charAt(0) + secondIn.charAt(0)
+  }
+
   const getAppData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('user_data')
@@ -48,17 +65,17 @@ const ProfileHead = ({appSettings, appUserData}) => {
       <ListItem
         containerStyle={{
           backgroundColor: AppMainColor,
-          borderTopLeftRadius: 15,
-          borderBottomRightRadius: 15,
-          borderTopRightRadius: 15,
+          borderTopLeftRadius: 25,
+          borderBottomRightRadius: 25,
+          borderTopRightRadius: 25,
           height: 90,
         }}
-        underlayColor="#c4c4c4"
+        underlayColor="white"
         onPress={() => {
           toGasOrderType(navigation)
         }}
       > 
-        <AvatarElement />
+        <AvatarElement name={inin} />
         <ListItem.Content> 
           <ListItem.Title 
             right

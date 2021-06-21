@@ -45,7 +45,10 @@ const AdminSummaryScreen = ({}) => {
     }, (error) => {
       console.log("error retrieving gas orders")
       console.log(error)
+      // getOrders()
     })
+
+    console.log(allOrderCount)
   }
 
   useEffect(() => {
