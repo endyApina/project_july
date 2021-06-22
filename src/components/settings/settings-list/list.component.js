@@ -1,5 +1,5 @@
 import React from 'react'; 
-import { View } from 'react-native';
+import { View, Linking } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements';
 import {toBecomeVendor, toOrders, toNotification, toPayments, toLogin} from '../../../session';
 import { useNavigation } from '@react-navigation/native';
@@ -19,10 +19,10 @@ const list = [
     title: 'Bulk Order', 
     icon: 'group'
   },
-  {
-    title: 'Payments', 
-    icon: 'credit-card'
-  }, 
+  // {
+  //   title: 'Payments', 
+  //   icon: 'credit-card'
+  // }, 
   // {
   //   title: 'History', 
   //   icon: 'settings'
@@ -51,12 +51,20 @@ const SettingsList = () => {
       toPayments(navigation)
     }
 
+    if (title === "Support") {
+      Linking.openURL('mailto:info@gastugo.com?subject=Support')
+    }
+
     if (title === "Notifications") {
       toNotification(navigation)
     }
 
     if (title === "My Orders") {
       toOrders(navigation)
+    }
+
+    if (title === "About") {
+      Linking.openURL('https://anchortechpro.com:8002/')
     }
 
     if (title === "Bulk Order") {

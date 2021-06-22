@@ -1,13 +1,14 @@
 import React from 'react'; 
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectAppSettings } from '../../../../redux/settings/settings.selector';
 import { DetailsContainer, DetailsText, NumberContainer, NumberText, ImageContainer, TextContainer, InnerContainer } from './styles';
-import { Image } from 'react-native';
+import { Image, Pressable } from 'react-native';
 
-const DetailsCard = ({orderNumber, status, txtcolor, ...otherProps}) => {
+const DetailsCard = ({orderNumber, status, txtcolor,  ...otherProps}) => {
   return (
-    <DetailsContainer {...otherProps}>
+      <DetailsContainer {...otherProps}>
       <InnerContainer>
         <ImageContainer> 
           <Image 

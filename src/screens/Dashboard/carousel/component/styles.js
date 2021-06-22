@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const DetailsContainer = styled.View`
   border: 1px solid #f2f2f2;
-  width: 48%;
+  width: 100%;
   marginTop: 10%;
   borderRadius: 12px;
   height: 250px;

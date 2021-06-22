@@ -8,33 +8,81 @@ import { DashboardContainer, OrderNowContainer } from './styles';
 import FullNameText from './welcometext';
 import { toGasOrderType } from '../../session';
 import OrderSection from './orders';
-import { getUserData, AppWait } from '../../config';
+import { getUserData, AppWait, apiHeaders, GAS_ORDER_HISTORY_API } from '../../config';
 import { useNavigation } from '@react-navigation/native';
 import { ListItem } from "react-native-elements";
 import AdminSummaryScreen from './carousel';
-import {PayWithFlutterwave} from 'flutterwave-react-native'
+import {PayWithFlutterwave} from 'flutterwave-react-native'; 
+import axios from 'axios';
 
 const Dashboard = ({appSettings, toggleLoadOrders}) => {
   const [name, setName] = useState('');
   const {AppMainColor} = appSettings;
   const navigation = useNavigation(); 
+  const [pendingOrderCount, addOrder] = useState(0);
+  const [allOrderCount, updateOrderCount] = useState(0);
+  const [tokenString, updateToken] = useState("");
 
   const [refreshing, setRefreshing] = useState(false)
 
   const onRefresh = useCallback(() => {
     setRefreshing(true) 
     AppWait(2000).then(() => setRefreshing(false))
-    // toggleLoadOrders()
+    getOrders()
   })
   
   useEffect(() => {
     getUserData().then((res) => {
       setName(res.user_data.full_name)
+      updateToken(res.token_string)
     })
   }, [])
 
+  const getOrders = () => {
+    // console.log(tokenString)
+    const options = {
+      headers: apiHeaders(tokenString)
+    }
+
+    axios.get(GAS_ORDER_HISTORY_API, options)
+    .then((response) => {
+      const responseData = response.data
+      const responseBody = responseData.body 
+      if (Array.isArray(responseBody)) {
+        var counter = 0
+        responseBody.forEach((element, pos) => {
+          // console.log(element.order)
+          if (element.order.order_status == "pending") {
+            counter++
+            addOrder(counter)
+          }
+        });
+        updateOrderCount(responseBody.length)
+      }
+
+      // toggleLoader(false)
+    }, (error) => {
+      console.log("error retrieving gas orders")
+      console.log(error)
+      // getOrders()
+    })
+
+    console.log(allOrderCount)
+  }
+
+  useEffect(() => {
+    getOrders()
+  }, [tokenString])
+
   return (
-    <ScrollView> 
+    <ScrollView
+      refreshControl={
+        <RefreshControl 
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      }
+    > 
       <DashboardContainer> 
         <FullNameText name={name} />
         <OrderNowContainer> 
@@ -67,7 +115,10 @@ const Dashboard = ({appSettings, toggleLoadOrders}) => {
         </ListItem>
         </OrderNowContainer>
         {/* <OrderSection /> */}
-        <AdminSummaryScreen />
+        <AdminSummaryScreen 
+        pendingOrderCount={pendingOrderCount}
+        allOrderCount={allOrderCount}
+        />
       </DashboardContainer>
     </ScrollView>
   )

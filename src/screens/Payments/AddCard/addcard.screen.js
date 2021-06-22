@@ -37,10 +37,35 @@ const AddCardScreen = ({appSettings}) => {
   const [isSubmitting, toggleSubmitting] = useState(false);
 
   const handleChange = data => {
-    const key = Object.keys(data)[0];
-    const val = data[key];
-    updateCardDetails({...cardDetails, [key]: val});
+
+    return ({nativeEvent: {key: value}}) => {
+      alert("jkfbs")
+      if (value === "Backspace") {
+        alert("her")
+      }
+    }
+    // const key = Object.keys(data)[0];
+    // const val = data[key];
+
+    // if (key == "cardNumber") {
+    //   handleCardNumInput(val)
+    // } else {
+    //   updateCardDetails({...cardDetails, [key]: val});
+    // }
   };
+  
+  const handleCardNumInput = (stat) => {
+    if (stat.length == 4 && stat != " ") {
+      console.log("four")
+      let newLen = stat + " "
+      console.log(newLen)
+      updateCardDetails({...cardDetails, cardNumber: newLen})
+    }else {
+      console.log('else')
+      console.log(stat)
+      updateCardDetails({...cardDetails, cardNumber: stat})
+    }
+  }
 
   const handleSubmit = () => {
     if (cardNumber == "") {
