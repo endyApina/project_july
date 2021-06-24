@@ -3,6 +3,7 @@ import { Dimensions } from 'react-native';
 
 export const OrdersContainer = styled.View`
     backgroundColor: white;
+    paddingBottom: 10%;
 `;
 
 export const OrderOverCon = styled.View`
@@ -31,7 +32,9 @@ export const EmptyOrderView = styled.View`
   align-items: center;
 `;
 
-export const InnerView = styled.View``;
+export const InnerView = styled.View`
+
+`;
 
 export const PendingOrderDiv = styled.View`
   paddingLeft: 27%;

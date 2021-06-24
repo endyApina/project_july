@@ -84,7 +84,7 @@ const OrderHistory = ({loadOrder, appSettings}) => {
       // console.log(responseData)
       if (Array.isArray(responseBody)) {
         responseBody.forEach((element, pos) => {
-          // console.log(element)
+          console.log(element)
           if (element.order.order_status == "pending") {
             tempPending.push(element)
             responseBody.splice(pos, 1)
@@ -92,12 +92,10 @@ const OrderHistory = ({loadOrder, appSettings}) => {
         });
 
         responseBody.forEach(element => {
-          // console.log(element)
           tempOrderArray.push(element)
         });
 
       }
-
       updatePendingArray(tempPending)
       updateOrderArray(tempOrderArray)
       toggleLoader(false)
@@ -137,7 +135,7 @@ const OrderHistory = ({loadOrder, appSettings}) => {
             !pageLoading ? 
             <OrdersContainer> 
               {
-                Array.isArray(orderArray) ? 
+                Array.isArray(pendingArray) ? 
                 pendingArray.map((item, i) => (
                   <NotificationCard 
                     key={i}
@@ -167,7 +165,7 @@ const OrderHistory = ({loadOrder, appSettings}) => {
                 null
               }
               {
-                orderArray == null && orderArray.length == 0 ?
+                orderArray == null ?
                 <EmptyOrderView
                   style={
                     [styles.container, styles.horizontal]

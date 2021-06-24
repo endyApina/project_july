@@ -10,7 +10,7 @@ import { ContentContainer, AddressText, AdditionText, SubtrationText, Subtration
 import CustomButton from '../../forms/custom-button/custom-button.component';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GET_STATION_BY_ID, UserAsyncData, StationAsyncData, UserGeoDataAsyncData, ORDER_GAS_API, apiHeaders, CANCEL_GAS_API, GasOrderData } from '../../../config';
+import { GET_STATION_BY_ID, UserAsyncData, StationAsyncData, storeLastLogin, UserGeoDataAsyncData, ORDER_GAS_API, apiHeaders, CANCEL_GAS_API, GasOrderData } from '../../../config';
 import axios from 'axios';
 import { Picker } from "@react-native-picker/picker";
 import { toConfirmRequest } from '../../../session';
@@ -222,12 +222,6 @@ const StationContent = ({appSettings}) => {
         setUserID(userID)
         setFullName(userFullName)
 			}
-      // setTimeout(() => {
-      //   console.log("USer: " + userEmail)
-      //   console.log("USer: " + userID)
-      //   console.log("USer: " + userFullName)
-      // }, 2000);
-			// return jsonValue != null ? JSON.parse(jsonValue) : null;
 		} catch(e) {
 			console.log(e)
 		}
@@ -390,6 +384,7 @@ const StationContent = ({appSettings}) => {
       }
       axios.post(ORDER_GAS_API, orderData, options)
       .then((response) => {
+        storeLastLogin(orderData)
         handleSubmitSuccess(response.data)
         setTimeout(() => {
           toggleSubmittingOrder(false)

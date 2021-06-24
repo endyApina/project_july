@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'; 
-import { View, StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native'; 
+import { View, StyleSheet, Text, SafeAreaView, ScrollView, Alert } from 'react-native'; 
 import { connect } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { Divider } from 'react-native-paper';
@@ -8,7 +8,7 @@ import { createStructuredSelector } from 'reselect';
 import { Avatar, BoldWeightText, ViewContainer, ConfirmRequestContainer, ViewContainerRow, CancelButtonController, BoldNormalText, SmallHeaderText, NormalText, CustomButtonController } from './confirm-request.styles';
 import CustomButton from '../../components/forms/custom-button/custom-button.component';
 import ButtonText from '../../components/forms/button-text/button-text.component';
-import { getUserData, getOrderDetail, apiHeaders, COMPLETE_GAS_ORDER } from '../../config';
+import { getUserData, getOrderDetail, apiHeaders, COMPLETE_GAS_ORDER, DELETE_GAS_ORDER_API } from '../../config';
 import {toHome, toCancelOrder} from '../../session';
 import Swipeable from 'react-native-swipeable';
 import axios from 'axios';
@@ -103,6 +103,8 @@ const ConfirmRequestScreen = ({appSettings}) => {
   const { AppMainColor, boxShadow, buttonTextColor, defaultButtonBackgroundColor, defaultButtonWidth, inputRadius, defaultInputWidth, defaultInputPlaceholderColor, defaultInputBgColor, defaultInputTextColor} = appSettings;
   const navigation = useNavigation();
 
+  const buttonWidth = '90%';
+
   const [orderData, updateData] = useState({
     customerName: "", 
     street: "",
@@ -136,8 +138,67 @@ const ConfirmRequestScreen = ({appSettings}) => {
     toCancelOrder(navigation)
   }
 
+  const onDeleteOrder = async () => {
+    Alert.alert(
+      "Delete Order?", 
+      "delete gas order", 
+      [
+        {
+          text: "Cancel", 
+          onPress: () => Alert.alert("Cancel Pressed"), 
+          style: "cancel"
+        },
+        {
+          text: "Yes", 
+          onPress: () => handleDeleteOrder("delete"), 
+          style: "default"
+        }
+      ], {
+        cancelable: true, 
+        onDismiss: () => 
+        Alert.alert("This alert was dismissed by tapping the outside")
+      }, 
+    ) 
+  }
+
   const backToHome = () => {
     toHome(navigation)
+  }
+
+  const handleDeleteOrder = (message) => {
+    getOrderDetail().then((res) => {
+      const order = res.order 
+      let data = {
+        order_id: order.id, 
+        user_email: order.user_email, 
+        message: message
+      }
+
+      if (tokenString != "") {
+        const options = {
+          headers: apiHeaders(tokenString)
+        }
+  
+        axios.post(DELETE_GAS_ORDER_API, data, options)
+        .then((res) => {
+          const responseData = res.data
+          if (responseData.code == 200) {
+            alert("deleted")
+            toHome(navigation)
+          } else {
+            console.log(responseData.message)
+            alert("unable to delete gas order")
+          }
+          
+        }, (error) => {
+          console.log(error)
+          toggleLoader(false)
+        })
+      } else {
+        toggleLoader(false)
+        console.log("empty token string")
+      }
+    })
   }
 
   const handleConfirmRequest = () => {
@@ -253,22 +314,22 @@ const ConfirmRequestScreen = ({appSettings}) => {
               </View>
               {
                 orderData.orderStatus == "pending" ?
-                <CancelButtonController>
+                <CustomButtonController>
                   <CustomButton 
                     onPress={cancelOrderNow} 
                     // loading={submissionLoader}
-                    space={'10px'} 
+                    space={'5px'} 
                     uppercase={'true'} 
-                    width={'230px'} 
+                    width={buttonWidth} 
                     color={buttonTextColor} 
-                    bgcolor={AppMainColor} 
+                    bgcolor={'#756d4f'} 
                     box-shadow={boxShadow}
                     radius={'10px'}
                     // disabled={disableButton}
                   >
                     <ButtonText weight={'bold'}>{'Cancel Order'}</ButtonText>
                   </CustomButton> 
-                </CancelButtonController>
+                </CustomButtonController>
                 :
                 null 
               }
@@ -276,13 +337,29 @@ const ConfirmRequestScreen = ({appSettings}) => {
           }
           <CustomButtonController>
             <CustomButton 
+              onPress={onDeleteOrder} 
+              // loading={submissionLoader}
+              space={'5px'} 
+              uppercase={'true'} 
+              width={buttonWidth} 
+              color={buttonTextColor} 
+              bgcolor={'#614242'} 
+              box-shadow={boxShadow}
+              radius={'10px'}
+              // disabled={disableButton}
+            >
+              <ButtonText weight={'bold'}>{'Delete Order'}</ButtonText>
+            </CustomButton> 
+          </CustomButtonController>
+          <CustomButtonController>
+            <CustomButton 
               onPress={backToHome} 
               // loading={submissionLoader}
-              space={'20px'} 
+              space={'5px'} 
               uppercase={'true'} 
-              width={'330px'} 
+              width={buttonWidth} 
               color={buttonTextColor} 
-              bgcolor={'#5c5c5c'} 
+              bgcolor={'#0f5e14'} 
               box-shadow={boxShadow}
               radius={'10px'}
               // disabled={disableButton}
