@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'; 
-import { SafeAreaView, ScrollView } from 'react-native';
+import { SafeAreaView, ScrollView, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import { selectAppSettings } from '../../../redux/settings/settings.selector';
 import { createStructuredSelector } from 'reselect';
@@ -9,6 +9,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import CustomButton from '../../../components/forms/custom-button/custom-button.component';
 import ButtonText from '../../../components/forms/button-text/button-text.component';
 import CustomInput from '../../../components/forms/custom-input/custom-input.component';
+import axios from 'axios';
 
 const HeaderSection = () => {
   return (
@@ -36,36 +37,67 @@ const AddCardScreen = ({appSettings}) => {
   const {cardNumber, cardHolderName, exp, cvv} = cardDetails;
   const [isSubmitting, toggleSubmitting] = useState(false);
 
-  const handleChange = data => {
-
-    return ({nativeEvent: {key: value}}) => {
-      alert("jkfbs")
-      if (value === "Backspace") {
-        alert("her")
-      }
-    }
-    // const key = Object.keys(data)[0];
-    // const val = data[key];
-
-    // if (key == "cardNumber") {
-    //   handleCardNumInput(val)
-    // } else {
-    //   updateCardDetails({...cardDetails, [key]: val});
-    // }
-  };
-  
-  const handleCardNumInput = (stat) => {
-    if (stat.length == 4 && stat != " ") {
-      console.log("four")
-      let newLen = stat + " "
-      console.log(newLen)
-      updateCardDetails({...cardDetails, cardNumber: newLen})
-    }else {
-      console.log('else')
-      console.log(stat)
-      updateCardDetails({...cardDetails, cardNumber: stat})
-    }
+  const callPay = async () => {
+    console.log("callPau")
+    // return fetch('https://api.paystack.co/transaction/initialize', {
+    //   method: 'POST', 
+    //   headers: {
+    //     Authorization: 'Bearer sk_test_bff0bbb55f131f964d1d92150646f267d64a64ae', 
+    //     'Content-Type': 'application/json'
+    //   }, 
+    //   body: JSON.stringify({
+    //     email: "apinaendy@gmail.com", 
+    //     amount: "4000"
+    //   })
+    // }).then((response) => response.json())
+    // .then((json) => {
+    //   console.log(json)
+    // }).catch((error) => {
+    //   console.log(error)
+    // })
+    return fetch('https://api.paystack.co/transaction/initialize', {
+      method: 'POST', 
+      headers: {
+        Authorization: 'Bearer sk_test_bff0bbb55f131f964d1d92150646f267d64a64ae', 
+        'Content-Type': 'application/json'
+      }, 
+      body: JSON.stringify({
+        "email": "customer@email.com",
+        "amount": "10000",
+        "metadata": {
+          "custom_fields": [
+            {
+              "value": "makurdi",
+              "display_name": "Donation for",
+              "variable_name": "donation_for"
+            }
+          ]
+        },
+        "bank":{
+            "code": "057",
+            "account_number": "0000000000"
+        },
+        "birthday": "1995-12-23"
+      })
+    }).then((response) => response.json())
+    .then((json) => {
+      console.log(json)
+    }).catch((error) => {
+      console.log(error)
+    })
   }
+  
+  useEffect(() => {
+    console.log("calling api")
+    callPay()
+  }, [])
+
+  const handleChange = data => {
+    const key = Object.keys(data)[0];
+    const val = data[key];
+    console.log(key)
+    updateCardDetails({...cardDetails, [key]: val});
+  };
 
   const handleSubmit = () => {
     if (cardNumber == "") {
@@ -108,6 +140,7 @@ const AddCardScreen = ({appSettings}) => {
                 width={'95%'} 
                 radius={'1px'}
                 txtcolor={'#4a4a4a'} 
+                keyboardType="numeric"
             />
             {/* <VISAContainer>
               <FontAwesome name="cc-visa" size={30} color={appColor} />
@@ -128,6 +161,7 @@ const AddCardScreen = ({appSettings}) => {
               width={'370px'} 
               radius={'1px'}
               txtcolor={'#4a4a4a'} 
+              keyboardType="numeric"
             />
           </CardContainer>
         </AddCardRowContainer>
@@ -146,6 +180,7 @@ const AddCardScreen = ({appSettings}) => {
                 width={'120px'} 
                 radius={'1px'}
                 txtcolor={'#4a4a4a'} 
+                keyboardType="numeric"
               />
           </ExpireContainer>
           <CVVContainer>
@@ -161,6 +196,7 @@ const AddCardScreen = ({appSettings}) => {
               width={'70px'} 
               radius={'1px'}
               txtcolor={'#4a4a4a'} 
+              keyboardType="numeric"
             />
             </CVVContainer>
           </CardContainer>
@@ -175,6 +211,7 @@ const AddCardScreen = ({appSettings}) => {
           color={'white'} 
           bgcolor={AppMainColor} 
           // box-shadow={}
+          keyboardType="numeric"
           radius={'10px'}
           >
               <ButtonText weight={'bold'}>{'ADD CARD'}</ButtonText>

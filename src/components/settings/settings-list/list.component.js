@@ -19,10 +19,10 @@ const list = [
     title: 'Bulk Order', 
     icon: 'group'
   },
-  // {
-  //   title: 'Payments', 
-  //   icon: 'credit-card'
-  // }, 
+  {
+    title: 'Payments', 
+    icon: 'credit-card'
+  }, 
   // {
   //   title: 'History', 
   //   icon: 'settings'
