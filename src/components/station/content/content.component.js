@@ -3,7 +3,7 @@ import { createStructuredSelector } from 'reselect';
 import { selectAppSettings } from '../../../redux/settings/settings.selector';
 import { connect } from 'react-redux';
 import ButtonText from '../../forms/button-text/button-text.component';
-import { View, Text, TextInput } from 'react-native'; 
+import { View, Text, TextInput, Modal, Pressable, StyleSheet } from 'react-native'; 
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { Divider } from 'react-native-paper';
 import { ContentContainer, AddressText, AdditionText, SubtrationText, SubtrationButton, IncreamentText, QuantityView, AdditionButton, AboutText, TimeText, DaysText, RatingIconContainer, RatingText, RatingContainer, KGContainer, KGText, PricingText, IncreamentSection, LineContainer, LocationContatainer, DeliveryInstructionContainer, PickerContainer } from './content.styles';
@@ -187,6 +187,7 @@ const AddressSection = ({ text, changeText}) => {
 }
 
 const StationContent = ({appSettings}) => {
+  const [modalVisible, setModalVisible] = useState(false);
 	const [userToken, setToken] = useState('');
   const [gasOrder, updateOrder] = useState({
     userID: "",
@@ -346,63 +347,64 @@ const StationContent = ({appSettings}) => {
   }
   
   const onSubmit = async () => {
-    toggleDisableButton(true)
-    toggleSubmittingOrder(true)
-    toggleLoader(true)
-    const orderData = {
-      address: gasOrder.userAddress, 
-      delivery_instructions: gasOrder.deliveryInstruction, 
-      delivery_type: selectedDeliveryType,
-      order_quantity: String(clicks), 
-      user_email: userEmail, 
-      user_full_name: userFullName,
-      user_id: parseInt(userID), 
-      order_size: gasOrder.orderSize, 
-      order_amount: gasOrder.orderAmount
-    }
+    setModalVisible(true)
+    // toggleDisableButton(true)
+    // toggleSubmittingOrder(true)
+    // toggleLoader(true)
+    // const orderData = {
+    //   address: gasOrder.userAddress, 
+    //   delivery_instructions: gasOrder.deliveryInstruction, 
+    //   delivery_type: selectedDeliveryType,
+    //   order_quantity: String(clicks), 
+    //   user_email: userEmail, 
+    //   user_full_name: userFullName,
+    //   user_id: parseInt(userID), 
+    //   order_size: gasOrder.orderSize, 
+    //   order_amount: gasOrder.orderAmount
+    // }
 
-    if (gasOrder.userAddress == "") {
-      alert("Please Enter Delivery Address")
-      toggleDisableButton(false)
-      toggleLoader(false)
-      toggleSubmittingOrder(false)
-      return 
-    }
+    // if (gasOrder.userAddress == "") {
+    //   alert("Please Enter Delivery Address")
+    //   toggleDisableButton(false)
+    //   toggleLoader(false)
+    //   toggleSubmittingOrder(false)
+    //   return 
+    // }
 
-    if (clicks == 0) {
-      alert("Please specify quantity")
-      toggleDisableButton(false)
-      toggleLoader(false)
-      toggleSubmittingOrder(false)
-      return
-    }
+    // if (clicks == 0) {
+    //   alert("Please specify quantity")
+    //   toggleDisableButton(false)
+    //   toggleLoader(false)
+    //   toggleSubmittingOrder(false)
+    //   return
+    // }
 
-    console.log(orderData)
-    if (userToken != " ") {
-      const options = {
-        headers: apiHeaders(userToken)
-      }
-      axios.post(ORDER_GAS_API, orderData, options)
-      .then((response) => {
-        storeLastLogin(orderData)
-        handleSubmitSuccess(response.data)
-        setTimeout(() => {
-          toggleSubmittingOrder(false)
-          toggleDisableButton(false)
-          toggleLoader(false)
-        }, 2000);
-        toggleSubmittingOrder(true)
-      }, (error) => {
-        toggleSubmittingOrder(false)
-        toggleDisableButton(false)
-        toggleLoader(false)
-        console.log(error)
-        alert('There has been issues with placing your order information. Kindly check your orders page, and contact support.')
-      })
-    }
+    // console.log(orderData)
+    // if (userToken != " ") {
+    //   const options = {
+    //     headers: apiHeaders(userToken)
+    //   }
+    //   axios.post(ORDER_GAS_API, orderData, options)
+    //   .then((response) => {
+    //     storeLastLogin(orderData)
+    //     handleSubmitSuccess(response.data)
+    //     setTimeout(() => {
+    //       toggleSubmittingOrder(false)
+    //       toggleDisableButton(false)
+    //       toggleLoader(false)
+    //     }, 2000);
+    //     toggleSubmittingOrder(true)
+    //   }, (error) => {
+    //     toggleSubmittingOrder(false)
+    //     toggleDisableButton(false)
+    //     toggleLoader(false)
+    //     console.log(error)
+    //     alert('There has been issues with placing your order information. Kindly check your orders page, and contact support.')
+    //   })
+    // }
 
-    toggleDisableButton(false)
-    toggleLoader(false)
+    // toggleDisableButton(false)
+    // toggleLoader(false)
     
   }
 
@@ -439,6 +441,27 @@ const StationContent = ({appSettings}) => {
     <ContentContainer> 
       {
         <>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Hello World!</Text>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
+                  <Text style={styles.textStyle}>Hide Modal</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
           <Weight weight={gasOrder.orderSize + "Kg"} />
           <Divider />
           <Price price={"N" + gasOrder.orderAmount} />
@@ -489,6 +512,50 @@ const StationContent = ({appSettings}) => {
   </>
   )
 }
+
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  }
+});
 
 const mapStateToProps = createStructuredSelector({
   appSettings: selectAppSettings, 
