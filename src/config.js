@@ -19,9 +19,9 @@ export const appSettings = {
 	emailIcon: 'md-mail',
 	phoneIcon: 'md-call',
 	lockIcon: 'md-lock',
-	inputRadius: '10px', 
+	inputRadius: '10px',
 	inputSpace: '10px',
-	defaultInputBgColor: '#f2f2f2', 
+	defaultInputBgColor: '#f2f2f2',
 	defaultInputPlaceholderColor: '#919090',
 	defaultInputTextColor: 'black',
 	boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)',
@@ -44,7 +44,7 @@ export const appModes = {
 		subColor: 'black',
 		additionalColor: 'grey'
 	}
- 
+
 };
 
 export const user_role_code="2222"
@@ -54,7 +54,7 @@ export const vendor_role="vendor"
 
 export const apiHeaders = (token) => {
 	return {
-		"Authorization": token, 
+		"Authorization": token,
 		"app_source": user_role
 	}
 }
@@ -64,7 +64,7 @@ export const apiHeaders = (token) => {
 // const API_BASE = 'http://104.211.9.107:7002/'
 // const API_BASE = 'https://appserver.my-gpi.com:8002/'
 // const API_BASE = 'https://41.77.47.34:8002/'
-const API_BASE = 'https://anchortechpro.com:8002/'
+const API_BASE = 'http://80.240.129.27:8002/'
 
 export const API_STRING = 'http://milky-way-api.us-east-1.elasticbeanstalk.com/api/v1/'
 export const REG_API = API_BASE + 'auth/registration'
@@ -116,7 +116,7 @@ export const userLogOut = async () => {
 }
 
 export const AppWait = (timeout) => {
-	return new Promise(resolve => setTimeout(resolve, timeout)); 
+	return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
 export const storeLastLogin = async (orderData) => {

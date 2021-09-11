@@ -2,8 +2,8 @@ import styled from 'styled-components/native';
 import { Dimensions, TouchableOpacity } from 'react-native';
 
 export const SettingsContainer = styled.View`
-  height: ${Dimensions.get('window').height}px;
   paddingTop: 60px;
+  paddingBottom: 60px;
   paddingLeft: 20px;
   paddingRight: 20px;
   backgroundColor: white;

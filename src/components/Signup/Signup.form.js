@@ -64,14 +64,16 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart, signUpSuccessStatus
             const code = responseBody.code 
 
             if (body != "" || message != "" || code != "") {
+                toggleSubmitting(false)
                 signUpStart({body, message, code})
             } else {
+                toggleSubmitting(false)
                 console.log("error")
             }
         }, (error) => {
+            toggleSubmitting(false)
             console.log(error)
         })
-        toggleSubmitting(false)
         // signUpStart({email, password, fullName, phone})
     }
 
@@ -162,7 +164,7 @@ const SignUp = ({appSettings, isSubmittingForm, signUpStart, signUpSuccessStatus
                 onPress={() => handleSubmit()} 
                 space={'20px'} 
                 uppercase={'true'} 
-                loading={isSubmittingForm}
+                loading={isSubmitting}
                 width={defaultButtonWidth} 
                 color={buttonTextColor} 
                 bgcolor={AppMainColor} 

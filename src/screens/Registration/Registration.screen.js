@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import {Avatar } from '../Login/Login.styles';
 import CustomTextContainer from '../../components/forms/custom-text/custom-text.container';
 import {selectCurrentUser} from '../../redux/user/user.selector';
+import { getUserData } from '../../config';
 
 const RegistrationScreen = ({appSettings, currentUser}) => {
     const { mainColor, LoginCustomTextColor, backgroundColor } = appSettings;
@@ -24,7 +25,9 @@ const RegistrationScreen = ({appSettings, currentUser}) => {
     }
 
     useEffect(() => {
-        if (currentUser) navigateToNextSlide()
+        getUserData().then((res) => {
+            if (res.user_data) navigateToNextSlide()
+        })
     }, [currentUser])
 
     return (

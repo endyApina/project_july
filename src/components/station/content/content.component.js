@@ -206,6 +206,7 @@ const StationContent = ({appSettings}) => {
   const [disableButton, toggleDisableButton] = useState(false);
   const [submittingOrder, toggleSubmittingOrder] = useState(false);
   const [selectedDeliveryType, setSelectedDeliveryType] = useState();
+  const [banks, updateBank] = useState([]);
 
 	const getUserData = async () => {
 		try {
@@ -226,6 +227,26 @@ const StationContent = ({appSettings}) => {
 		} catch(e) {
 			console.log(e)
 		}
+  }
+
+  const getBanks = async () => {
+    return fetch('https://api.paystack.co/bank', {
+      method: 'GET', 
+      headers: {
+        Authorization: 'Bearer sk_test_bff0bbb55f131f964d1d92150646f267d64a64ae', 
+        'Content-Type': 'application/json'
+      }
+    }).then((response) => response.json())
+    .then((json) => {
+      console.log(json)
+      var response = json.data 
+      if (Array.isArray(response)) {
+        updateBank(response)
+      }
+      
+    }).catch((error) => {
+      console.log(error)
+    })
   }
 
   const getOrderDetails = async () => {
@@ -307,6 +328,36 @@ const StationContent = ({appSettings}) => {
     )
   }
 
+  const BankPicker = ({}) => {
+    return (
+      <PickerContainer> 
+        <LineContainer> 
+          <PricingText> 
+            {"Bank Nmae"}
+          </PricingText>
+        </LineContainer>
+        <Picker
+          selectedValue={selectedDeliveryType}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedDeliveryType(itemValue)
+          }
+        >
+          {
+            Array.isArray(banks) ? 
+            banks.map((item, i) => (
+              <Picker.Item 
+                label={item.id}
+                value={item.name}
+              />
+            ))
+            :
+            null 
+          }
+        </Picker>
+      </PickerContainer>
+    )
+  }
+
   const handleChangeText = (text) => {
     updateOrder({
       ...gasOrder,
@@ -347,64 +398,65 @@ const StationContent = ({appSettings}) => {
   }
   
   const onSubmit = async () => {
-    setModalVisible(true)
-    // toggleDisableButton(true)
-    // toggleSubmittingOrder(true)
-    // toggleLoader(true)
-    // const orderData = {
-    //   address: gasOrder.userAddress, 
-    //   delivery_instructions: gasOrder.deliveryInstruction, 
-    //   delivery_type: selectedDeliveryType,
-    //   order_quantity: String(clicks), 
-    //   user_email: userEmail, 
-    //   user_full_name: userFullName,
-    //   user_id: parseInt(userID), 
-    //   order_size: gasOrder.orderSize, 
-    //   order_amount: gasOrder.orderAmount
-    // }
+    // getBanks()
+    // setModalVisible(true)
+    toggleDisableButton(true)
+    toggleSubmittingOrder(true)
+    toggleLoader(true)
+    const orderData = {
+      address: gasOrder.userAddress, 
+      delivery_instructions: gasOrder.deliveryInstruction, 
+      delivery_type: selectedDeliveryType,
+      order_quantity: String(clicks), 
+      user_email: userEmail, 
+      user_full_name: userFullName,
+      user_id: parseInt(userID), 
+      order_size: gasOrder.orderSize, 
+      order_amount: gasOrder.orderAmount
+    }
 
-    // if (gasOrder.userAddress == "") {
-    //   alert("Please Enter Delivery Address")
-    //   toggleDisableButton(false)
-    //   toggleLoader(false)
-    //   toggleSubmittingOrder(false)
-    //   return 
-    // }
+    if (gasOrder.userAddress == "") {
+      alert("Please Enter Delivery Address")
+      toggleDisableButton(false)
+      toggleLoader(false)
+      toggleSubmittingOrder(false)
+      return 
+    }
 
-    // if (clicks == 0) {
-    //   alert("Please specify quantity")
-    //   toggleDisableButton(false)
-    //   toggleLoader(false)
-    //   toggleSubmittingOrder(false)
-    //   return
-    // }
+    if (clicks == 0) {
+      alert("Please specify quantity")
+      toggleDisableButton(false)
+      toggleLoader(false)
+      toggleSubmittingOrder(false)
+      return
+    }
 
-    // console.log(orderData)
-    // if (userToken != " ") {
-    //   const options = {
-    //     headers: apiHeaders(userToken)
-    //   }
-    //   axios.post(ORDER_GAS_API, orderData, options)
-    //   .then((response) => {
-    //     storeLastLogin(orderData)
-    //     handleSubmitSuccess(response.data)
-    //     setTimeout(() => {
-    //       toggleSubmittingOrder(false)
-    //       toggleDisableButton(false)
-    //       toggleLoader(false)
-    //     }, 2000);
-    //     toggleSubmittingOrder(true)
-    //   }, (error) => {
-    //     toggleSubmittingOrder(false)
-    //     toggleDisableButton(false)
-    //     toggleLoader(false)
-    //     console.log(error)
-    //     alert('There has been issues with placing your order information. Kindly check your orders page, and contact support.')
-    //   })
-    // }
+    console.log(orderData)
+    if (userToken != " ") {
+      const options = {
+        headers: apiHeaders(userToken)
+      }
+      axios.post(ORDER_GAS_API, orderData, options)
+      .then((response) => {
+        storeLastLogin(orderData)
+        handleSubmitSuccess(response.data)
+        setTimeout(() => {
+          toggleSubmittingOrder(false)
+          toggleDisableButton(false)
+          toggleLoader(false)
+        }, 2000);
+        toggleSubmittingOrder(true)
+      }, (error) => {
+        toggleSubmittingOrder(false)
+        toggleDisableButton(false)
+        toggleLoader(false)
+        console.log(error)
+        alert('There has been issues with placing your order information. Kindly check your orders page, and contact support.')
+      })
+    }
 
-    // toggleDisableButton(false)
-    // toggleLoader(false)
+    toggleDisableButton(false)
+    toggleLoader(false)
     
   }
 
@@ -452,6 +504,7 @@ const StationContent = ({appSettings}) => {
           >
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
+                <PickerSection />
                 <Text style={styles.modalText}>Hello World!</Text>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}

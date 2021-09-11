@@ -161,7 +161,6 @@ const AddCardScreen = ({appSettings}) => {
               width={'370px'} 
               radius={'1px'}
               txtcolor={'#4a4a4a'} 
-              keyboardType="numeric"
             />
           </CardContainer>
         </AddCardRowContainer>

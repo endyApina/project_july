@@ -69,13 +69,13 @@ const LoginScreen = ({ appSettings, verifiedUser }) => {
 								<SignInContainer>
 										<SignIn />
 								</SignInContainer>
-								<CustomTextContainer 
+								{/* <CustomTextContainer 
 										txtcolor={LoginCustomTextColor}
 										fontweight={'bolder'} 
 										onPress={() => navigation.push('ForgotPassword')}
 								>
 										Forgot Password?
-								</CustomTextContainer>
+								</CustomTextContainer> */}
 								<CustomTextContainer txtcolor={LoginCustomTextColor} onPress={() => navigation.push('Registration')}>New user? Create account</CustomTextContainer>
 						</LoginContainer>
 						:
